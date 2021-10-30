@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { supabase } from "../supabase";
+import { supabase } from "../supabase.js";
 import UserForm from "../components/UserForm.vue";
 
 export default {

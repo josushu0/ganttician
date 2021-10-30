@@ -5,7 +5,7 @@
 <script>
 import { onBeforeMount } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { supabase } from "./supabase";
+import { supabase } from "./supabase.js";
 
 export default {
   setup() {
