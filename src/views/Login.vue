@@ -20,10 +20,17 @@
                 />
                 <h1 class="title is-3">Bienvenido</h1>
               </div>
+
               <div class="field mb-5">
                 <label for="email" class="label">Email</label>
                 <div class="control has-icons-left">
-                  <input type="email" name="email" id="email" class="input" />
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    class="input"
+                    v-model="email"
+                  />
                   <span class="icon is-small is-left">
                     <fa class="fa" icon="envelope" />
                   </span>
@@ -38,6 +45,7 @@
                     name="password"
                     id="password"
                     class="input"
+                    v-model="password"
                   />
                   <span class="icon is-small is-left">
                     <fa class="fa" icon="lock" />
@@ -52,8 +60,23 @@
                       button
                       is-rounded is-primary is-uppercase is-fullwidth
                     "
+                    @click="handleLogin"
                   >
                     Iniciar sesión
+                  </button>
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="control">
+                  <button
+                    class="
+                      button
+                      is-rounded is-primary is-uppercase is-fullwidth
+                    "
+                    @click="handleSignup"
+                  >
+                    Crear usuario
                   </button>
                 </div>
               </div>
@@ -66,10 +89,45 @@
 </template>
 
 <script>
+import { ref } from "vue";
+import { supabase } from "../supabase";
+
 export default {
   name: "Login",
-  data() {
-    return {};
+  setup() {
+    const email = ref("");
+    const password = ref("");
+
+    const handleLogin = async () => {
+      try {
+        const { error } = await supabase.auth.signIn({
+          email: email.value,
+          password: password.value,
+        });
+        if (error) throw error;
+      } catch (error) {
+        alert(error.error_description || error.message);
+      }
+    };
+
+    const handleSignup = async () => {
+      try {
+        const { error } = await supabase.auth.signUp({
+          email: email.value,
+          password: password.value,
+        });
+        if (error) throw error;
+      } catch (error) {
+        alert(error.error_description || error.message);
+      }
+    };
+
+    return {
+      email,
+      password,
+      handleLogin,
+      handleSignup,
+    };
   },
 };
 </script>
