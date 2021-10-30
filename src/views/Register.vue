@@ -1,7 +1,7 @@
 <template>
   <div class="hero is-fullheight has-background-grey-dark">
     <div class="hero-body">
-      <UserForm supa="Iniciar sesión" />
+      <UserForm supa="Registrarse" />
     </div>
   </div>
 </template>
@@ -11,15 +11,15 @@ import { supabase } from "../supabase";
 import UserForm from "../components/UserForm.vue";
 
 export default {
-  name: "Login",
+  name: "Register",
   components: { UserForm },
   setup() {
     const email = UserForm.email;
     const password = UserForm.password;
 
-    const handleLogin = async () => {
+    const handleSignup = async () => {
       try {
-        const { error } = await supabase.auth.signIn({
+        const { error } = await supabase.auth.signUp({
           email: email.value,
           password: password.value,
         });
@@ -32,7 +32,7 @@ export default {
     return {
       email,
       password,
-      handleLogin,
+      handleSignup,
     };
   },
 };
