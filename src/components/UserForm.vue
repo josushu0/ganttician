@@ -64,14 +64,14 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref } from 'vue';
 
 export default {
-  name: "UserForm",
-  props: ["supa"],
+  name: 'UserForm',
+  props: ['supa'],
   setup() {
-    const email = ref("");
-    const password = ref("");
+    const email = ref('');
+    const password = ref('');
 
     return {
       email,

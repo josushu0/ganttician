@@ -14,12 +14,12 @@
 </template>
 
 <script>
-import { supabase } from "../supabase";
-import { onBeforeMount } from "vue";
-import { useRouter } from "vue-router";
+import { onBeforeMount } from 'vue';
+import { useRouter } from 'vue-router';
+import supabase from '../supabase';
 
 export default {
-  name: "Home",
+  name: 'HomeView',
   setup() {
     const router = useRouter();
 
@@ -34,7 +34,7 @@ export default {
 
     onBeforeMount(() => {
       if (!supabase.auth.user()) {
-        router.replace("/login");
+        router.replace('/login');
       }
     });
 

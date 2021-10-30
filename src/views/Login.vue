@@ -7,15 +7,15 @@
 </template>
 
 <script>
-import { supabase } from "../supabase.js";
-import UserForm from "../components/UserForm.vue";
+import supabase from '../supabase';
+import UserForm from '../components/UserForm.vue';
 
 export default {
-  name: "Login",
+  name: 'LoginView',
   components: { UserForm },
   setup() {
-    const email = UserForm.email;
-    const password = UserForm.password;
+    const { email } = UserForm;
+    const { password } = UserForm;
 
     const handleLogin = async () => {
       try {

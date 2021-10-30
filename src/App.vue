@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import { onBeforeMount } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { supabase } from "./supabase.js";
+import { onBeforeMount } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import supabase from './supabase';
 
 export default {
   setup() {
@@ -13,10 +13,10 @@ export default {
     const route = useRoute();
     onBeforeMount(() => {
       supabase.auth.onAuthStateChange(() => {
-        if (supabase.auth.user() == null && route.path == "/") {
-          router.replace("/login");
-        } else if (route.path == "/login" || route.path == "/register") {
-          router.replace("/");
+        if (supabase.auth.user() == null && route.path === '/') {
+          router.replace('/login');
+        } else if (route.path === '/login' || route.path === '/register') {
+          router.replace('/');
         }
       });
     });
