@@ -6,7 +6,7 @@
           <div
             class="column is-8-tablet is-6-desktop is-5-widescreen is-4-fullhd"
           >
-            <form action="" class="box p-5">
+            <div class="box p-5">
               <div
                 class="
                   is-flex is-flex-direction-column is-align-items-center
@@ -57,7 +57,7 @@
                   </button>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
