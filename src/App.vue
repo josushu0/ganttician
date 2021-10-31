@@ -5,7 +5,7 @@
 <script>
 import { onBeforeMount } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import supabase from './supabase';
+import { supabase } from './supabase';
 
 export default {
   setup() {
@@ -13,7 +13,7 @@ export default {
     const route = useRoute();
     onBeforeMount(() => {
       supabase.auth.onAuthStateChange(() => {
-        if (supabase.auth.user() == null && route.path === '/') {
+        if (supabase.auth.user() == null) {
           router.replace('/login');
         } else if (route.path === '/login' || route.path === '/register') {
           router.replace('/');

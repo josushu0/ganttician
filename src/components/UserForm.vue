@@ -21,8 +21,9 @@
                 type="email"
                 name="email"
                 id="email"
+                required
                 class="input"
-                v-model="email"
+                v-model="userEmail"
               />
               <span class="icon is-small is-left">
                 <fa class="fa" icon="envelope" />
@@ -37,8 +38,9 @@
                 type="password"
                 name="password"
                 id="password"
+                required
                 class="input"
-                v-model="password"
+                v-model="userPassword"
               />
               <span class="icon is-small is-left">
                 <fa class="fa" icon="lock" />
@@ -51,12 +53,12 @@
               <!-- TODO -->
               <button
                 class="button is-rounded is-primary is-uppercase is-fullwidth"
-                @click="handleLogin"
-              >
-                {{ supa }}
+                @click="handleType()">
+                {{ actionType }}
               </button>
             </div>
           </div>
+          <slot></slot>
         </div>
       </div>
     </div>
@@ -64,19 +66,47 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { supabase } from '../supabase';
 
 export default {
   name: 'UserForm',
-  props: ['supa'],
-  setup() {
-    const email = ref('');
-    const password = ref('');
-
+  props: ['actionType'],
+  data() {
     return {
-      email,
-      password,
+      userEmail: '',
+      userPassword: '',
     };
+  },
+  methods: {
+    async handleLogin() {
+      try {
+        const { error } = await supabase.auth.signIn({
+          email: this.userEmail,
+          password: this.userPassword,
+        });
+        if (error) { throw error; }
+      } catch (error) {
+        console.log(error.error_description || error.message);
+      }
+    },
+
+    async handleSignup() {
+      try {
+        const { error } = await supabase.auth.signUp({
+          email: this.userEmail,
+          password: this.userPassword,
+        });
+        if (error) { throw error; }
+      } catch (error) {
+        console.log(error.error_description || error.message);
+      }
+    },
+
+    handleType() {
+      if (this.actionType === 'Iniciar Sesión') {
+        this.handleLogin();
+      } else this.handleSignup();
+    },
   },
 };
 </script>
