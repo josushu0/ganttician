@@ -1,25 +1,20 @@
 <template>
-  <div>
-    <div class="field">
-      <div class="control">
-        <button
-          class="button is-rounded is-primary is-uppercase is-fullwidth"
-          @click="handleSignout"
-        >
-          Cerrar sesión
-        </button>
-      </div>
-    </div>
-  </div>
+  <Navbar>
+    <button class="button is-primary" @click="handleSignout">
+      <strong>Cerrar sesión</strong>
+    </button>
+  </Navbar>
 </template>
 
 <script>
 import { onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
-import supabase from '../supabase';
+import { supabase } from '../supabase';
+import Navbar from '../components/Navbar.vue';
 
 export default {
   name: 'HomeView',
+  components: { Navbar },
   setup() {
     const router = useRouter();
 
