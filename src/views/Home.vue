@@ -9,8 +9,8 @@
 <script>
 import { onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
-import { supabase } from '../supabase';
 import Navbar from '../components/Navbar.vue';
+import supabase from '../supabase';
 
 export default {
   name: 'HomeView',
@@ -18,20 +18,20 @@ export default {
   setup() {
     const router = useRouter();
 
-    const handleSignout = async () => {
+    onBeforeMount(() => {
+      if (!supabase.auth.session()) {
+        router.replace('/login');
+      }
+    });
+
+    async function handleSignout() {
       try {
         const { error } = await supabase.auth.signOut();
         if (error) throw error;
       } catch (error) {
         alert(error.error_description || error.message);
       }
-    };
-
-    onBeforeMount(() => {
-      if (!supabase.auth.user()) {
-        router.replace('/login');
-      }
-    });
+    }
 
     return {
       handleSignout,
