@@ -1,8 +1,8 @@
 <template>
   <div class="hero is-fullheight has-background-black-ter">
     <div class="hero-body">
-      <UserForm actionType='Iniciar Sesión'>
-        <router-link to="/register" class="">No tienes una cuenta?</router-link>
+      <UserForm :actionType="actionType" :login="login">
+        <router-link to="/register">No tienes una cuenta?</router-link>
       </UserForm>
     </div>
   </div>
@@ -14,5 +14,11 @@ import UserForm from '../components/UserForm.vue';
 export default {
   name: 'LoginView',
   components: { UserForm },
+  data() {
+    return {
+      actionType: 'Iniciar sesión',
+      login: true,
+    };
+  },
 };
 </script>

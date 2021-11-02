@@ -1,7 +1,7 @@
 <template>
   <div class="hero is-fullheight has-background-black-ter">
     <div class="hero-body">
-      <UserForm actionType='Registrar'>
+      <UserForm :actionType="actionType" :login="login">
         <router-link to="/login" class="">Ya tienes una cuenta?</router-link>
       </UserForm>
     </div>
@@ -14,5 +14,11 @@ import UserForm from '../components/UserForm.vue';
 export default {
   name: 'RegisterView',
   components: { UserForm },
+  data() {
+    return {
+      actionType: 'Registrarse',
+      login: false,
+    };
+  },
 };
 </script>

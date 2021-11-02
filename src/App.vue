@@ -12,8 +12,8 @@ export default {
     const router = useRouter();
     const route = useRoute();
     onBeforeMount(() => {
-      supabase.auth.onAuthStateChange(() => {
-        if (supabase.auth.user() == null) {
+      supabase.auth.onAuthStateChange((user) => {
+        if (!user) {
           router.replace('/login');
         } else if (route.path === '/login' || route.path === '/register') {
           router.replace('/');

@@ -2,15 +2,9 @@
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-8-tablet is-6-desktop is-5-widescreen is-4-fullhd">
-        <div class="box p-5">
-          <div
-            class="is-flex is-flex-direction-column is-align-items-center mb-6"
-          >
-            <img
-              class="image is-96x96"
-              src="../../src/assets/logo.png"
-              alt="Vue logo"
-            />
+        <form class="box has-background-light p-5" @submit.prevent="handleType">
+          <div class="is-flex is-flex-direction-column is-align-items-center mb-6">
+            <img class="image is-96x96" src="../../src/assets/logo.png" alt="Vue logo" />
             <h1 class="title is-3">Bienvenido</h1>
           </div>
 
@@ -21,9 +15,9 @@
                 type="email"
                 name="email"
                 id="email"
-                required
                 class="input"
                 v-model="userEmail"
+                required
               />
               <span class="icon is-small is-left">
                 <fa class="fa" icon="envelope" />
@@ -38,9 +32,9 @@
                 type="password"
                 name="password"
                 id="password"
-                required
                 class="input"
                 v-model="userPassword"
+                required
               />
               <span class="icon is-small is-left">
                 <fa class="fa" icon="lock" />
@@ -52,14 +46,14 @@
             <div class="control">
               <!-- TODO -->
               <button
-                class="button is-rounded is-primary is-uppercase is-fullwidth"
-                @click="handleType()">
+                type="submit"
+                class="button is-rounded is-primary is-uppercase is-fullwidth">
                 {{ actionType }}
               </button>
             </div>
           </div>
           <slot></slot>
-        </div>
+        </form>
       </div>
     </div>
   </div>
@@ -70,7 +64,10 @@ import { supabase } from '../supabase';
 
 export default {
   name: 'UserForm',
-  props: ['actionType'],
+  props: {
+    actionType: String,
+    login: Boolean,
+  },
   data() {
     return {
       userEmail: '',
@@ -103,7 +100,7 @@ export default {
     },
 
     handleType() {
-      if (this.actionType === 'Iniciar Sesión') {
+      if (this.login) {
         this.handleLogin();
       } else this.handleSignup();
     },
