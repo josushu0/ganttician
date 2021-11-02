@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-8-tablet is-6-desktop is-5-widescreen is-4-fullhd">
+    <div class="columns is-centered m-0">
+      <div class="column is-7-tablet is-6-desktop is-5-widescreen is-4-fullhd">
         <form class="box has-background-light p-5" @submit.prevent="handleType">
           <div class="is-flex is-flex-direction-column is-align-items-center mb-5">
             <img class="image is-96x96" src="../../src/assets/logo.png" alt="Vue logo" />

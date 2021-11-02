@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import { onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import Navbar from '../components/Navbar.vue';
 import supabase from '../supabase';
@@ -18,11 +17,9 @@ export default {
   setup() {
     const router = useRouter();
 
-    onBeforeMount(() => {
-      if (!supabase.auth.session()) {
-        router.replace('/login');
-      }
-    });
+    if (!supabase.auth.session()) {
+      router.replace('/login');
+    }
 
     async function handleSignout() {
       try {
