@@ -1,9 +1,8 @@
 <template>
-  <Navbar>
-    <button class="button is-primary" @click="handleSignout">
-      <strong>Cerrar sesión</strong>
-    </button>
-  </Navbar>
+  <div class="grid">
+    <Navbar id="navbar" />
+    <main id="main" class="has-background-primary"></main>
+  </div>
 </template>
 
 <script>
@@ -20,19 +19,44 @@ export default {
     if (!supabase.auth.session()) {
       router.replace('/login');
     }
-
-    async function handleSignout() {
-      try {
-        const { error } = await supabase.auth.signOut();
-        if (error) throw error;
-      } catch (error) {
-        alert(error.error_description || error.message);
-      }
-    }
-
-    return {
-      handleSignout,
-    };
   },
 };
 </script>
+
+<style scoped>
+.grid {
+  display: grid;
+}
+#navbar {
+  grid-area: navbar;
+}
+#main {
+  grid-area: main;
+}
+
+@media only screen and (min-width: 756px) {
+  .grid {
+    grid-template-columns: 70px auto;
+    grid-template-areas: "navbar main";
+  }
+  #signOut {
+    width: 100%;
+    padding: 1.7rem 0rem;
+  }
+}
+
+@media only screen and (max-width: 756px) {
+  .grid {
+    grid-template-rows: calc(100vh - 60px) 60px;
+    grid-template-columns: 100vw;
+    grid-template-areas:
+      "main"
+      "navbar";
+  }
+  #signOut {
+    width: auto;
+    height: 100%;
+    padding: 0rem 1.5rem;
+  }
+}
+</style>

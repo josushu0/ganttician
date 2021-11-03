@@ -1,67 +1,84 @@
 <template>
-  <nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand"></div>
+  <nav id="navbar" class="has-background-dark">
+    <div id="flex" class="is-flex is-align-items-center">
+      <img id="logo" class="image is-32x32" src="../assets/logo.png" alt="logo">
+      <button class="button is-dark">
+        <span class="icon is-large">
+          <fa class="fas fa-lg" icon="layer-group" />
+        </span>
+      </button>
 
-  <div id="navbarBasicExample" class="navbar-menu">
-    <div class="navbar-start">
-      <a class="navbar-item">
-        <router-link to="/">
-          <span class="icon is-medium">
-            <fa class="fas fa-lg" icon="th-large" />
-          </span>
-        </router-link>
-      </a>
+      <button class="button is-dark">
+        <span class="icon is-large">
+          <fa class="fas fa-lg" icon="plus-square" />
+        </span>
+      </button>
 
-      <a class="navbar-item">
-        <router-link to="/">
-          <span class="icon is-medium">
-            <fa class="fas fa-lg" icon="plus-square" />
-          </span>
-        </router-link>
-      </a>
-
-      <a class="navbar-item">
-        Home
-      </a>
-
-      <a class="navbar-item">
-        Documentation
-      </a>
-
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
-          More
-        </a>
-
-        <div class="navbar-dropdown">
-          <a class="navbar-item">
-            About
-          </a>
-          <a class="navbar-item">
-            Jobs
-          </a>
-          <a class="navbar-item">
-            Contact
-          </a>
-          <hr class="navbar-divider">
-          <a class="navbar-item">
-            Report an issue
-          </a>
-        </div>
-      </div>
+      <button class="button is-dark" @click="handleSignout">
+        <span class="icon is-large">
+          <fa class="fas fa-lg" icon="sign-out-alt" />
+        </span>
+      </button>
     </div>
-
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <slot></slot>
-      </div>
-    </div>
-  </div>
-</nav>
+  </nav>
 </template>
 
 <script>
+import supabase from '../supabase';
+
 export default {
   name: 'NavbarComponent',
+  setup() {
+    async function handleSignout() {
+      try {
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
+      } catch (error) {
+        alert(error.error_description || error.message);
+      }
+    }
+
+    return {
+      handleSignout,
+    };
+  },
 };
 </script>
+
+<style scoped>
+@media only screen and (min-width: 756px) {
+  #navbar {
+    height: 100vh;
+  }
+  #flex {
+    flex-direction: column;
+    height: 100%;
+  }
+  #logo {
+    margin: 1rem 0rem;
+  }
+  button {
+    width: 100%;
+    padding: 1.7rem 0rem;
+  }
+}
+
+@media only screen and (max-width: 756px) {
+  #navbar {
+    height: 60px;
+    width: 100vw;
+  }
+  #flex {
+    flex-direction: row;
+    height: 100%;
+  }
+  #logo {
+    display: none;
+  }
+  button {
+    width: auto;
+    height: 100%;
+    padding: 0rem 1.5rem;
+  }
+}
+</style>
