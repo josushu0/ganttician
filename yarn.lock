@@ -514,6 +514,11 @@ define-properties@^1.1.3:
   dependencies:
     object-keys "^1.0.12"
 
+dhtmlx-gantt@^7.1.7:
+  version "7.1.7"
+  resolved "https://registry.yarnpkg.com/dhtmlx-gantt/-/dhtmlx-gantt-7.1.7.tgz#812aa026c5bf7b5ed6148aa1a82155115fc21f6c"
+  integrity sha512-n6OhU1oGIg0Llc33zzwb3cbLa5aMd/XC/JDLPDihIGVtxY2IyYuo921EZH6t2AIaWOTU8h6v0OSD2BCCPXO/xQ==
+
 doctrine@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/doctrine/-/doctrine-2.1.0.tgz"
