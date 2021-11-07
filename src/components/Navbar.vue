@@ -2,6 +2,12 @@
   <nav id="navbar" class="has-background-dark">
     <div id="flex" class="is-flex is-align-items-center">
       <img id="logo" class="image is-32x32" src="../assets/logo.png" alt="logo">
+      <button class="button is-dark" @click="hideDrawer">
+        <span class="icon is-large">
+          <fa class="fas fa-lg" icon="list-ul" />
+        </span>
+      </button>
+
       <button class="button is-dark">
         <span class="icon is-large">
           <fa class="fas fa-lg" icon="layer-group" />
@@ -28,7 +34,10 @@ import supabase from '../supabase';
 
 export default {
   name: 'NavbarComponent',
-  setup() {
+  emits: ['hideDrawer'],
+  setup(_props, { emit }) {
+    let hiddenDrawer = false;
+
     async function handleSignout() {
       try {
         const { error } = await supabase.auth.signOut();
@@ -38,15 +47,22 @@ export default {
       }
     }
 
+    const hideDrawer = () => {
+      hiddenDrawer = !hiddenDrawer;
+      emit('hideDrawer', hiddenDrawer);
+    };
+
     return {
       handleSignout,
+      hiddenDrawer,
+      hideDrawer,
     };
   },
 };
 </script>
 
 <style scoped>
-@media only screen and (min-width: 756px) {
+@media only screen and (min-width: 1024px) {
   #navbar {
     height: 100vh;
   }
@@ -63,7 +79,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 756px) {
+@media only screen and (max-width: 1023px) {
   #navbar {
     height: 60px;
     width: 100vw;
