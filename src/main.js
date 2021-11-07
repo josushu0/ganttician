@@ -6,7 +6,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import router from './router';
 import App from './App.vue';
-import './assets/style.css';
+import './assets/index.css';
 
 library.add(faEnvelope, faLock, faLayerGroup, faPlusSquare, faSignOutAlt, faListUl);
 
