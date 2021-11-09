@@ -1,87 +1,69 @@
 <template>
-  <div class="container">
-    <div class="columns is-centered m-0">
-      <div class="column is-7-tablet is-6-desktop is-5-widescreen is-4-fullhd">
-        <form class="box has-background-light p-5" @submit.prevent="handleType">
-          <div class="is-flex is-flex-direction-column is-align-items-center mb-5">
-            <img class="image is-96x96" src="../../src/assets/logo.png" alt="Vue logo" />
-            <h1 class="title is-3">Bienvenido</h1>
-          </div>
-
-          <div class="field mb-3" v-if="!login">
-            <label for="username" class="label">Nombre de usuario</label>
-            <div class="control has-icons-left">
-              <input
-                type="text"
-                name="username"
-                id="username"
-                class="input"
-                v-model="userName"
-                required
-              />
-              <span class="icon is-small is-left">
-                <fa class="fa" icon="user" />
-              </span>
-            </div>
-          </div>
-
-          <div class="field mb-3">
-            <label for="email" class="label">Email</label>
-            <div class="control has-icons-left">
-              <input
-                type="email"
-                name="email"
-                id="email"
-                class="input"
-                v-model="userEmail"
-                required
-              />
-              <span class="icon is-small is-left">
-                <fa class="fa" icon="envelope" />
-              </span>
-            </div>
-          </div>
-
-          <div class="field mb-6">
-            <label for="password" class="label">Contraseña</label>
-            <div class="control has-icons-left">
-              <input
-                type="password"
-                name="password"
-                id="password"
-                class="input"
-                v-model="userPassword"
-                required
-              />
-              <span class="icon is-small is-left">
-                <fa class="fa" icon="lock" />
-              </span>
-            </div>
-          </div>
-
-          <div class="field">
-            <div class="control">
-              <!-- TODO -->
-              <button
-                type="submit"
-                class="button is-rounded is-primary is-uppercase is-fullwidth">
-                {{ buttonText }}
-              </button>
-            </div>
-          </div>
-          <slot></slot>
-        </form>
-      </div>
+  <div class="grid place-content-stretch
+      bg-white dark:bg-gray-800
+      px-7 py-6 w-full h-full shadow-xl
+      text-gray-700 dark:text-white
+      sm:w-108 sm:h-auto sm:rounded-lg 2xl:w-120">
+    <div class="flex flex-col items-center justify-end mb-10">
+      <img src="../assets/logo.png" alt="Logo" width="96" height="96">
+      <h1 class="text-3xl font-bold">Bienvenido</h1>
     </div>
+    <form @submit.prevent="handleType">
+      <div class="mb-6" v-if="!login">
+        <label for="username" class="font-bold">Usuario</label>
+        <div>
+          <UserIcon class="h-5 w-5 absolute mt-4 ml-2 text-gray-400 dark:text-gray-300
+          sm:h-6 sm:w-6" />
+          <input type="text" name="username" id="username"
+          class="w-full rounded border-gray-300
+          focus:ring-purple-600 focus:border-transparent text-sm sm:text-base mt-2 pl-10
+          dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <label for="email" class="font-bold">Email</label>
+        <div>
+          <MailIcon class="h-5 w-5 absolute mt-4.5 ml-2 text-gray-400 dark:text-gray-300
+          sm:h-6 sm:w-6"/>
+          <input type="email" name="email" id="email"
+          class="w-full rounded border-gray-300
+          focus:ring-purple-600 focus:border-transparent text-sm sm:text-base mt-2 pl-10
+          dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <label for="password" class="font-bold">Contraseña</label>
+        <div>
+          <LockClosedIcon class="h-5 w-5 absolute mt-4 ml-2 text-gray-400 dark:text-gray-300
+          sm:h-6 sm:w-6" />
+          <input type="password" name="password" id="password"
+          class="w-full rounded border-gray-300
+          focus:ring-purple-600 focus:border-transparent text-sm sm:text-base mt-2 pl-10
+          dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
+        </div>
+      </div>
+
+      <button type="submit"
+      class="rounded-full bg-purple-500 text-white py-2 px-6 uppercase w-full mt-6
+      hover:bg-purple-600">
+        {{ buttonText }}
+      </button>
+
+      <slot></slot>
+    </form>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue';
-import supabase from '../supabase';
+import { MailIcon, LockClosedIcon, UserIcon } from '@heroicons/vue/solid';
+import supabase from '../supabase/supabase';
 
 export default {
   name: 'UserForm',
+  components: { MailIcon, LockClosedIcon, UserIcon },
   props: {
     buttonText: String,
     login: Boolean,
@@ -146,3 +128,9 @@ export default {
   },
 };
 </script>
+
+<style>
+/* body {
+  color: #d1d5db,
+} */
+</style>

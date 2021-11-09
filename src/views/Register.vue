@@ -1,12 +1,13 @@
 <template>
-  <div class="hero is-fullheight has-background-black-ter">
-    <div class="hero-body p-0">
-      <UserForm :buttonText="buttonText" :login="login">
-        <p>
-          Ya tienes una cuenta? <router-link to="/login" class="">Inicia sesión</router-link>
-        </p>
-      </UserForm>
-    </div>
+  <div class="grid w-screen h-screen place-items-center bg-gray-100 bg-wiggle-light
+  dark:bg-gray-700 dark:bg-wiggle-dark">
+    <UserForm :buttonText="buttonText" :login="login">
+      <p class="mt-4 text-center">
+        Ya tienes una cuenta?
+        <router-link to="/login"
+        class="text-blue-700 hover:underline dark:text-blue-400"> Inicia sesión</router-link>
+      </p>
+    </UserForm>
   </div>
 </template>
 
@@ -14,7 +15,7 @@
 import { onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import UserForm from '../components/UserForm.vue';
-import supabase from '../supabase';
+import supabase from '../supabase/supabase';
 
 export default {
   name: 'RegisterView',

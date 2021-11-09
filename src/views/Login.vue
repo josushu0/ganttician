@@ -1,10 +1,12 @@
 <template>
-  <div class="hero is-fullheight has-background-black-ter">
-    <div class="hero-body p-0">
-      <UserForm :buttonText="buttonText" :login="login">
-        <p>No tienes una cuenta? <router-link to="/register">Regístrate</router-link></p>
-      </UserForm>
-    </div>
+  <div class="grid w-screen h-screen place-items-center bg-gray-100 bg-wiggle-light
+  dark:bg-gray-700 dark:bg-wiggle-dark">
+    <UserForm :buttonText="buttonText" :login="login">
+      <p class="mt-4 text-center">No tienes una cuenta?
+        <router-link to="/register"
+        class="dark text-blue-700 hover:underline dark:text-blue-400"> Regístrate</router-link>
+      </p>
+    </UserForm>
   </div>
 </template>
 
@@ -12,7 +14,7 @@
 import { onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import UserForm from '../components/UserForm.vue';
-import supabase from '../supabase';
+import supabase from '../supabase/supabase';
 
 export default {
   name: 'LoginView',
