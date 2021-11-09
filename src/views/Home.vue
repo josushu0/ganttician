@@ -12,7 +12,7 @@ import { useRouter } from 'vue-router';
 import { gantt } from 'dhtmlx-gantt';
 import Navbar from '../components/Navbar.vue';
 import GanttChart from '../components/GanttChart.vue';
-import supabase from '../supabase';
+import supabase from '../supabase/supabase';
 
 export default {
   name: 'HomeView',
