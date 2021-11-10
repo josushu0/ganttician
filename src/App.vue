@@ -4,7 +4,7 @@
 
 <script>
 import { useRouter, useRoute } from 'vue-router';
-import supabase from './supabase';
+import supabase from './supabase/supabase';
 
 export default {
   setup() {

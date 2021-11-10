@@ -65,8 +65,34 @@ export default {
 <style>
 /* @import "../../node_modules/dhtmlx-gantt/codebase/dhtmlxgantt.css"; */
 @import "../../node_modules/dhtmlx-gantt/codebase/skins/dhtmlxgantt_material.css";
-.gantt_tree_content {
-    overflow:hidden;
-    text-overflow: ellipsis;
+@media (prefers-color-scheme: dark) {
+  .gantt_grid_scale, .gantt_task_scale, .gantt_task_vscroll, .gantt_grid_data, .grid_cell,
+  .gantt_layout_cell, .gantt_task_scale * {
+      background-color: rgb(43, 53, 68);
+      border-color: rgb(31, 41, 55 ) !important;
+  }
+  .gantt_grid_scale, .gantt_task_scale,
+  .gantt_task .gantt_task_scale .gantt_scale_cell,
+  .gantt_grid_scale .gantt_grid_head_cell {
+      color: white !important;
+      border-color: rgb(31, 41, 55) !important;
+  }
+  .gantt_row, .gantt_task_row, .gantt_row.odd, .gantt_task_row.odd {
+      background-color: rgb(43, 53, 68);
+      border-color: rgb(31, 41, 55) !important;
+  }
+  .gantt_task_row.odd.gantt_selected {
+    background-color: rgba(0,199,181,.2);
+  }
+  .gantt_row *, .gantt_task_cell {
+    color: white !important;
+    border-color: rgb(31, 41, 55) !important;
+  }
+  .gantt_grid_data {
+    border-right: 1px solid rgb(31, 41, 55) !important;
+  }
+}
+.gantt_grid_data {
+  border-right: 1px solid #d7d7d7;
 }
 </style>
