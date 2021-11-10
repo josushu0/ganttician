@@ -1,9 +1,9 @@
 <template>
-  <div class="grid">
-    <Navbar id="navbar" @hideDrawer="hideDrawer" />
-    <main id="main">
-      <GanttChart class="gantt" :tasks="tasks" />
-    </main>
+  <div class="grid gap-0 h-screen w-screen bg-gray-100 dark:bg-gray-700">
+    <Navbar @hideDrawer="hideDrawer" class="row-start-1 col-start-1 w-screen h-16
+                                            lg:col-start-1 lg:row-start-1 lg:w-16 lg:h-screen" />
+    <GanttChart :tasks="tasks" class="row-start-2 col-start-1 w-screen h-full overflow-hidden
+                                      lg:col-start-2 lg:row-start-1 lg:w-full lg:h-screen" />
   </div>
 </template>
 
@@ -96,54 +96,15 @@ export default {
 </script>
 
 <style scoped>
-.grid {
-  display: grid;
-}
-#navbar {
-  grid-area: navbar;
-}
-#main {
-  grid-area: main;
-}
-
-.gantt-hidden {
-  display: none;
-}
-
 @media only screen and (min-width: 1024px) {
   .grid {
-    grid-template-columns: 60px calc(100vw - 60px);
-    grid-template-rows: 100vh;
-    grid-template-areas: "navbar main";
-  }
-  #signOut {
-    width: 100%;
-    padding: 1.7rem 0rem;
-  }
-  .gantt {
-    overflow: hidden;
-    position: relative;
-    height: 100%;
+    grid-template-columns: 64px calc(100vw - 64px);
   }
 }
 
 @media only screen and (max-width: 1023px) {
   .grid {
-    grid-template-rows: 60px calc(100vh - 60px);
-    grid-template-columns: 100vw;
-    grid-template-areas:
-      "navbar"
-      "main";
-  }
-  #signOut {
-    width: auto;
-    height: 100%;
-    padding: 0rem 1.5rem;
-  }
-  .gantt {
-    overflow: hidden;
-    height: calc(100vh - 60px);
-    width: 100vw;
+    grid-template-rows: 64px calc(100vh - 64px);
   }
 }
 </style>
