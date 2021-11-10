@@ -1,39 +1,51 @@
 <template>
-  <nav id="navbar" class="has-background-dark">
-    <div id="flex" class="is-flex is-align-items-center">
-      <img id="logo" class="image is-32x32" src="../assets/logo.png" alt="logo">
-      <button class="button is-dark" @click="hideDrawer">
-        <span class="icon is-large">
-          <fa class="fas fa-lg" icon="list-ul" />
-        </span>
-      </button>
+  <nav class="fixed top-0 left-0 h-16 w-screen flex flex-row items-center bg-gray-100 text-gray-700
+              lg:flex-col lg:h-screen lg:w-16
+              dark:bg-gray-800 dark:text-white">
+    <img src="../assets/logo.png" alt="Logo" height="48" width="48" class="ml-2 lg:mt-2 lg:ml-0">
 
-      <button class="button is-dark">
-        <span class="icon is-large">
-          <fa class="fas fa-lg" icon="layer-group" />
-        </span>
-      </button>
+    <hr class="bg-gray-300 dark:bg-gray-900 border border-gray-300 ml-2 h-3/4 w-0
+                lg:mt-2 lg:ml-0 lg:w-9/12 lg:h-0 dark:border-gray-900" />
 
-      <button class="button is-dark">
-        <span class="icon is-large">
-          <fa class="fas fa-lg" icon="plus-square" />
-        </span>
-      </button>
+    <button class="navbar_item rounded-lg ml-2 lg:mt-2 lg:ml-0
+                  flex justify-center items-center w-12 h-12 shadow-lg"
+                  @click="hideDrawer">
+      <MenuIcon class="h-6 w-6" />
+    </button>
 
-      <button class="button is-dark" @click="handleSignout">
-        <span class="icon is-large">
-          <fa class="fas fa-lg" icon="sign-out-alt" />
-        </span>
-      </button>
-    </div>
+    <button class="navbar_item rounded-lg ml-2 lg:mt-2 lg:ml-0
+                  flex justify-center items-center w-12 h-12 shadow-lg"
+                  @click="showProjects">
+      <CollectionIcon class="h-6 w-6" />
+    </button>
+
+    <button class="navbar_item rounded-lg ml-2 lg:mt-2 lg:ml-0
+                  flex justify-center items-center w-12 h-12 shadow-lg">
+      <PlusIcon class="h-6 w-6" />
+    </button>
+
+    <hr class="bg-gray-300 dark:bg-gray-900 border border-gray-300 ml-auto h-3/4 w-0
+                lg:mt-auto lg:ml-0 lg:w-9/12 lg:h-0 dark:border-gray-900" />
+
+    <button class="logout_button rounded-lg  ml-2 mr-2 lg:mt-2 lg:ml-0 lg:mr-0 lg:mb-2
+                  flex justify-center items-center w-12 h-12 shadow-lg"
+                  @click="handleSignout">
+      <LogoutIcon class="h-6 w-6" />
+    </button>
   </nav>
 </template>
 
 <script>
-import supabase from '../supabase';
+import {
+  CollectionIcon, MenuIcon, PlusIcon, LogoutIcon,
+} from '@heroicons/vue/solid';
+import supabase from '../supabase/supabase';
 
 export default {
   name: 'NavbarComponent',
+  components: {
+    CollectionIcon, MenuIcon, PlusIcon, LogoutIcon,
+  },
   emits: ['hideDrawer'],
   setup(_props, { emit }) {
     let hiddenDrawer = false;
@@ -60,41 +72,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-@media only screen and (min-width: 1024px) {
-  #navbar {
-    height: 100vh;
-  }
-  #flex {
-    flex-direction: column;
-    height: 100%;
-  }
-  #logo {
-    margin: 1rem 0rem;
-  }
-  button {
-    width: 100%;
-    padding: 1.7rem 0rem;
-  }
-}
-
-@media only screen and (max-width: 1023px) {
-  #navbar {
-    height: 60px;
-    width: 100vw;
-  }
-  #flex {
-    flex-direction: row;
-    height: 100%;
-  }
-  #logo {
-    display: none;
-  }
-  button {
-    width: auto;
-    height: 100%;
-    padding: 0rem 1.5rem;
-  }
-}
-</style>
