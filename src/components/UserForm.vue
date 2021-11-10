@@ -14,7 +14,7 @@
         <div>
           <UserIcon class="h-5 w-5 absolute mt-4 ml-2 text-gray-400 dark:text-gray-300
           sm:h-6 sm:w-6" />
-          <input type="text" name="username" id="username"
+          <input type="text" name="username" id="username" v-model="userName"
           class="w-full rounded border-gray-300
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base mt-2 pl-10
           dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
@@ -26,7 +26,7 @@
         <div>
           <MailIcon class="h-5 w-5 absolute mt-4.5 ml-2 text-gray-400 dark:text-gray-300
           sm:h-6 sm:w-6"/>
-          <input type="email" name="email" id="email"
+          <input type="email" name="email" id="email" v-model="userEmail"
           class="w-full rounded border-gray-300
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base mt-2 pl-10
           dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
@@ -38,7 +38,7 @@
         <div>
           <LockClosedIcon class="h-5 w-5 absolute mt-4 ml-2 text-gray-400 dark:text-gray-300
           sm:h-6 sm:w-6" />
-          <input type="password" name="password" id="password"
+          <input type="password" name="password" id="password" v-model="userPassword"
           class="w-full rounded border-gray-300
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base mt-2 pl-10
           dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
