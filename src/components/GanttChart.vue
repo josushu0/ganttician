@@ -1,33 +1,60 @@
-/* eslint-disable quotes */
 <template>
   <div id="gantt"></div>
 </template>
 
 <script>
 import { gantt } from 'dhtmlx-gantt';
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
+import supabase from '../supabase/supabase';
 
 export default {
   name: 'GanttChart',
-  props: {
-    tasks: {
-      type: Object,
-      default() {
-        return { data: [], links: [] };
-      },
-    },
-  },
-  setup(props) {
+  setup() {
+    const tasks = ref();
+    const session = supabase.auth.session();
+    const user = supabase.auth.user().id;
+
+    async function getTasks() {
+      if (session) {
+        const { data: ganttTasks } = await supabase
+          .from('gantt_tasks')
+          .select('id,duration,text,start_date,progress,parent')
+          .eq('user', user);
+        tasks.value = {
+          data: ganttTasks,
+          links: [],
+        };
+        gantt.init('gantt');
+        gantt.parse(tasks.value);
+      }
+    }
+
     onMounted(() => {
-      gantt.config.xml_date = '%d-%m-%Y';
+      gantt.i18n.setLocale('es');
+      gantt.config.xml_date = '%Y-%m-%d';
+
+      // Scales configuration
       gantt.config.scale_height = 50;
       gantt.config.scales = [
         { unit: 'month', step: 1, format: '%F, %Y' },
         { unit: 'day', step: 1, format: '%d, %D' },
       ];
+
+      // Time Grid configuration
       gantt.config.fit_tasks = true;
       gantt.config.sort = true;
       gantt.config.autoscroll = true;
+      gantt.config.touch_drag = 200;
+
+      // Grid columns configuration
+      gantt.config.columns = [
+        {
+          name: 'text', width: '120', tree: true,
+        },
+        { name: 'start_date', align: 'center' },
+        { name: 'duration', align: 'center' },
+        { name: 'add', label: '', width: 44 },
+      ];
 
       // Lightbox configuration
       gantt.locale.labels.section_time = 'Periodo';
@@ -42,28 +69,27 @@ export default {
       gantt.config.buttons_left = ['gantt_cancel_btn'];
       gantt.config.buttons_right = ['gantt_save_btn', 'gantt_delete_btn'];
 
-      // Plugins
+      // Plugins configuration
       gantt.plugins({
         drag_timeline: true,
         tooltip: true,
         undo: true,
       });
-      gantt.templates.tooltip_text = function (start, end) {
-        return `<b>Inicio:</b> ${gantt.templates.tooltip_date_format(start)}<br/><b>Fin:</b> ${gantt.templates.tooltip_date_format(end)}`;
-      };
+      gantt.templates.tooltip_text = (start, end) => `<b>Inicio:</b> ${gantt.templates
+        .tooltip_date_format(start)}<br/><b>Fin:</b> ${gantt.templates.tooltip_date_format(end)}`;
 
-      gantt.config.touch_drag = 200;
-      gantt.i18n.setLocale('es');
+      getTasks();
+    });
 
-      gantt.init('gantt');
-      gantt.parse(props.tasks);
+    onUnmounted(() => {
+      tasks.value = null;
+      gantt.clearAll();
     });
   },
 };
 </script>
 
 <style>
-/* @import "../../node_modules/dhtmlx-gantt/codebase/dhtmlxgantt.css"; */
 @import "../../node_modules/dhtmlx-gantt/codebase/skins/dhtmlxgantt_material.css";
 @media (prefers-color-scheme: dark) {
   .gantt_grid_scale, .gantt_task_scale, .gantt_task_vscroll, .gantt_grid_data, .grid_cell,
