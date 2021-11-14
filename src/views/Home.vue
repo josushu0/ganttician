@@ -1,8 +1,9 @@
 <template>
-  <div class="grid gap-0 h-screen w-screen bg-gray-100 dark:bg-gray-700"
+  <div class="grid gap-0 grid-rows-[52px,calc(100vh-52px)] h-screen w-screen
+  bg-gray-100 dark:bg-gray-700 lg:grid-cols-[3.5rem,calc(100vw-3.5rem)]"
   v-if="session">
-    <Navbar @hideDrawer="hideDrawer" class="row-start-1 col-start-1 w-screen h-16
-                                            lg:col-start-1 lg:row-start-1 lg:w-16 lg:h-screen" />
+    <Navbar @hideDrawer="hideDrawer" class="row-start-1 col-start-1 w-screen h-[52px]
+                                            lg:col-start-1 lg:row-start-1 lg:w-14 lg:h-screen" />
     <GanttChart class="row-start-2 col-start-1 w-screen h-full overflow-hidden
                                       lg:col-start-2 lg:row-start-1 lg:w-full lg:h-screen" />
   </div>
@@ -85,7 +86,7 @@ export default {
 </script>
 
 <style scoped>
-@media only screen and (min-width: 1024px) {
+/* @media only screen and (min-width: 1024px) {
   .grid {
     grid-template-columns: 64px calc(100vw - 64px);
   }
@@ -93,7 +94,7 @@ export default {
 
 @media only screen and (max-width: 1023px) {
   .grid {
-    grid-template-rows: 64px calc(100vh - 64px);
+    grid-template-rows: 56px calc(100vh - 56px);
   }
-}
+} */
 </style>

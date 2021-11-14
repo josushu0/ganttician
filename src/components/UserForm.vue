@@ -3,7 +3,7 @@
       bg-white dark:bg-gray-800
       px-7 py-6 w-full h-full shadow-xl
       text-gray-700 dark:text-white
-      sm:w-108 sm:h-auto sm:rounded-lg 2xl:w-120">
+      sm:w-[27rem] sm:h-auto sm:rounded-lg 2xl:w-[30rem]">
     <div class="flex flex-col items-center justify-end mb-10">
       <img src="../assets/logo.png" alt="Logo" width="96" height="96">
       <h1 class="text-3xl font-bold">Bienvenido</h1>
@@ -24,7 +24,7 @@
       <div class="mb-6">
         <label for="email" class="font-bold">Email</label>
         <div>
-          <MailIcon class="h-5 w-5 absolute mt-4.5 ml-2 text-gray-400 dark:text-gray-300
+          <MailIcon class="h-5 w-5 absolute mt-[1.05rem] ml-2 text-gray-400 dark:text-gray-300
           sm:h-6 sm:w-6"/>
           <input type="email" name="email" id="email" v-model="userEmail"
           class="w-full rounded border-gray-300
@@ -46,7 +46,7 @@
       </div>
 
       <button type="submit"
-      class="rounded-full bg-purple-500 text-white py-2 px-6 uppercase w-full mt-6
+      class="rounded bg-purple-500 text-white py-2 px-6 uppercase w-full mt-6
       hover:bg-purple-600">
         {{ buttonText }}
       </button>
