@@ -18,7 +18,7 @@ import GanttChart from '../components/GanttChart.vue';
 import supabase from '../supabase/supabase';
 
 export default {
-  name: 'HomeView',
+  name: 'AppView',
   components: {
     Navbar,
     GanttChart,
