@@ -14,7 +14,7 @@
         <div class="relative w-full mt-1 text-gray-300 dark:text-gray-500
         focus-within:text-gray-700 dark:focus-within:text-white">
           <input type="text" name="username" id="username" v-model="userName" required
-          class="rounded border-gray-300 w-full text-white
+          class="rounded border-gray-300 w-full text-gray-700 dark:text-white
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base pl-10
           dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
           <span class="absolute h-full w-10 left-0 top-0 z-10
@@ -29,7 +29,7 @@
         <div class="relative w-full mt-1 text-gray-300 dark:text-gray-500
         focus-within:text-gray-700 dark:focus-within:text-white">
           <input type="email" name="email" id="email" v-model="userEmail" required
-          class="rounded border-gray-300 w-full text-white
+          class="rounded border-gray-300 w-full text-gray-700 dark:text-white
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base pl-10
           dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
           <span class="absolute h-full w-10 left-0 top-0 z-10
@@ -44,7 +44,7 @@
         <div class="relative w-full mt-1 text-gray-300 dark:text-gray-500
         focus-within:text-gray-700 dark:focus-within:text-white">
           <input type="password" name="password" id="password" v-model="userPassword" required
-          class="rounded border-gray-300 w-full text-white
+          class="rounded border-gray-300 w-full text-gray-700 dark:text-white
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base pl-10
           dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
           <span class="absolute h-full w-10 left-0 top-0 z-10
