@@ -3,50 +3,59 @@
       bg-white dark:bg-gray-800
       px-7 py-6 w-full h-full shadow-xl
       text-gray-700 dark:text-white
-      sm:w-[27rem] sm:h-auto sm:rounded-lg 2xl:w-[30rem]">
-    <div class="flex flex-col items-center justify-end mb-10">
+      sm:w-[27rem] sm:h-auto sm:rounded-lg">
+    <div class="flex flex-col items-center justify-end mb-4">
       <img src="../assets/logo.png" alt="Logo" width="96" height="96">
-      <h1 class="text-3xl font-bold">Bienvenido</h1>
+      <h1 class="text-2xl font-bold">Bienvenido</h1>
     </div>
     <form @submit.prevent="handleType">
-      <div class="mb-6" v-if="!login">
+      <div class="mb-4" v-if="!login">
         <label for="username" class="font-bold">Usuario</label>
-        <div>
-          <UserIcon class="h-5 w-5 absolute mt-4 ml-2 text-gray-400 dark:text-gray-300
-          sm:h-6 sm:w-6" />
-          <input type="text" name="username" id="username" v-model="userName"
-          class="w-full rounded border-gray-300
-          focus:ring-purple-600 focus:border-transparent text-sm sm:text-base mt-2 pl-10
+        <div class="relative w-full mt-1 text-gray-300 dark:text-gray-500
+        focus-within:text-gray-700 dark:focus-within:text-white">
+          <input type="text" name="username" id="username" v-model="userName" required
+          class="rounded border-gray-300 w-full text-white
+          focus:ring-purple-600 focus:border-transparent text-sm sm:text-base pl-10
           dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
+          <span class="absolute h-full w-10 left-0 top-0 z-10
+          flex justify-center items-center pointer-events-none">
+            <UserIcon class="h-5 w-5 mb-[2px] sm:h-6 sm:w-6" />
+          </span>
         </div>
       </div>
 
-      <div class="mb-6">
+      <div class="mb-4">
         <label for="email" class="font-bold">Email</label>
-        <div>
-          <MailIcon class="h-5 w-5 absolute mt-[1.05rem] ml-2 text-gray-400 dark:text-gray-300
-          sm:h-6 sm:w-6"/>
-          <input type="email" name="email" id="email" v-model="userEmail"
-          class="w-full rounded border-gray-300
-          focus:ring-purple-600 focus:border-transparent text-sm sm:text-base mt-2 pl-10
+        <div class="relative w-full mt-1 text-gray-300 dark:text-gray-500
+        focus-within:text-gray-700 dark:focus-within:text-white">
+          <input type="email" name="email" id="email" v-model="userEmail" required
+          class="rounded border-gray-300 w-full text-white
+          focus:ring-purple-600 focus:border-transparent text-sm sm:text-base pl-10
           dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
+          <span class="absolute h-full w-10 left-0 top-0 z-10
+          flex justify-center items-center pointer-events-none">
+            <MailIcon class="h-5 w-5 sm:h-6 sm:w-6" />
+          </span>
         </div>
       </div>
 
-      <div class="mb-6">
+      <div class="mb-4">
         <label for="password" class="font-bold">Contraseña</label>
-        <div>
-          <LockClosedIcon class="h-5 w-5 absolute mt-4 ml-2 text-gray-400 dark:text-gray-300
-          sm:h-6 sm:w-6" />
-          <input type="password" name="password" id="password" v-model="userPassword"
-          class="w-full rounded border-gray-300
-          focus:ring-purple-600 focus:border-transparent text-sm sm:text-base mt-2 pl-10
+        <div class="relative w-full mt-1 text-gray-300 dark:text-gray-500
+        focus-within:text-gray-700 dark:focus-within:text-white">
+          <input type="password" name="password" id="password" v-model="userPassword" required
+          class="rounded border-gray-300 w-full text-white
+          focus:ring-purple-600 focus:border-transparent text-sm sm:text-base pl-10
           dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
+          <span class="absolute h-full w-10 left-0 top-0 z-10
+          flex justify-center items-center pointer-events-none">
+            <LockClosedIcon class="h-5 w-5 sm:h-6 sm:w-6" />
+          </span>
         </div>
       </div>
 
       <button type="submit"
-      class="rounded bg-purple-500 text-white py-2 px-6 uppercase w-full mt-6
+      class="rounded bg-purple-500 text-white py-2 px-6 uppercase w-full mt-4
       hover:bg-purple-600">
         {{ buttonText }}
       </button>

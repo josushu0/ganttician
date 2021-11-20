@@ -1,5 +1,5 @@
 <template>
-  <div class="grid w-screen h-screen place-items-center bg-gray-100 bg-wiggle-light
+  <div class="grid w-screen min-h-screen place-items-center bg-gray-100 bg-wiggle-light
   dark:bg-gray-700 dark:bg-wiggle-dark">
     <UserForm :buttonText="buttonText" :login="login">
       <p class="mt-4 text-center">No tienes una cuenta?
