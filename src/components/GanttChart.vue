@@ -40,13 +40,37 @@ export default {
         { unit: 'day', step: 1, format: '%d, %D' },
       ];
 
-      // Time Grid configuration
-      gantt.config.fit_tasks = true;
-      gantt.config.sort = true;
-      gantt.config.autoscroll = true;
-      gantt.config.touch_drag = 200;
+      gantt.config.layout = {
+        css: 'gantt_container',
+        rows: [
+          {
+            cols: [
+              {
+              // the default grid view
+                view: 'grid',
+                scrollX: 'scrollHor',
+                scrollY: 'scrollVer',
+              },
+              { resizer: true, width: 1 },
+              {
+              // the default timeline view
+                view: 'timeline',
+                scrollX: 'scrollHor',
+                scrollY: 'scrollVer',
+              },
+              {
+                view: 'scrollbar',
+                id: 'scrollVer',
+              },
+            ],
+          },
+          {
+            view: 'scrollbar',
+            id: 'scrollHor',
+          },
+        ],
+      };
 
-      // Grid columns configuration
       gantt.config.columns = [
         {
           name: 'text', width: '120', tree: true,
@@ -55,6 +79,13 @@ export default {
         { name: 'duration', align: 'center' },
         { name: 'add', label: '', width: 44 },
       ];
+
+      // Time Grid configuration
+      gantt.config.fit_tasks = true;
+      gantt.config.sort = true;
+      gantt.config.autoscroll = true;
+      gantt.config.touch_drag = 200;
+      gantt.config.touch = 'force';
 
       // Lightbox configuration
       gantt.locale.labels.section_time = 'Periodo';

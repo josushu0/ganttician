@@ -2,10 +2,12 @@
   <div class="grid gap-0 grid-rows-[52px,calc(100vh-52px)] h-screen w-screen
   bg-gray-100 dark:bg-gray-700 lg:grid-cols-[3.5rem,calc(100vw-3.5rem)]"
   v-if="session">
-    <Navbar @hideDrawer="hideDrawer" class="row-start-1 col-start-1 w-screen h-[52px]
-                                            lg:col-start-1 lg:row-start-1 lg:w-14 lg:h-screen" />
-    <GanttChart class="row-start-2 col-start-1 w-screen h-full overflow-hidden
-                                      lg:col-start-2 lg:row-start-1 lg:w-full lg:h-screen" />
+    <Navbar @hideDrawer="hideDrawer"
+    class="row-start-1 col-start-1 w-screen h-[52px]
+    lg:col-start-1 lg:row-start-1 lg:w-14 lg:h-screen" />
+    <GanttChart
+    class="row-start-2 col-start-1 w-screen h-full overflow-hidden
+    lg:col-start-2 lg:row-start-1 lg:w-full lg:h-screen" />
   </div>
 </template>
 
@@ -33,45 +35,21 @@ export default {
       }
     });
 
-    function hideDrawer(hiddenDrawer) {
-      if (hiddenDrawer) {
-        gantt.config.layout = {
-          css: 'gantt_container',
-          rows: [
-            {
-              cols: [
-                {
-                  view: 'timeline', id: 'timeline', scrollX: 'scrollHor', scrollY: 'scrollVer',
-                },
-                { view: 'scrollbar', scroll: 'y', id: 'scrollVer' },
-              ],
-            },
-            {
-              view: 'scrollbar', scroll: 'x', id: 'scrollHor', height: 20,
-            },
-          ],
-        };
+    function hideDrawer(hiddeDrawer) {
+      if (hiddeDrawer) {
+        gantt.config.columns = [
+          { name: 'add', label: '', width: 44 },
+        ];
         gantt.resetLayout();
       } else {
-        gantt.config.layout = {
-          css: 'gantt_container',
-          rows: [
-            {
-              cols: [
-                {
-                  view: 'grid', id: 'grid', scrollX: 'scrollHor', scrollY: 'scrollVer',
-                },
-                {
-                  view: 'timeline', id: 'timeline', scrollX: 'scrollHor', scrollY: 'scrollVer',
-                },
-                { view: 'scrollbar', scroll: 'y', id: 'scrollVer' },
-              ],
-            },
-            {
-              view: 'scrollbar', scroll: 'x', id: 'scrollHor', height: 20,
-            },
-          ],
-        };
+        gantt.config.columns = [
+          {
+            name: 'text', width: '120', tree: true,
+          },
+          { name: 'start_date', align: 'center' },
+          { name: 'duration', align: 'center' },
+          { name: 'add', label: '', width: 44 },
+        ];
         gantt.resetLayout();
       }
     }
@@ -84,17 +62,3 @@ export default {
 
 };
 </script>
-
-<style scoped>
-/* @media only screen and (min-width: 1024px) {
-  .grid {
-    grid-template-columns: 64px calc(100vw - 64px);
-  }
-}
-
-@media only screen and (max-width: 1023px) {
-  .grid {
-    grid-template-rows: 56px calc(100vh - 56px);
-  }
-} */
-</style>
