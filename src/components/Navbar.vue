@@ -47,7 +47,7 @@ export default {
   components: {
     CollectionIcon, MenuIcon, PlusIcon, LogoutIcon,
   },
-  emits: ['hideDrawer'],
+  emits: ['hideDrawer', 'showProjects'],
   setup(_props, { emit }) {
     let hiddenDrawer = false;
 
@@ -65,10 +65,15 @@ export default {
       emit('hideDrawer', hiddenDrawer);
     };
 
+    const showProjects = () => {
+      emit('showProjects');
+    };
+
     return {
       handleSignout,
       hiddenDrawer,
       hideDrawer,
+      showProjects,
     };
   },
 };
