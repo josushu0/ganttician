@@ -46,14 +46,14 @@ export default {
           {
             cols: [
               {
-              // the default grid view
+                // the default grid view
                 view: 'grid',
                 scrollX: 'scrollHor',
                 scrollY: 'scrollVer',
               },
               { resizer: true, width: 1 },
               {
-              // the default timeline view
+                // the default timeline view
                 view: 'timeline',
                 scrollX: 'scrollHor',
                 scrollY: 'scrollVer',
@@ -73,7 +73,9 @@ export default {
 
       gantt.config.columns = [
         {
-          name: 'text', width: '120', tree: true,
+          name: 'text',
+          width: '120',
+          tree: true,
         },
         { name: 'start_date', align: 'center' },
         { name: 'duration', align: 'center' },
@@ -91,9 +93,17 @@ export default {
       gantt.locale.labels.section_time = 'Periodo';
       gantt.config.lightbox.sections = [
         {
-          name: 'description', height: 45, type: 'textarea', map_to: 'text', focus: true,
-        }, {
-          name: 'time', height: 35, type: 'duration', map_to: 'auto',
+          name: 'description',
+          height: 45,
+          type: 'textarea',
+          map_to: 'text',
+          focus: true,
+        },
+        {
+          name: 'time',
+          height: 35,
+          type: 'duration',
+          map_to: 'auto',
         },
       ];
       gantt.config.lightbox_additional_height = 110;
@@ -108,7 +118,6 @@ export default {
       });
       gantt.templates.tooltip_text = (start, end) => `<b>Inicio:</b> ${gantt.templates
         .tooltip_date_format(start)}<br/><b>Fin:</b> ${gantt.templates.tooltip_date_format(end)}`;
-
       getTasks();
     });
 
