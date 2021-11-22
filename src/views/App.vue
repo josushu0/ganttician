@@ -37,20 +37,11 @@ export default {
 
     function hideDrawer(hiddeDrawer) {
       if (hiddeDrawer) {
-        gantt.config.columns = [
-          { name: 'add', label: '', width: 44 },
-        ];
-        gantt.resetLayout();
+        gantt.config.show_grid = false;
+        gantt.render();
       } else {
-        gantt.config.columns = [
-          {
-            name: 'text', width: '120', tree: true,
-          },
-          { name: 'start_date', align: 'center' },
-          { name: 'duration', align: 'center' },
-          { name: 'add', label: '', width: 44 },
-        ];
-        gantt.resetLayout();
+        gantt.config.show_grid = true;
+        gantt.render();
       }
     }
 
