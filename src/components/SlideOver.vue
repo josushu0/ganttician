@@ -6,7 +6,7 @@
         <TransitionChild as="template"
         enter="ease-in-out duration-500" enter-from="opacity-0" enter-to="opacity-100"
         leave="ease-in-out duration-500" leave-from="opacity-100" leave-to="opacity-0">
-          <DialogOverlay class="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <DialogOverlay class="absolute inset-0 bg-gray-500/75 transition-opacity" />
         </TransitionChild>
         <div class="fixed inset-y-0 right-0 pl-10 max-w-full flex">
           <TransitionChild as="template"
@@ -20,17 +20,20 @@
               leave="ease-in-out duration-500" leave-from="opacity-100" leave-to="opacity-0">
                 <div class="absolute top-0 left-0 -ml-8 pt-4 pr-2 flex sm:-ml-10 sm:pr-4">
                   <button type="button"
-                  class="rounded-md text-gray-300 hover:text-white focus:outline-none
-                  focus:ring-2 focus:ring-white" @click="close">
-                    <span class="sr-only">Close panel</span>
+                  class="rounded-md text-gray-300 hover:text-white
+                  focus:outline-none focus:ring-2 focus:ring-white
+                  dark:text-gray-700 dark:hover:text-gray-900 dark:focus:ring-gray-800"
+                  @click="close">
+                    <span class="sr-only">Cerrar panel</span>
                     <XIcon class="h-6 w-6" aria-hidden="true" />
                   </button>
                 </div>
               </TransitionChild>
-              <div class="h-full flex flex-col py-6 bg-white shadow-xl overflow-y-scroll">
+              <div class="h-full flex flex-col py-6 bg-white shadow-xl overflow-y-scroll
+              dark:bg-gray-700 ">
                 <div class="px-4 sm:px-6">
-                  <DialogTitle class="text-lg font-medium text-gray-900">
-                    Panel title
+                  <DialogTitle class="text-lg font-medium text-gray-900 dark:text-gray-200">
+                    Editar tarea
                   </DialogTitle>
                 </div>
                 <div class="mt-6 relative flex-1 px-4 sm:px-6">
