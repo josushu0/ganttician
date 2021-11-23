@@ -1,9 +1,9 @@
 <template>
   <div class="grid place-content-stretch
       bg-gray-50 dark:bg-gray-800
-      px-7 py-6 max-w-sm h-full shadow-xl
+      px-7 py-6 w-full h-full shadow-xl
       text-gray-700 dark:text-gray-200
-      sm:w-[27rem] sm:h-auto sm:rounded-lg">
+      sm:max-w-sm sm:h-auto sm:rounded-lg">
     <div class="flex flex-col items-center justify-end mb-4">
       <img src="../assets/logo.png" alt="Logo" width="96" height="96">
       <h1 class="text-2xl font-bold">Bienvenido</h1>
