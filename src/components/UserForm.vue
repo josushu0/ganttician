@@ -77,6 +77,7 @@ export default {
     buttonText: String,
     login: Boolean,
   },
+  emits: ['loginError', 'signupError'],
   setup(props, { emit }) {
     const userName = ref('');
     const userEmail = ref('');
@@ -91,7 +92,7 @@ export default {
           ]);
         if (error) { throw error; }
       } catch (error) {
-        emit('signupError');
+        emit('signupError', error.message);
       }
     }
 
@@ -103,8 +104,7 @@ export default {
         });
         if (error) { throw error; }
       } catch (error) {
-        emit('loginError');
-        console.log(error.error_description || error.message);
+        emit('loginError', error.message);
       }
     }
 
@@ -117,7 +117,7 @@ export default {
         if (error) { throw error; }
         createProfile();
       } catch (error) {
-        emit('signupError');
+        emit('signupError', error.message);
       }
     }
 
@@ -138,9 +138,3 @@ export default {
   },
 };
 </script>
-
-<style>
-/* body {
-  color: #d1d5db,
-} */
-</style>

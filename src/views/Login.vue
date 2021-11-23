@@ -14,8 +14,7 @@
     </TransitionRoot>
     <div class="grid w-screen min-h-screen place-items-center bg-gray-100 bg-wiggle-light
     dark:bg-gray-700 dark:bg-wiggle-dark">
-      <UserForm :buttonText="buttonText" :login="login"
-      @signupError='signupError' @loginError='loginError' >
+      <UserForm :buttonText="buttonText" :login="login" @loginError='loginError' >
         <p class="mt-4 text-center text-gray-500 dark:text-gray-300">No tienes una cuenta?
           <router-link to="/register"
           class="dark text-blue-600 hover:underline dark:text-blue-300"> Regístrate</router-link>
@@ -55,12 +54,12 @@ export default {
       toggleAlert.value = false;
     }
 
-    const loginError = () => {
+    function loginError(error) {
       alertType.value = 'Error';
-      alertDescription.value = 'Usuario o contraseña incorrectos.';
+      alertDescription.value = error;
       toggleAlert.value = true;
       setTimeout(() => dismissAlert(), 4000);
-    };
+    }
 
     return {
       buttonText,

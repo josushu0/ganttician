@@ -47,7 +47,7 @@ export default {
   components: {
     CollectionIcon, MenuIcon, PlusIcon, LogoutIcon,
   },
-  emits: ['hideDrawer', 'showProjects'],
+  emits: ['hideDrawer', 'showProjects', 'signoutError'],
   setup(_props, { emit }) {
     let hiddenDrawer = false;
 
@@ -56,7 +56,7 @@ export default {
         const { error } = await supabase.auth.signOut();
         if (error) throw error;
       } catch (error) {
-        alert(error.error_description || error.message);
+        emit('signoutError', error.message);
       }
     }
 
