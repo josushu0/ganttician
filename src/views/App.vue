@@ -8,7 +8,7 @@
     <GanttChart
     class="row-start-2 col-start-1 w-screen h-full overflow-hidden
     lg:col-start-2 lg:row-start-1 lg:w-full lg:h-screen" />
-    <SlideOver :toggle="toggle" @closeSlideOver="closeSlideOver" />
+    <SlideOver :toggle="toggle" @closeSlideOver="closeSlideOver" class="z-50"/>
   </div>
 </template>
 
