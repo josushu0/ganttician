@@ -1,8 +1,8 @@
 <template>
   <div class="grid place-content-stretch
-      bg-white dark:bg-gray-800
-      px-7 py-6 w-full h-full shadow-xl
-      text-gray-700 dark:text-white
+      bg-gray-50 dark:bg-gray-800
+      px-7 py-6 max-w-sm h-full shadow-xl
+      text-gray-700 dark:text-gray-200
       sm:w-[27rem] sm:h-auto sm:rounded-lg">
     <div class="flex flex-col items-center justify-end mb-4">
       <img src="../assets/logo.png" alt="Logo" width="96" height="96">
@@ -10,11 +10,11 @@
     </div>
     <form @submit.prevent="handleType">
       <div class="mb-4" v-if="!login">
-        <label for="username" class="font-bold">Usuario</label>
+        <label for="username" class="font-bold text-sm">Usuario</label>
         <div class="relative w-full mt-1 text-gray-300 dark:text-gray-500
-        focus-within:text-gray-700 dark:focus-within:text-white">
+        focus-within:text-gray-700 dark:focus-within:text-gray-200">
           <input type="text" name="username" id="username" v-model="userName" required
-          class="rounded border-gray-300 w-full text-gray-700 dark:text-white
+          class="rounded border-gray-300 w-full text-gray-700 dark:text-gray-200
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base pl-10
           dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
           <span class="absolute h-full w-10 left-0 top-0 z-10
@@ -25,11 +25,11 @@
       </div>
 
       <div class="mb-4">
-        <label for="email" class="font-bold">Email</label>
+        <label for="email" class="font-bold text-sm">Email</label>
         <div class="relative w-full mt-1 text-gray-300 dark:text-gray-500
-        focus-within:text-gray-700 dark:focus-within:text-white">
+        focus-within:text-gray-700 dark:focus-within:text-gray-200">
           <input type="email" name="email" id="email" v-model="userEmail" required
-          class="rounded border-gray-300 w-full text-gray-700 dark:text-white
+          class="rounded border-gray-300 w-full text-gray-700 dark:text-gray-200
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base pl-10
           dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
           <span class="absolute h-full w-10 left-0 top-0 z-10
@@ -40,11 +40,11 @@
       </div>
 
       <div class="mb-4">
-        <label for="password" class="font-bold">Contraseña</label>
+        <label for="password" class="font-bold text-sm">Contraseña</label>
         <div class="relative w-full mt-1 text-gray-300 dark:text-gray-500
-        focus-within:text-gray-700 dark:focus-within:text-white">
+        focus-within:text-gray-700 dark:focus-within:text-gray-200">
           <input type="password" name="password" id="password" v-model="userPassword" required
-          class="rounded border-gray-300 w-full text-gray-700 dark:text-white
+          class="rounded border-gray-300 w-full text-gray-700 dark:text-gray-200
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base pl-10
           dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
           <span class="absolute h-full w-10 left-0 top-0 z-10
@@ -55,7 +55,7 @@
       </div>
 
       <button type="submit"
-      class="rounded bg-purple-500 text-white py-2 px-6 uppercase w-full mt-4
+      class="rounded bg-purple-500 text-white py-2 px-6 uppercase w-full mt-2
       hover:bg-purple-600">
         {{ buttonText }}
       </button>
@@ -77,7 +77,7 @@ export default {
     buttonText: String,
     login: Boolean,
   },
-  setup(props) {
+  setup(props, { emit }) {
     const userName = ref('');
     const userEmail = ref('');
     const userPassword = ref('');
@@ -91,7 +91,7 @@ export default {
           ]);
         if (error) { throw error; }
       } catch (error) {
-        console.log(error.error_description || error.message);
+        emit('signupError');
       }
     }
 
@@ -103,6 +103,7 @@ export default {
         });
         if (error) { throw error; }
       } catch (error) {
+        emit('loginError');
         console.log(error.error_description || error.message);
       }
     }
@@ -116,7 +117,7 @@ export default {
         if (error) { throw error; }
         createProfile();
       } catch (error) {
-        console.log(error.error_description || error.message);
+        emit('signupError');
       }
     }
 
