@@ -45,30 +45,20 @@
   </div>
 </template>
 
-<script>
-import { reactive, toRefs } from 'vue';
+<script setup>
+import { reactive } from 'vue';
 
-export default {
-  name: 'TaskForm',
-  emits: ['saveTask'],
-  setup(_, { emit }) {
-    const taskName = 'Prueba';
-    const taskInfo = reactive({
-      title: '',
-      description: '',
-      start: Date,
-      finish: Date,
-    });
+// eslint-disable-next-line no-undef
+const emit = defineEmits(['saveTask']);
 
-    const saveTask = () => {
-      emit('saveTask', taskInfo);
-    };
+const taskInfo = reactive({
+  title: '',
+  description: '',
+  start: Date,
+  finish: Date,
+});
 
-    return {
-      taskName,
-      saveTask,
-      ...toRefs(taskInfo),
-    };
-  },
+const saveTask = () => {
+  emit('saveTask', taskInfo);
 };
 </script>

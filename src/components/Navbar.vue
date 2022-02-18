@@ -36,45 +36,32 @@
   </nav>
 </template>
 
-<script>
+<script setup>
 import {
   CollectionIcon, MenuIcon, PlusIcon, LogoutIcon,
 } from '@heroicons/vue/solid';
 import supabase from '../supabase/supabase';
 
-export default {
-  name: 'NavbarComponent',
-  components: {
-    CollectionIcon, MenuIcon, PlusIcon, LogoutIcon,
-  },
-  emits: ['hideDrawer', 'showProjects', 'signoutError'],
-  setup(_props, { emit }) {
-    let hiddenDrawer = false;
+// eslint-disable-next-line no-undef
+const emit = defineEmits(['hideDrawer', 'showProjects', 'signoutError']);
 
-    async function handleSignout() {
-      try {
-        const { error } = await supabase.auth.signOut();
-        if (error) throw error;
-      } catch (error) {
-        emit('signoutError', error.message);
-      }
-    }
+let hiddenDrawer = false;
 
-    const hideDrawer = () => {
-      hiddenDrawer = !hiddenDrawer;
-      emit('hideDrawer', hiddenDrawer);
-    };
+async function handleSignout() {
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+  } catch (error) {
+    emit('signoutError', error.message);
+  }
+}
 
-    const showProjects = () => {
-      emit('showProjects');
-    };
+const hideDrawer = () => {
+  hiddenDrawer = !hiddenDrawer;
+  emit('hideDrawer', hiddenDrawer);
+};
 
-    return {
-      handleSignout,
-      hiddenDrawer,
-      hideDrawer,
-      showProjects,
-    };
-  },
+const showProjects = () => {
+  emit('showProjects');
 };
 </script>
