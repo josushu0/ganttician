@@ -11,7 +11,7 @@
     "@headlessui/vue": "^1.5.0",
     "@heroicons/vue": "^1.0.5",
     "@supabase/supabase-js": "^1.30.3",
-    "@tailwindcss/forms": "^0.3.4",
+    "@tailwindcss/forms": "^0.4.0",
     "@vitejs/plugin-vue": "^1.9.3",
     "dhtmlx-gantt": "^7.1.7",
     "vite": "^2.6.4",
