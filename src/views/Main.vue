@@ -19,7 +19,8 @@
     lg:col-start-1 lg:row-start-1 lg:w-14 lg:h-screen" />
     <GanttChart
     class="row-start-2 col-start-1 w-screen h-full overflow-hidden
-    lg:col-start-2 lg:row-start-1 lg:w-full lg:h-screen" />
+    lg:col-start-2 lg:row-start-1 lg:w-full lg:h-screen"
+    @ganttError="ganttError" />
     <SlideOver :toggle="toggleSlideOver" @closeSlideOver="closeSlideOver" class="z-50"/>
   </div>
 </template>
@@ -32,15 +33,17 @@ import { TransitionRoot } from '@headlessui/vue';
 import Navbar from '../components/Navbar.vue';
 import GanttChart from '../components/GanttChart.vue';
 import SlideOver from '../components/SlideOver.vue';
+import AlertDialog from '../components/AlertDialog.vue';
 import supabase from '../supabase/supabase';
 
 export default {
-  name: 'AppView',
+  name: 'MainView',
   components: {
     Navbar,
     GanttChart,
     SlideOver,
     TransitionRoot,
+    AlertDialog,
   },
   setup() {
     const router = useRouter();
@@ -82,6 +85,13 @@ export default {
       setTimeout(() => dismissAlert(), 4000);
     }
 
+    function ganttError(error) {
+      alertType.value = 'Error';
+      alertDescription.value = error;
+      toggleAlert.value = true;
+      setTimeout(() => dismissAlert(), 4000);
+    }
+
     return {
       hideDrawer,
       showSlideOver,
@@ -92,6 +102,7 @@ export default {
       alertType,
       alertDescription,
       signoutError,
+      ganttError,
     };
   },
 
