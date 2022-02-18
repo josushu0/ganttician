@@ -24,7 +24,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { TransitionRoot } from '@headlessui/vue';
@@ -32,44 +32,28 @@ import UserForm from '../components/UserForm.vue';
 import supabase from '../supabase/supabase';
 import AlertDialog from '../components/AlertDialog.vue';
 
-export default {
-  name: 'LoginView',
-  components: { UserForm, AlertDialog, TransitionRoot },
-  setup() {
-    const router = useRouter();
-    const buttonText = 'Iniciar sesión';
-    const login = true;
+const router = useRouter();
+const buttonText = 'Iniciar sesión';
+const login = true;
 
-    onBeforeMount(() => {
-      if (supabase.auth.session()) {
-        router.replace('/');
-      }
-    });
+onBeforeMount(() => {
+  if (supabase.auth.session()) {
+    router.replace('/');
+  }
+});
 
-    const alertType = ref();
-    const alertDescription = ref();
-    const toggleAlert = ref(false);
+const alertType = ref();
+const alertDescription = ref();
+const toggleAlert = ref(false);
 
-    function dismissAlert() {
-      toggleAlert.value = false;
-    }
+function dismissAlert() {
+  toggleAlert.value = false;
+}
 
-    function loginError(error) {
-      alertType.value = 'Error';
-      alertDescription.value = error;
-      toggleAlert.value = true;
-      setTimeout(() => dismissAlert(), 4000);
-    }
-
-    return {
-      buttonText,
-      login,
-      alertType,
-      alertDescription,
-      loginError,
-      toggleAlert,
-      dismissAlert,
-    };
-  },
-};
+function loginError(error) {
+  alertType.value = 'Error';
+  alertDescription.value = error;
+  toggleAlert.value = true;
+  setTimeout(() => dismissAlert(), 4000);
+}
 </script>

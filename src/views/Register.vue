@@ -25,7 +25,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { TransitionRoot } from '@headlessui/vue';
@@ -33,44 +33,28 @@ import UserForm from '../components/UserForm.vue';
 import supabase from '../supabase/supabase';
 import AlertDialog from '../components/AlertDialog.vue';
 
-export default {
-  name: 'RegisterView',
-  components: { UserForm, AlertDialog, TransitionRoot },
-  setup() {
-    const router = useRouter();
-    const buttonText = 'Registrarse';
-    const login = false;
+const router = useRouter();
+const buttonText = 'Registrarse';
+const login = false;
 
-    onBeforeMount(() => {
-      if (supabase.auth.session()) {
-        router.replace('/');
-      }
-    });
+onBeforeMount(() => {
+  if (supabase.auth.session()) {
+    router.replace('/');
+  }
+});
 
-    const alertType = ref();
-    const alertDescription = ref();
-    const toggleAlert = ref(false);
+const alertType = ref();
+const alertDescription = ref();
+const toggleAlert = ref(false);
 
-    function dismissAlert() {
-      toggleAlert.value = false;
-    }
+function dismissAlert() {
+  toggleAlert.value = false;
+}
 
-    function signupError(error) {
-      alertType.value = 'Error';
-      alertDescription.value = error;
-      toggleAlert.value = true;
-      setTimeout(() => dismissAlert(), 4000);
-    }
-
-    return {
-      buttonText,
-      login,
-      alertType,
-      alertDescription,
-      signupError,
-      toggleAlert,
-      dismissAlert,
-    };
-  },
-};
+function signupError(error) {
+  alertType.value = 'Error';
+  alertDescription.value = error;
+  toggleAlert.value = true;
+  setTimeout(() => dismissAlert(), 4000);
+}
 </script>

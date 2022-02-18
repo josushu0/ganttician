@@ -25,7 +25,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { useRouter } from 'vue-router';
 import { gantt } from 'dhtmlx-gantt';
 import { onBeforeMount, ref } from 'vue';
@@ -36,75 +36,49 @@ import SlideOver from '../components/SlideOver.vue';
 import AlertDialog from '../components/AlertDialog.vue';
 import supabase from '../supabase/supabase';
 
-export default {
-  name: 'MainView',
-  components: {
-    Navbar,
-    GanttChart,
-    SlideOver,
-    TransitionRoot,
-    AlertDialog,
-  },
-  setup() {
-    const router = useRouter();
-    const session = supabase.auth.session();
-    onBeforeMount(() => {
-      if (!session) {
-        router.replace('/login');
-      }
-    });
+const router = useRouter();
+const session = supabase.auth.session();
+onBeforeMount(() => {
+  if (!session) {
+    router.replace('/login');
+  }
+});
 
-    function hideDrawer(hiddenDrawer) {
-      if (hiddenDrawer) {
-        gantt.config.show_grid = false;
-        gantt.render();
-      } else {
-        gantt.config.show_grid = true;
-        gantt.render();
-      }
-    }
+function hideDrawer(hiddenDrawer) {
+  if (hiddenDrawer) {
+    gantt.config.show_grid = false;
+    gantt.render();
+  } else {
+    gantt.config.show_grid = true;
+    gantt.render();
+  }
+}
 
-    const toggleSlideOver = ref(false);
-    const showSlideOver = () => {
-      toggleSlideOver.value = true;
-    };
-    const closeSlideOver = () => {
-      toggleSlideOver.value = false;
-    };
-
-    const toggleAlert = ref(false);
-    const alertType = ref();
-    const alertDescription = ref();
-    function dismissAlert() {
-      toggleAlert.value = false;
-    }
-    function signoutError(error) {
-      alertType.value = 'Error';
-      alertDescription.value = error;
-      toggleAlert.value = true;
-      setTimeout(() => dismissAlert(), 4000);
-    }
-
-    function ganttError(error) {
-      alertType.value = 'Error';
-      alertDescription.value = error;
-      toggleAlert.value = true;
-      setTimeout(() => dismissAlert(), 4000);
-    }
-
-    return {
-      hideDrawer,
-      showSlideOver,
-      closeSlideOver,
-      session,
-      toggleSlideOver,
-      toggleAlert,
-      alertType,
-      alertDescription,
-      signoutError,
-      ganttError,
-    };
-  },
-
+const toggleSlideOver = ref(false);
+const showSlideOver = () => {
+  toggleSlideOver.value = true;
 };
+const closeSlideOver = () => {
+  toggleSlideOver.value = false;
+};
+
+const toggleAlert = ref(false);
+const alertType = ref();
+const alertDescription = ref();
+function dismissAlert() {
+  toggleAlert.value = false;
+}
+function signoutError(error) {
+  alertType.value = 'Error';
+  alertDescription.value = error;
+  toggleAlert.value = true;
+  setTimeout(() => dismissAlert(), 4000);
+}
+
+function ganttError(error) {
+  alertType.value = 'Error';
+  alertDescription.value = error;
+  toggleAlert.value = true;
+  setTimeout(() => dismissAlert(), 4000);
+}
 </script>
