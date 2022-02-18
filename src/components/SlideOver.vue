@@ -1,4 +1,3 @@
-<!-- This example requires Tailwind CSS v2.0+ -->
 <template>
   <TransitionRoot as="template" :show="isOpen">
     <Dialog as="div" class="fixed inset-0 overflow-hidden" @close="close">
@@ -38,13 +37,11 @@
                   </DialogTitle>
                 </div>
                 <div class="mt-6 relative flex-1 px-4 sm:px-6">
-                  <!-- Replace with your content -->
                   <div class="absolute inset-0 px-4 sm:px-6">
                     <div class="h-full" aria-hidden="true">
                       <slot></slot>
                     </div>
                   </div>
-                  <!-- /End replace -->
                 </div>
               </div>
             </div>
@@ -55,35 +52,21 @@
   </TransitionRoot>
 </template>
 
-<script>
+<script setup>
 import { toRef } from 'vue';
 import {
   Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot,
 } from '@headlessui/vue';
 import { XIcon } from '@heroicons/vue/outline';
 
-export default {
-  components: {
-    Dialog,
-    DialogOverlay,
-    DialogTitle,
-    TransitionChild,
-    TransitionRoot,
-    XIcon,
-  },
-  props: { toggle: Boolean },
-  emits: ['closeSlideOver'],
-  setup(props, { emit }) {
-    const isOpen = toRef(props, 'toggle');
+// eslint-disable-next-line no-undef
+const props = defineProps({ toggle: Boolean });
+// eslint-disable-next-line no-undef
+const emit = defineEmits(['closeSlideOver']);
 
-    const close = () => {
-      emit('closeSlideOver');
-    };
+const isOpen = toRef(props, 'toggle');
 
-    return {
-      isOpen,
-      close,
-    };
-  },
+const close = () => {
+  emit('closeSlideOver');
 };
 </script>

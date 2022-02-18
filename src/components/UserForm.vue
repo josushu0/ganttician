@@ -65,76 +65,64 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
 import { MailIcon, LockClosedIcon, UserIcon } from '@heroicons/vue/solid';
 import supabase from '../supabase/supabase';
 
-export default {
-  name: 'UserForm',
-  components: { MailIcon, LockClosedIcon, UserIcon },
-  props: {
-    buttonText: String,
-    login: Boolean,
-  },
-  emits: ['loginError', 'signupError'],
-  setup(props, { emit }) {
-    const userName = ref('');
-    const userEmail = ref('');
-    const userPassword = ref('');
+// eslint-disable-next-line no-undef
+const props = defineProps({
+  buttonText: String,
+  login: Boolean,
+});
+// eslint-disable-next-line no-undef
+const emit = defineEmits(['loginError', 'signupError']);
 
-    async function createProfile() {
-      try {
-        const { error } = await supabase
-          .from('profile')
-          .insert([
-            { id: supabase.auth.user().id, user_name: userName.value },
-          ]);
-        if (error) { throw error; }
-      } catch (error) {
-        emit('signupError', error.message);
-      }
-    }
+const userName = ref('');
+const userEmail = ref('');
+const userPassword = ref('');
 
-    async function handleLogin() {
-      try {
-        const { error } = await supabase.auth.signIn({
-          email: userEmail.value,
-          password: userPassword.value,
-        });
-        if (error) { throw error; }
-      } catch (error) {
-        emit('loginError', error.message);
-      }
-    }
+async function createProfile() {
+  try {
+    const { error } = await supabase
+      .from('profile')
+      .insert([
+        { id: supabase.auth.user().id, user_name: userName.value },
+      ]);
+    if (error) { throw error; }
+  } catch (error) {
+    emit('signupError', error.message);
+  }
+}
 
-    async function handleSignup() {
-      try {
-        const { error } = await supabase.auth.signUp({
-          email: userEmail.value,
-          password: userPassword.value,
-        });
-        if (error) { throw error; }
-        createProfile();
-      } catch (error) {
-        emit('signupError', error.message);
-      }
-    }
+async function handleLogin() {
+  try {
+    const { error } = await supabase.auth.signIn({
+      email: userEmail.value,
+      password: userPassword.value,
+    });
+    if (error) { throw error; }
+  } catch (error) {
+    emit('loginError', error.message);
+  }
+}
 
-    function handleType() {
-      if (props.login) {
-        handleLogin();
-      } else handleSignup();
-    }
+async function handleSignup() {
+  try {
+    const { error } = await supabase.auth.signUp({
+      email: userEmail.value,
+      password: userPassword.value,
+    });
+    if (error) { throw error; }
+    createProfile();
+  } catch (error) {
+    emit('signupError', error.message);
+  }
+}
 
-    return {
-      handleLogin,
-      handleSignup,
-      handleType,
-      userName,
-      userEmail,
-      userPassword,
-    };
-  },
-};
+function handleType() {
+  if (props.login) {
+    handleLogin();
+  } else handleSignup();
+}
 </script>

@@ -17,29 +17,21 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
 import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/vue/solid';
 
-export default {
-  name: 'AlertDialog',
-  components: { CheckCircleIcon, ExclamationCircleIcon },
-  props: {
-    type: String,
-    description: String,
-  },
-  setup(props) {
-    const bgType = ref();
+// eslint-disable-next-line no-undef
+const props = defineProps({
+  type: String,
+  description: String,
+});
 
-    if (props.type === 'Error') {
-      bgType.value = false;
-    } else {
-      bgType.value = true;
-    }
+const bgType = ref();
 
-    return {
-      bgType,
-    };
-  },
-};
+if (props.type === 'Error') {
+  bgType.value = false;
+} else {
+  bgType.value = true;
+}
 </script>
