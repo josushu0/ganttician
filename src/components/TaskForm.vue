@@ -35,7 +35,7 @@
         dark:text-red-400 dark:hover:bg-red-500 dark:hover:text-gray-50">
           Eliminar
         </button>
-        <button @click="saveTask"
+        <button @click="addTask"
         class="rounded bg-purple-500 text-white py-2 px-6
       hover:bg-purple-600">
           Guardar
@@ -46,19 +46,23 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { ref } from 'vue';
 
 // eslint-disable-next-line no-undef
-const emit = defineEmits(['saveTask']);
+const emit = defineEmits(['addTask']);
+const title = ref('');
+const description = ref('');
+const start = ref('');
+const finish = ref('');
 
-const taskInfo = reactive({
-  title: '',
-  description: '',
-  start: Date,
-  finish: Date,
-});
+const taskInfo = {
+  title,
+  description,
+  start,
+  finish,
+};
 
-const saveTask = () => {
-  emit('saveTask', taskInfo);
+const addTask = () => {
+  emit('addTask', taskInfo);
 };
 </script>
