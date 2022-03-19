@@ -2,31 +2,39 @@
   <div class="flex flex-col last:justify-end text-gray-700 dark:text-gray-200 h-full">
     <form @submit.prevent class="h-full flex flex-col">
       <div class="mb-4">
-        <label for="title" class="text-lg font-medium">Título</label>
+        <label for="title" class="font-medium">Título</label>
         <input type="text" name="title" id="title" v-model="title"
         class="rounded border-gray-300 w-full
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base
           dark:bg-gray-700 dark:border-[#515c6d] dark:focus:ring-purple-500 mt-1" />
       </div>
       <div class="mb-4">
-        <label for="description" class="text-lg font-medium">Descripción</label>
-        <textarea name="description" id="description" cols="30" rows="5" v-model="description"
+        <label for="description" class="font-medium">Descripción</label>
+        <textarea name="description" id="description" rows="3" v-model="description"
         class="rounded border-gray-300 w-full
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base
           dark:bg-gray-700 dark:border-[#515c6d] dark:focus:ring-purple-500 mt-1"></textarea>
       </div>
       <div class="mb-4">
-        <label class="text-lg font-medium">Periodo</label>
+        <label class="font-medium">Periodo</label>
         <div class="flex justify-between items-center">
           <input type="date" name="start" id="start" v-model="start"
-        class="rounded border-gray-300
+          class="rounded border-gray-300
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base
           dark:bg-gray-700 dark:border-[#515c6d] dark:focus:ring-purple-500 mt-1">
           <span>a</span>
           <input type="date" name="finish" id="finish" v-model="finish"
-        class="rounded border-gray-300
+          class="rounded border-gray-300
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base
           dark:bg-gray-700 dark:border-[#515c6d] dark:focus:ring-purple-500 mt-1">
+        </div>
+      </div>
+      <div class="mb-4">
+        <label for="progress" class="font-medium">Progreso</label>
+        <div class="flex content-center">
+          <input type="range" name="progress" id="progress" min="0" max="100" step="1"
+          v-model="progress" class="w-full accent-purple-600 dark:accent-purple-500 mt-1" />
+          <span class="w-16 text-right">{{ progress }}%</span>
         </div>
       </div>
       <div class="mt-auto flex justify-end">
@@ -49,11 +57,12 @@
 import { ref } from 'vue';
 
 // eslint-disable-next-line no-undef
-const emit = defineEmits(['addTask']);
+const emit = defineEmits(['addTask', 'deleteTask']);
 const title = ref('');
 const description = ref('');
 const start = ref('');
 const finish = ref('');
+const progress = ref(0);
 
 const taskInfo = {
   title,
@@ -64,5 +73,9 @@ const taskInfo = {
 
 const addTask = () => {
   emit('addTask', taskInfo);
+};
+
+const deleteTask = () => {
+  emit('deleteTask');
 };
 </script>
