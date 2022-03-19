@@ -120,29 +120,30 @@ onBeforeMount(() => {
 
   gantt.config.layout = {
     css: 'gantt_container',
-    cols: [
+    rows: [
       {
-        width: 400,
-        min_width: 400,
-        rows: [
-          // the default grid view
+        cols: [
           {
-            view: 'grid', scrollX: 'gridScroll', scrollable: true, scrollY: 'scrollVer',
+            // the default grid view
+            view: 'grid',
+            scrollX: 'scrollHor',
+            scrollY: 'scrollVer',
           },
-          { view: 'scrollbar', id: 'gridScroll', group: 'horizontal' },
-        ],
-      },
-      { resizer: true, width: 1 },
-      {
-        rows: [
-          // the default timeline view
-          { view: 'timeline', scrollX: 'scrollHor', scrollY: 'scrollVer' },
-          { view: 'scrollbar', id: 'scrollHor', group: 'horizontal' },
+          {
+            // the default timeline view
+            view: 'timeline',
+            scrollX: 'scrollHor',
+            scrollY: 'scrollVer',
+          },
+          {
+            view: 'scrollbar',
+            id: 'scrollVer',
+          },
         ],
       },
       {
         view: 'scrollbar',
-        id: 'scrollVer',
+        id: 'scrollHor',
       },
     ],
   };
@@ -160,6 +161,8 @@ onBeforeMount(() => {
   gantt.config.autoscroll = true;
   gantt.config.touch_drag = 200;
   gantt.config.touch = 'force';
+  gantt.config.wai_aria_attributes = true;
+  gantt.config.grid_width = 400;
 
   gantt.createTask = () => {
     gantt.showLightbox();
