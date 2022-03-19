@@ -18,7 +18,7 @@
     class="row-start-1 col-start-1 w-screen h-[52px]
     lg:col-start-1 lg:row-start-1 lg:w-14 lg:h-screen" />
     <GanttChart
-    class="row-start-2 col-start-1 w-screen h-full overflow-hidden
+    class="row-start-2 col-start-1 w-full h-full overflow-hidden
     lg:col-start-2 lg:row-start-1 lg:w-full lg:h-screen"
     @ganttError="ganttError" />
     <SlideOver :toggle="toggleSlideOver" @closeSlideOver="closeSlideOver" class="z-50"/>

@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div id="gantt" class="w-screen h-full"></div>
+  <div id="gantt" class="w-full h-full"></div>
   <SlideOver :toggle="toggleSlideOver" @closeSlideOver="closeSlideOver" class="z-50">
     <TaskForm @addTask="addTask" />
   </SlideOver>
@@ -120,40 +120,38 @@ onBeforeMount(() => {
 
   gantt.config.layout = {
     css: 'gantt_container',
-    rows: [
+    cols: [
       {
-        cols: [
+        width: 400,
+        min_width: 400,
+        rows: [
+          // the default grid view
           {
-            // the default grid view
-            view: 'grid',
-            scrollX: 'scrollHor',
-            scrollY: 'scrollVer',
+            view: 'grid', scrollX: 'gridScroll', scrollable: true, scrollY: 'scrollVer',
           },
-          { resizer: true, width: 1 },
-          {
-            // the default timeline view
-            view: 'timeline',
-            scrollX: 'scrollHor',
-            scrollY: 'scrollVer',
-          },
-          {
-            view: 'scrollbar',
-            id: 'scrollVer',
-          },
+          { view: 'scrollbar', id: 'gridScroll', group: 'horizontal' },
+        ],
+      },
+      { resizer: true, width: 1 },
+      {
+        rows: [
+          // the default timeline view
+          { view: 'timeline', scrollX: 'scrollHor', scrollY: 'scrollVer' },
+          { view: 'scrollbar', id: 'scrollHor', group: 'horizontal' },
         ],
       },
       {
         view: 'scrollbar',
-        id: 'scrollHor',
+        id: 'scrollVer',
       },
     ],
   };
 
   gantt.config.columns = [
-    { name: 'text', width: '200', tree: true },
-    { name: 'start_date', align: 'center' },
-    { name: 'duration', align: 'center' },
-    { name: 'add', label: '', width: 44 },
+    { name: 'text', width: '*', tree: true },
+    { name: 'start_date', width: 85, align: 'center' },
+    { name: 'duration', width: 85, align: 'center' },
+    { name: 'add', label: '', width: 35 },
   ];
 
   // Time Grid configuration
@@ -162,7 +160,6 @@ onBeforeMount(() => {
   gantt.config.autoscroll = true;
   gantt.config.touch_drag = 200;
   gantt.config.touch = 'force';
-  gantt.config.grid_width = 400;
 
   gantt.createTask = () => {
     gantt.showLightbox();
@@ -226,5 +223,10 @@ onUnmounted(() => {
 }
 .gantt_grid_data {
   border-right: 1px solid #d7d7d7;
+}
+.gantt_tree_content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
