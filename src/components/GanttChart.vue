@@ -9,6 +9,7 @@
 
 <script setup>
 import { gantt } from 'dhtmlx-gantt';
+import { v4 as uuid } from 'uuid';
 import {
   onUnmounted, ref, reactive, onBeforeMount,
 } from 'vue';
@@ -56,31 +57,34 @@ async function getTasks() {
 
 async function addTask(taskInfo) {
   const {
-    title, description, start, finish,
+    title, description, start, finish, progress,
   } = taskInfo;
   const duration = (Date.parse(finish.value) - Date.parse(start.value)) / 1000 / 60 / 60 / 24;
+  const id = uuid();
   try {
     const { error } = await supabase
       .from('gantt_tasks')
       .insert([
         {
+          id,
           user: session.user.id,
           text: title.value,
           description: description.value,
           start_date: start.value,
           duration,
-          progress: 0.0,
+          progress: progress.value / 100,
           // parent,
           // project: props.project
         },
       ]);
     if (error) throw error;
     tasks.data.push({
+      id,
       text: title.value,
       description: description.value,
       start_date: start.value,
       duration,
-      progress: 0.0,
+      progress: progress.value / 100,
       // parent,
     });
     gantt.parse(tasks);
@@ -146,11 +150,7 @@ onBeforeMount(() => {
   };
 
   gantt.config.columns = [
-    {
-      name: 'text',
-      width: '120',
-      tree: true,
-    },
+    { name: 'text', width: '200', tree: true },
     { name: 'start_date', align: 'center' },
     { name: 'duration', align: 'center' },
     { name: 'add', label: '', width: 44 },
@@ -162,6 +162,7 @@ onBeforeMount(() => {
   gantt.config.autoscroll = true;
   gantt.config.touch_drag = 200;
   gantt.config.touch = 'force';
+  gantt.config.grid_width = 400;
 
   gantt.createTask = () => {
     gantt.showLightbox();

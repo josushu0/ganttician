@@ -69,6 +69,7 @@ const taskInfo = {
   description,
   start,
   finish,
+  progress,
 };
 
 const addTask = () => {
