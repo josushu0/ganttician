@@ -2,7 +2,7 @@
 <div>
   <div id="gantt" class="w-full h-full"></div>
   <SlideOver :toggle="toggleSlideOver" @closeSlideOver="closeSlideOver" class="z-50">
-    <TaskForm @addTask="addTask" />
+    <TaskForm @addTask="addTask" :edit=edit />
   </SlideOver>
 </div>
 </template>
@@ -19,9 +19,8 @@ import supabase from '../supabase/supabase';
 
 // eslint-disable-next-line no-undef
 const emit = defineEmits(['ganttError']);
-// eslint-disable-next-line no-undef
-// const props = defineProps(['project']);
 
+const edit = ref();
 const session = supabase.auth.session();
 const tasks = reactive({
   data: [],
@@ -164,7 +163,14 @@ onBeforeMount(() => {
   gantt.config.wai_aria_attributes = true;
   gantt.config.grid_width = 400;
 
+  gantt.attachEvent('onTaskDblClick', () => {
+    // const task = gantt.getTask(id);
+    edit.value = true;
+    gantt.showLightbox();
+  });
+
   gantt.createTask = () => {
+    edit.value = false;
     gantt.showLightbox();
   };
 
@@ -189,8 +195,8 @@ onBeforeMount(() => {
 });
 
 onUnmounted(() => {
-  tasks.data = null;
-  tasks.links = null;
+  tasks.data = {};
+  tasks.links = {};
   gantt.clearAll();
 });
 </script>

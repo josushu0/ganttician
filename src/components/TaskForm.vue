@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="mt-auto flex justify-end">
-        <button @click="deleteTask"
+        <button @click="deleteTask" v-if="props.edit"
         class="rounded text-red-700 py-2 px-6 mr-4 hover:bg-red-300
         dark:text-red-400 dark:hover:bg-red-500 dark:hover:text-gray-50">
           Eliminar
@@ -58,6 +58,10 @@ import { ref } from 'vue';
 
 // eslint-disable-next-line no-undef
 const emit = defineEmits(['addTask', 'deleteTask']);
+// eslint-disable-next-line no-undef
+const props = defineProps({
+  edit: Boolean,
+});
 const title = ref('');
 const description = ref('');
 const start = ref('');
