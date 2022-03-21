@@ -1,8 +1,9 @@
+/* eslint-disable camelcase */
 <template>
 <div>
   <div id="gantt" class="w-full h-full"></div>
   <SlideOver :toggle="toggleSlideOver" @closeSlideOver="closeSlideOver" class="z-50">
-    <TaskForm @addTask="addTask" :edit=edit />
+    <TaskForm :edit=edit @addTask="addTask" />
   </SlideOver>
 </div>
 </template>
@@ -13,13 +14,14 @@ import { v4 as uuid } from 'uuid';
 import {
   onUnmounted, ref, reactive, onBeforeMount,
 } from 'vue';
+import useTaskStore from '../stores/taskStore';
 import SlideOver from './SlideOver.vue';
 import TaskForm from './TaskForm.vue';
 import supabase from '../supabase/supabase';
 
 // eslint-disable-next-line no-undef
 const emit = defineEmits(['ganttError']);
-
+const taskEdit = useTaskStore();
 const edit = ref();
 const session = supabase.auth.session();
 const tasks = reactive({
@@ -32,7 +34,7 @@ async function getTasks() {
     try {
       const { data: ganttTasks, error: tasksError } = await supabase
         .from('gantt_tasks')
-        .select('id,duration,text,start_date,progress,parent')
+        .select('id,duration,text,description,start_date,progress,parent')
         .eq('user', session.user.id);
         // .eq('project', props.project);
       tasks.data = ganttTasks;
@@ -163,8 +165,23 @@ onBeforeMount(() => {
   gantt.config.wai_aria_attributes = true;
   gantt.config.grid_width = 400;
 
-  gantt.attachEvent('onTaskDblClick', () => {
-    // const task = gantt.getTask(id);
+  gantt.attachEvent('onTaskDblClick', (id) => {
+    const {
+      text, description, start_date: startDate, end_date: endDate, progress,
+    } = gantt.getTask(id);
+    taskEdit.task.text = text;
+    taskEdit.task.description = description;
+    let mes = startDate.getMonth();
+    if (mes < 10) {
+      mes = `0${mes}`;
+    }
+    taskEdit.task.start_date = `${startDate.getFullYear()}-${mes}-${startDate.getDate()}`;
+    mes = endDate.getMonth();
+    if (mes < 10) {
+      mes = `0${mes}`;
+    }
+    taskEdit.task.end_date = `${endDate.getFullYear()}-${mes}-${endDate.getDate()}`;
+    taskEdit.task.progress = progress;
     edit.value = true;
     gantt.showLightbox();
   });

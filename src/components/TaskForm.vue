@@ -55,6 +55,10 @@
 
 <script setup>
 import { ref } from 'vue';
+import useTaskStore from '../stores/taskStore';
+
+const taskEdit = useTaskStore();
+console.log(taskEdit);
 
 // eslint-disable-next-line no-undef
 const emit = defineEmits(['addTask', 'deleteTask']);
@@ -62,11 +66,11 @@ const emit = defineEmits(['addTask', 'deleteTask']);
 const props = defineProps({
   edit: Boolean,
 });
-const title = ref('');
-const description = ref('');
-const start = ref('');
-const finish = ref('');
-const progress = ref(0);
+const title = ref(taskEdit.task.text);
+const description = ref(taskEdit.task.description);
+const start = ref(taskEdit.task.start_date);
+const finish = ref(taskEdit.task.end_date);
+const progress = ref(taskEdit.task.progress * 100);
 
 const taskInfo = {
   title,
@@ -75,6 +79,7 @@ const taskInfo = {
   finish,
   progress,
 };
+taskEdit.$reset();
 
 const addTask = () => {
   emit('addTask', taskInfo);
