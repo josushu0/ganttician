@@ -23,11 +23,10 @@
       class="row-start-2 col-start-1 w-screen h-full overflow-hidden
       lg:col-start-2 lg:row-start-1 lg:w-full lg:h-screen"
       @ganttError="ganttError" />
-      <SlideOver :toggle="toggleSlideOver" @closeSlideOver="closeSlideOver" class="z-50"/>
     </div>
   </div>
   <div v-else>
-    <Project />
+    <Project @showGantt="showGantt"/>
   </div>
   </div>
 </template>
@@ -39,12 +38,11 @@ import { onBeforeMount, ref } from 'vue';
 import { TransitionRoot } from '@headlessui/vue';
 import Navbar from '../components/Navbar.vue';
 import GanttChart from '../components/GanttChart.vue';
-import SlideOver from '../components/SlideOver.vue';
 import AlertDialog from '../components/AlertDialog.vue';
 import Project from '../components/Proyect.vue';
 import supabase from '../supabase/supabase';
 
-const project = ref(false);
+const project = ref(true);
 
 const router = useRouter();
 const session = supabase.auth.session();
@@ -64,12 +62,12 @@ function hideDrawer(hiddenDrawer) {
   }
 }
 
-const toggleSlideOver = ref(false);
 const showSlideOver = () => {
-  toggleSlideOver.value = true;
+  project.value = false;
 };
-const closeSlideOver = () => {
-  toggleSlideOver.value = false;
+
+const showGantt = () => {
+  project.value = true;
 };
 
 const toggleAlert = ref(false);
