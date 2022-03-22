@@ -1,51 +1,54 @@
+/* eslint-disable camelcase */
 <template>
 <div>
-  <div id="gantt" class="w-screen h-full"></div>
+  <div id="gantt" class="w-full h-full"></div>
   <SlideOver :toggle="toggleSlideOver" @closeSlideOver="closeSlideOver" class="z-50">
-    <TaskForm @saveTask="saveTask" />
+    <TaskForm :edit=edit @addTask="addTask" />
   </SlideOver>
 </div>
 </template>
 
 <script setup>
 import { gantt } from 'dhtmlx-gantt';
+import { v4 as uuid } from 'uuid';
 import {
-  onMounted, onUnmounted, ref, reactive,
+  onUnmounted, ref, reactive, onBeforeMount,
 } from 'vue';
+import useTaskStore from '../stores/taskStore';
 import SlideOver from './SlideOver.vue';
 import TaskForm from './TaskForm.vue';
 import supabase from '../supabase/supabase';
 
 // eslint-disable-next-line no-undef
 const emit = defineEmits(['ganttError']);
-
+const taskEdit = useTaskStore();
+const edit = ref();
+const session = supabase.auth.session();
 const tasks = reactive({
-  data: {},
+  data: [],
   links: [],
 });
-const session = supabase.auth.session();
-const user = supabase.auth.user().id;
 
 async function getTasks() {
   if (session) {
     try {
-      const { error: projectError } = await supabase
-        .from('projects')
-        .select('id')
-        .eq('user', user);
       const { data: ganttTasks, error: tasksError } = await supabase
         .from('gantt_tasks')
-        .select('id,duration,text,start_date,progress,parent')
-        .eq('user', user);
-        // .eq('projects', project.id);
+        .select('id,duration,text,description,start_date,progress,parent')
+        .eq('user', session.user.id);
+        // .eq('project', props.project);
       tasks.data = ganttTasks;
-      tasks.links = [];
+      const { data: ganttLinks, error: linksError } = await supabase
+        .from('gantt_links')
+        .select('type,source,target');
+        // .eq('project', props.project);
+      tasks.links = ganttLinks;
       gantt.init('gantt');
       gantt.parse(tasks);
-      if (projectError) {
-        throw projectError;
-      } else if (tasksError) {
+      if (tasksError) {
         throw tasksError;
+      } else if (linksError) {
+        throw linksError;
       }
     } catch (error) {
       emit('ganttError', error);
@@ -53,51 +56,60 @@ async function getTasks() {
   }
 }
 
-// async function updateTasks() {
-//   gantt.parse(tasks);
-//   gantt.render();
-// }
-
-const toggleSlideOver = ref(false);
-const taskId = ref();
-function showSlideOver() {
-  toggleSlideOver.value = true;
-}
-function closeSlideOver() {
-  toggleSlideOver.value = false;
-}
-async function saveTask(taskInfo) {
+async function addTask(taskInfo) {
   const {
-    title, description, start, finish,
+    title, description, start, finish, progress,
   } = taskInfo;
-  const duration = (new Date(finish) - new Date(start)) / 1000 / 60 / 60 / 24;
+  const duration = (Date.parse(finish.value) - Date.parse(start.value)) / 1000 / 60 / 60 / 24;
+  const id = uuid();
   try {
     const { error } = await supabase
       .from('gantt_tasks')
       .insert([
         {
-          user,
-          text: title,
-          description,
-          start_date: start,
+          id,
+          user: session.user.id,
+          text: title.value,
+          description: description.value,
+          start_date: start.value,
           duration,
-          progress: 0.0,
+          progress: progress.value / 100,
+          // parent,
+          // project: props.project
         },
       ]);
     if (error) throw error;
+    tasks.data.push({
+      id,
+      text: title.value,
+      description: description.value,
+      start_date: start.value,
+      duration,
+      progress: progress.value / 100,
+      // parent,
+    });
+    gantt.parse(tasks);
+    gantt.hideLightbox();
   } catch (error) {
-    emit('ganttError');
+    emit('ganttError', error);
   }
-  // updateTasks();
-  const task = gantt.getTask(taskId.value);
-  gantt.deleteTask(task.id);
-  gantt.hideLightbox();
-  taskId.value = null;
 }
 
-onMounted(() => {
+// Slide Over controls
+const toggleSlideOver = ref(false);
+
+function showSlideOver() {
+  toggleSlideOver.value = true;
+}
+
+function closeSlideOver() {
+  toggleSlideOver.value = false;
+}
+
+// Gantt config
+onBeforeMount(() => {
   gantt.i18n.setLocale('es');
-  gantt.config.xml_date = '%Y-%m-%d';
+  gantt.config.date_format = '%Y-%m-%d';
   gantt.config.cascade_delete = false;
 
   // Scales configuration
@@ -118,7 +130,6 @@ onMounted(() => {
             scrollX: 'scrollHor',
             scrollY: 'scrollVer',
           },
-          { resizer: true, width: 1 },
           {
             // the default timeline view
             view: 'timeline',
@@ -139,14 +150,10 @@ onMounted(() => {
   };
 
   gantt.config.columns = [
-    {
-      name: 'text',
-      width: '120',
-      tree: true,
-    },
-    { name: 'start_date', align: 'center' },
-    { name: 'duration', align: 'center' },
-    { name: 'add', label: '', width: 44 },
+    { name: 'text', width: '*', tree: true },
+    { name: 'start_date', width: 85, align: 'center' },
+    { name: 'duration', width: 85, align: 'center' },
+    { name: 'add', label: '', width: 35 },
   ];
 
   // Time Grid configuration
@@ -155,39 +162,43 @@ onMounted(() => {
   gantt.config.autoscroll = true;
   gantt.config.touch_drag = 200;
   gantt.config.touch = 'force';
+  gantt.config.wai_aria_attributes = true;
+  gantt.config.grid_width = 400;
 
-  // Lightbox configuration
-  // gantt.locale.labels.section_time = 'Periodo';
-  // gantt.config.lightbox.sections = [
-  //   {
-  //     name: 'description',
-  //     height: 45,
-  //     type: 'textarea',
-  //     map_to: 'text',
-  //     focus: true,
-  //   },
-  //   {
-  //     name: 'time',
-  //     height: 35,
-  //     type: 'duration',
-  //     map_to: 'auto',
-  //   },
-  // ];
-  // gantt.config.lightbox_additional_height = 110;
-  // gantt.config.buttons_left = ['gantt_cancel_btn'];
-  // gantt.config.buttons_right = ['gantt_save_btn', 'gantt_delete_btn'];
+  gantt.attachEvent('onTaskDblClick', (id) => {
+    const {
+      text, description, start_date: startDate, end_date: endDate, progress,
+    } = gantt.getTask(id);
+    taskEdit.task.text = text;
+    taskEdit.task.description = description;
+    let mes = startDate.getMonth();
+    if (mes < 10) {
+      mes = `0${mes}`;
+    }
+    taskEdit.task.start_date = `${startDate.getFullYear()}-${mes}-${startDate.getDate()}`;
+    mes = endDate.getMonth();
+    if (mes < 10) {
+      mes = `0${mes}`;
+    }
+    taskEdit.task.end_date = `${endDate.getFullYear()}-${mes}-${endDate.getDate()}`;
+    taskEdit.task.progress = progress;
+    edit.value = true;
+    gantt.showLightbox();
+  });
 
-  gantt.showLightbox = (id) => {
+  gantt.createTask = () => {
+    edit.value = false;
+    gantt.showLightbox();
+  };
+
+  gantt.showLightbox = () => {
     showSlideOver();
-    taskId.value = id;
   };
 
   gantt.hideLightbox = () => {
     closeSlideOver();
     gantt.refreshData();
   };
-
-  // gantt.attachEvent('on', () => {});
 
   // Plugins configuration
   gantt.plugins({
@@ -196,12 +207,13 @@ onMounted(() => {
   });
   gantt.templates.tooltip_text = (start, end) => `<b>Inicio:</b> ${gantt.templates
     .tooltip_date_format(start)}<br/><b>Fin:</b> ${gantt.templates.tooltip_date_format(end)}`;
+
   getTasks();
 });
 
 onUnmounted(() => {
-  tasks.data = null;
-  tasks.links = null;
+  tasks.data = {};
+  tasks.links = {};
   gantt.clearAll();
 });
 </script>
@@ -237,5 +249,10 @@ onUnmounted(() => {
 }
 .gantt_grid_data {
   border-right: 1px solid #d7d7d7;
+}
+.gantt_tree_content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
