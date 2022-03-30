@@ -1,6 +1,6 @@
 <template>
   <div class="bg-gray-100 dark:bg-gray-700 h-screen w-screen grid place-content-center">
-    <div class="flex justify-center items-center flex-wrap gap-3 max-w-3xl m-auto">
+    <div v-if="projects" class="flex justify-center items-center flex-wrap gap-3 max-w-3xl m-auto">
       <button v-for='projectItem in projects' :key='projectItem.id'
         class="bg-gray-300 text-gray-900 rounded-lg h-32 w-32 shadow-lg
           dark:bg-gray-800 dark:text-gray-50 hover:bg-gray-400 hover:dark:bg-gray-900"
