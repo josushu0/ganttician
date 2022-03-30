@@ -16,13 +16,13 @@
     <button class="navbar_item rounded-lg ml-2 lg:mt-2 lg:ml-0 lg:w-11 lg:h-11
                   flex justify-center items-center w-10 h-10 shadow-lg"
                   @click="showProjects">
-      <CollectionIcon class="h-5 w-5 lg:h-6 lg:w-6" />
+      <ViewGridIcon class="h-5 w-5 lg:h-6 lg:w-6" />
     </button>
 
-    <button class="navbar_item rounded-lg ml-2 lg:mt-2 lg:ml-0 lg:w-11 lg:h-11
-                  flex justify-center items-center w-10 h-10 shadow-lg">
-      <PlusIcon class="h-5 w-5 lg:h-6 lg:w-6" />
-    </button>
+<!--    <button class="navbar_item rounded-lg ml-2 lg:mt-2 lg:ml-0 lg:w-11 lg:h-11-->
+<!--                  flex justify-center items-center w-10 h-10 shadow-lg">-->
+<!--      <PlusIcon class="h-5 w-5 lg:h-6 lg:w-6" />-->
+<!--    </button>-->
 
     <hr class="bg-gray-300 dark:bg-gray-900 border border-gray-300 ml-auto h-3/4 w-0
                 lg:mt-auto lg:ml-0 lg:w-9/12 lg:h-0 dark:border-gray-900" />
@@ -38,7 +38,7 @@
 
 <script setup>
 import {
-  CollectionIcon, MenuIcon, PlusIcon, LogoutIcon,
+  ViewGridIcon, MenuIcon, LogoutIcon,
 } from '@heroicons/vue/solid';
 import supabase from '../supabase/supabase';
 
