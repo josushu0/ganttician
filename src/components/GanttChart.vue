@@ -14,6 +14,7 @@ import {
   onUnmounted, ref, reactive, onBeforeMount,
 } from 'vue';
 import useTaskStore from '../stores/taskStore';
+import useProjectStore from '../stores/projectStore';
 import SlideOver from './SlideOver.vue';
 import TaskForm from './TaskForm.vue';
 import supabase from '../supabase/supabase';
@@ -28,19 +29,22 @@ const tasks = reactive({
   links: [],
 });
 
+const projectInfo = useProjectStore();
+projectInfo.project.id = localStorage.getItem('projectId');
+projectInfo.project.project_name = localStorage.getItem('projectName');
+
 async function getTasks() {
   if (session) {
     try {
       const { data: ganttTasks, error: tasksError } = await supabase
         .from('gantt_tasks')
         .select('id,duration,text,description,start_date,progress,parent')
-        .eq('user', session.user.id);
-      // .eq('project', props.project);
+        .eq('project', projectInfo.project.id);
       tasks.data = ganttTasks;
       const { data: ganttLinks, error: linksError } = await supabase
         .from('gantt_links')
-        .select('type,source,target');
-      // .eq('project', props.project);
+        .select('type,source,target')
+        .eq('project', projectInfo.project.id);
       tasks.links = ganttLinks;
       gantt.init('gantt');
       gantt.parse(tasks);
@@ -71,7 +75,7 @@ async function addTask(taskInfo) {
           duration,
           progress: progress.value / 100,
           // parent,
-          // project: props.project
+          project: projectInfo.project.id,
         },
       ]);
     if (error) throw error;
@@ -287,6 +291,9 @@ onBeforeMount(() => {
 onUnmounted(() => {
   tasks.data = [];
   tasks.links = [];
+  localStorage.removeItem('projectId');
+  localStorage.removeItem('projectName');
+  localStorage.setItem('projectSelected', 'false');
   gantt.clearAll();
 });
 </script>

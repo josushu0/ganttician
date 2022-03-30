@@ -49,6 +49,10 @@ const showGantt = () => {
 
 const getProject = (projectItem) => {
   projectStore.project = projectItem;
+  if (localStorage.getItem('projectId') === null && localStorage.getItem('projectName') === null) {
+    localStorage.setItem('projectId', projectItem.id);
+    localStorage.setItem('projectName', projectItem.project_name);
+  }
   showGantt();
 };
 
