@@ -1,9 +1,12 @@
 <template>
   <div>
-    <div id="gantt" class="w-full h-full"></div>
-    <SlideOver :toggle="toggleSlideOver" @closeSlideOver="closeSlideOver" class="z-50">
-      <TaskForm :edit=edit @addTask="addTask" @editTask="editTask" />
-    </SlideOver>
+    <div v-show="loaded" class="w-full h-full">
+      <div id="gantt" class="w-full h-full"></div>
+      <SlideOver :toggle="toggleSlideOver" @closeSlideOver="closeSlideOver" class="z-50">
+        <TaskForm :edit=edit @addTask="addTask" @editTask="editTask" />
+      </SlideOver>
+    </div>
+    <SpinnerLoader v-show="!loaded" />
   </div>
 </template>
 
@@ -17,6 +20,7 @@ import useTaskStore from '../stores/taskStore';
 import useProjectStore from '../stores/projectStore';
 import SlideOver from './SlideOver.vue';
 import TaskForm from './TaskForm.vue';
+import SpinnerLoader from './SpinnerLoader.vue';
 import supabase from '../supabase/supabase';
 
 // eslint-disable-next-line no-undef
@@ -28,6 +32,7 @@ const tasks = reactive({
   data: [],
   links: [],
 });
+const loaded = ref(false);
 
 const projectInfo = useProjectStore();
 projectInfo.project.id = localStorage.getItem('projectId');
@@ -40,16 +45,17 @@ async function getTasks() {
         .from('gantt_tasks')
         .select('id,duration,text,description,start_date,progress,parent')
         .eq('project', projectInfo.project.id);
-      tasks.data = ganttTasks;
       const { data: ganttLinks, error: linksError } = await supabase
         .from('gantt_links')
         .select('type,source,target')
         .eq('project', projectInfo.project.id);
+      if (tasksError) throw tasksError;
+      else if (linksError) throw linksError;
+      tasks.data = ganttTasks;
       tasks.links = ganttLinks;
       gantt.init('gantt');
       gantt.parse(tasks);
-      if (tasksError) throw tasksError;
-      else if (linksError) throw linksError;
+      loaded.value = true;
     } catch (error) {
       emit('ganttError', error);
     }
