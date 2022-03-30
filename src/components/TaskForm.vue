@@ -4,14 +4,14 @@
       <div class="mb-4">
         <label for="title" class="font-medium">Título</label>
         <input type="text" name="title" id="title" v-model="title"
-        class="rounded border-gray-300 w-full
+               class="rounded border-gray-300 w-full
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base
           dark:bg-gray-700 dark:border-[#515c6d] dark:focus:ring-purple-500 mt-1" />
       </div>
       <div class="mb-4">
         <label for="description" class="font-medium">Descripción</label>
         <textarea name="description" id="description" rows="3" v-model="description"
-        class="rounded border-gray-300 w-full
+                  class="rounded border-gray-300 w-full
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base
           dark:bg-gray-700 dark:border-[#515c6d] dark:focus:ring-purple-500 mt-1"></textarea>
       </div>
@@ -19,12 +19,12 @@
         <label class="font-medium">Periodo</label>
         <div class="flex justify-between items-center">
           <input type="date" name="start" id="start" v-model="start"
-          class="rounded border-gray-300
+                 class="rounded border-gray-300
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base
           dark:bg-gray-700 dark:border-[#515c6d] dark:focus:ring-purple-500 mt-1">
           <span>a</span>
           <input type="date" name="finish" id="finish" v-model="finish"
-          class="rounded border-gray-300
+                 class="rounded border-gray-300
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base
           dark:bg-gray-700 dark:border-[#515c6d] dark:focus:ring-purple-500 mt-1">
         </div>
@@ -33,18 +33,18 @@
         <label for="progress" class="font-medium">Progreso</label>
         <div class="flex content-center">
           <input type="range" name="progress" id="progress" min="0" max="100" step="1"
-          v-model="progress" class="w-full accent-purple-600 dark:accent-purple-500 mt-1" />
+                 v-model="progress" class="w-full accent-purple-600 dark:accent-purple-500 mt-1" />
           <span class="w-16 text-right">{{ progress }}%</span>
         </div>
       </div>
       <div class="mt-auto flex justify-end">
-        <button @click="deleteTask" v-if="props.edit"
-        class="rounded text-red-700 py-2 px-6 mr-4 hover:bg-red-300
+        <button v-if="props.edit"
+                class="rounded text-red-700 py-2 px-6 mr-4 hover:bg-red-300
         dark:text-red-400 dark:hover:bg-red-500 dark:hover:text-gray-50">
           Eliminar
         </button>
-        <button @click="addTask"
-        class="rounded bg-purple-500 text-white py-2 px-6
+        <button @click="decideTaskOperation"
+                class="rounded bg-purple-500 text-white py-2 px-6
       hover:bg-purple-600">
           Guardar
         </button>
@@ -57,15 +57,15 @@
 import { ref } from 'vue';
 import useTaskStore from '../stores/taskStore';
 
-const taskEdit = useTaskStore();
-console.log(taskEdit);
-
 // eslint-disable-next-line no-undef
-const emit = defineEmits(['addTask', 'deleteTask']);
+const emit = defineEmits(['addTask', 'editTask', 'deleteTask']);
 // eslint-disable-next-line no-undef
 const props = defineProps({
   edit: Boolean,
 });
+
+const taskEdit = useTaskStore();
+const id = ref(taskEdit.task.id);
 const title = ref(taskEdit.task.text);
 const description = ref(taskEdit.task.description);
 const start = ref(taskEdit.task.start_date);
@@ -73,6 +73,7 @@ const finish = ref(taskEdit.task.end_date);
 const progress = ref(taskEdit.task.progress * 100);
 
 const taskInfo = {
+  id,
   title,
   description,
   start,
@@ -85,7 +86,19 @@ const addTask = () => {
   emit('addTask', taskInfo);
 };
 
-const deleteTask = () => {
-  emit('deleteTask');
+const editTask = () => {
+  emit('editTask', taskInfo);
+};
+
+// const deleteTask = () => {
+//   emit('deleteTask', taskInfo);
+// };
+
+const decideTaskOperation = () => {
+  if (props.edit) {
+    editTask();
+    return;
+  }
+  addTask();
 };
 </script>
