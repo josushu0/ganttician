@@ -39,7 +39,7 @@ import { TransitionRoot } from '@headlessui/vue';
 import Navbar from '../components/Navbar.vue';
 import GanttChart from '../components/GanttChart.vue';
 import AlertDialog from '../components/AlertDialog.vue';
-import Project from '../components/Proyect.vue';
+import Project from '../components/Project.vue';
 import supabase from '../supabase/supabase';
 
 const router = useRouter();
