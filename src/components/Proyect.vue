@@ -1,23 +1,16 @@
 <template>
-  <div class="grid gap-0 grid-rows-[52px,calc(100vh-52px)] h-screen w-screen
-  bg-gray-100 dark:bg-gray-700 lg:grid-cols-[3.5rem,calc(100vw-3.5rem)]">
-    <TransitionRoot
-      :show="toggleAlert"
-      enter="transition-opacity duration-75"
-      enter-from="opacity-0"
-      enter-to="opacity-100"
-      leave="transition-opacity duration-150"
-      leave-from="opacity-100"
-      leave-to="opacity-0"
-    >
-      <AlertDialog :type='alertType' :description='alertDescription'
-      class="absolute right-2 top-2" />
-    </TransitionRoot>
-    <div v-for='project in projects' :key='project.id'>
-      <button class="navbar_item rounded-lg ml-2 lg:mt-2 lg:ml-0 lg:w-11 lg:h-11
-                  flex justify-center items-center w-10 h-10 shadow-lg"
-                  @click="showGantt">
-                  {{project.project_name}}
+  <div class="bg-gray-100 dark:bg-gray-700 h-screen w-screen grid place-content-center">
+    <div class="flex justify-center items-center flex-wrap gap-3 max-w-3xl m-auto">
+      <button v-for='projectItem in projects' :key='projectItem.id'
+        class="bg-gray-300 text-gray-900 rounded-lg h-32 w-32 shadow-lg
+          dark:bg-gray-800 dark:text-gray-50 hover:bg-gray-400 hover:dark:bg-gray-900"
+          @click="getProject(projectItem)">
+          {{projectItem.project_name}}
+      </button>
+      <button class="bg-gray-300 text-gray-900 rounded-lg h-32 w-32 shadow-lg
+        dark:bg-gray-800 dark:text-gray-50 flex justify-center items-center
+        hover:bg-gray-400 hover:dark:bg-gray-900">
+        <PlusSmIcon class="h-12 w-12" />
       </button>
     </div>
   </div>
@@ -25,39 +18,38 @@
 
 <script setup>
 import { onBeforeMount, ref } from 'vue';
-import { TransitionRoot } from '@headlessui/vue';
-import AlertDialog from './AlertDialog.vue';
+import { PlusSmIcon } from '@heroicons/vue/outline';
+import useProjectStore from '../stores/projectStore';
 import supabase from '../supabase/supabase';
 
 const session = supabase.auth.session();
-const toggleAlert = ref(false);
-const alertType = ref();
-const alertDescription = ref();
+const projectStore = useProjectStore();
 
 // eslint-disable-next-line no-undef
-const emit = defineEmits(['showGantt']);
-const projects = ref('');
+const emit = defineEmits(['projectError', 'showGantt']);
+const projects = ref();
 
 onBeforeMount(async () => {
   try {
     const { data, error } = await supabase
       .from('projects')
-      .select('*')
+      .select('id,project_name')
       .eq('user', session.user.id);
 
-    if (error) {
-      throw error;
-    }
-    if (data) {
-      projects.value = data;
-    }
+    if (error) throw error;
+    if (data) projects.value = data;
   } catch (error) {
-    alert(error);
+    emit('projectError', error);
   }
 });
 
 const showGantt = () => {
   emit('showGantt');
+};
+
+const getProject = (projectItem) => {
+  projectStore.project = projectItem;
+  showGantt();
 };
 
 </script>
