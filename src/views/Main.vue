@@ -2,7 +2,7 @@
   <div>
   <div v-if='projectSelected'>
     <div class="grid gap-0 grid-rows-[52px,calc(100vh-52px)] h-screen w-screen
-    bg-gray-100 dark:bg-gray-700 lg:grid-cols-[3.5rem,calc(100vw-3.5rem)]"
+    bg-gray-100 dark:bg-gray-750 lg:grid-cols-[3.5rem,calc(100vw-3.5rem)]"
     v-if="session">
       <TransitionRoot
         :show="toggleAlert"
