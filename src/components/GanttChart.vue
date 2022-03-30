@@ -120,6 +120,42 @@ async function editTask(taskInfo) {
   gantt.hideLightbox();
 }
 
+async function handleDrag(task) {
+  try {
+    const { error } = await supabase
+      .from('gantt_tasks')
+      .update({
+        text: task.title,
+        start_date: task.start_date,
+        duration: task.duration,
+        progress: task.progress,
+      })
+      .eq('id', task.id);
+    if (error) throw error;
+  } catch (error) {
+    emit('ganttError', error);
+  }
+}
+
+async function addLink(link) {
+  try {
+    const id = uuid();
+    const { error } = await supabase
+      .from('gantt_links')
+      .insert({
+        id,
+        type: link.type,
+        source: link.source,
+        target: link.target,
+        // project: ,
+      });
+    if (error) throw error;
+    gantt.changeLinkId(link.id, id);
+  } catch (error) {
+    emit('ganttError', error);
+  }
+}
+
 // Slide Over controls
 const toggleSlideOver = ref(false);
 
@@ -210,6 +246,17 @@ onBeforeMount(() => {
     taskEdit.task.progress = progress;
     edit.value = true;
     gantt.showLightbox();
+  });
+
+  gantt.attachEvent('onAfterTaskDrag', (id) => {
+    const task = gantt.getTask(id);
+    handleDrag(task);
+  });
+
+  gantt.attachEvent('onAfterLinkAdd', (id) => {
+    const link = gantt.getLink(id);
+    console.log(link);
+    addLink(link);
   });
 
   gantt.createTask = () => {
