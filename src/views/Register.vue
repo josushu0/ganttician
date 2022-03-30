@@ -55,6 +55,6 @@ function signupError(error) {
   alertType.value = 'Error';
   alertDescription.value = error;
   toggleAlert.value = true;
-  setTimeout(() => dismissAlert(), 4000);
+  setTimeout(() => dismissAlert(), 5000);
 }
 </script>

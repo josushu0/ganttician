@@ -82,20 +82,20 @@ function signoutError(error) {
   alertType.value = 'Error';
   alertDescription.value = error;
   toggleAlert.value = true;
-  setTimeout(() => dismissAlert(), 4000);
+  setTimeout(() => dismissAlert(), 5000);
 }
 
 function ganttError(error) {
   alertType.value = 'Error';
   alertDescription.value = error;
   toggleAlert.value = true;
-  setTimeout(() => dismissAlert(), 4000);
+  setTimeout(() => dismissAlert(), 5000);
 }
 
 function projectError(error) {
   alertType.value = 'Error';
   alertDescription.value = error;
   toggleAlert.value = true;
-  setTimeout(() => dismissAlert(), 4000);
+  setTimeout(() => dismissAlert(), 5000);
 }
 </script>
