@@ -1,5 +1,5 @@
 <template>
-  <nav class="fixed top-0 left-0 h-16 w-screen flex flex-row items-center bg-gray-100 text-gray-700
+  <nav class="fixed top-0 left-0 h-16 w-screen flex flex-row items-center bg-gray-200 text-gray-700
               lg:flex-col lg:h-screen lg:w-16
               dark:bg-gray-800 dark:text-white">
     <img src="../assets/logo.png" alt="Logo" height="34" width="34" class="ml-2 lg:mt-2 lg:ml-0">
