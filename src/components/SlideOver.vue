@@ -28,7 +28,7 @@
                   </button>
                 </div>
               </TransitionChild>
-              <div class="h-full flex flex-col py-6 bg-gray-50 shadow-xl overflow-y-scroll
+              <div class="h-full flex flex-col py-6 bg-gray-200 shadow-xl overflow-y-scroll
               dark:bg-gray-800 ">
                 <div class="px-4 sm:px-6">
                   <DialogTitle class="text-xl font-medium text-gray-700 dark:text-gray-200
