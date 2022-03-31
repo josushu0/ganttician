@@ -1,10 +1,6 @@
 <template>
   <div>
-  <div v-if='projectSelected'>
-    <div class="grid gap-0 grid-rows-[52px,calc(100vh-52px)] h-screen w-screen
-    bg-gray-100 dark:bg-gray-750 lg:grid-cols-[3.5rem,calc(100vw-3.5rem)]"
-    v-if="session">
-      <TransitionRoot
+    <TransitionRoot
         :show="toggleAlert"
         enter="transition-opacity duration-75"
         enter-from="opacity-0"
@@ -12,10 +8,14 @@
         leave="transition-opacity duration-150"
         leave-from="opacity-100"
         leave-to="opacity-0"
-      >
-        <AlertDialog :type='alertType' :description='alertDescription'
+    >
+      <AlertDialog :type='alertType' :description='alertDescription'
         class="absolute right-2 top-2" />
-      </TransitionRoot>
+    </TransitionRoot>
+  <div v-if='projectSelected'>
+    <div class="grid gap-0 grid-rows-[52px,calc(100vh-52px)] h-screen w-screen
+    bg-gray-100 dark:bg-gray-750 lg:grid-cols-[3.5rem,calc(100vw-3.5rem)]"
+    v-if="session">
       <Navbar @hideDrawer="hideDrawer" @showProjects="showProjects" @signoutError="signoutError"
       class="row-start-1 col-start-1 w-screen h-[52px]
       lg:col-start-1 lg:row-start-1 lg:w-14 lg:h-screen" />
