@@ -1,11 +1,13 @@
-/* eslint-disable camelcase */
 <template>
-<div>
-  <div id="gantt" class="w-full h-full"></div>
-  <SlideOver :toggle="toggleSlideOver" @closeSlideOver="closeSlideOver" class="z-50">
-    <TaskForm :edit=edit @addTask="addTask" />
-  </SlideOver>
-</div>
+  <div>
+    <div v-show="loaded" class="w-full h-full">
+      <div id="gantt" class="w-full h-full"></div>
+      <SlideOver :toggle="toggleSlideOver" @closeSlideOver="closeSlideOver" class="z-50">
+        <TaskForm :edit=edit @addTask="addTask" @editTask="editTask" />
+      </SlideOver>
+    </div>
+    <SpinnerLoader v-show="!loaded" />
+  </div>
 </template>
 
 <script setup>
@@ -15,8 +17,10 @@ import {
   onUnmounted, ref, reactive, onBeforeMount,
 } from 'vue';
 import useTaskStore from '../stores/taskStore';
+import useProjectStore from '../stores/projectStore';
 import SlideOver from './SlideOver.vue';
 import TaskForm from './TaskForm.vue';
+import SpinnerLoader from './SpinnerLoader.vue';
 import supabase from '../supabase/supabase';
 
 // eslint-disable-next-line no-undef
@@ -28,6 +32,11 @@ const tasks = reactive({
   data: [],
   links: [],
 });
+const loaded = ref(false);
+
+const projectInfo = useProjectStore();
+projectInfo.project.id = localStorage.getItem('projectId');
+projectInfo.project.project_name = localStorage.getItem('projectName');
 
 async function getTasks() {
   if (session) {
@@ -35,21 +44,18 @@ async function getTasks() {
       const { data: ganttTasks, error: tasksError } = await supabase
         .from('gantt_tasks')
         .select('id,duration,text,description,start_date,progress,parent')
-        .eq('user', session.user.id);
-        // .eq('project', props.project);
-      tasks.data = ganttTasks;
+        .eq('project', projectInfo.project.id);
       const { data: ganttLinks, error: linksError } = await supabase
         .from('gantt_links')
-        .select('type,source,target');
-        // .eq('project', props.project);
+        .select('type,source,target')
+        .eq('project', projectInfo.project.id);
+      if (tasksError) throw tasksError;
+      else if (linksError) throw linksError;
+      tasks.data = ganttTasks;
       tasks.links = ganttLinks;
       gantt.init('gantt');
       gantt.parse(tasks);
-      if (tasksError) {
-        throw tasksError;
-      } else if (linksError) {
-        throw linksError;
-      }
+      loaded.value = true;
     } catch (error) {
       emit('ganttError', error);
     }
@@ -75,11 +81,11 @@ async function addTask(taskInfo) {
           duration,
           progress: progress.value / 100,
           // parent,
-          // project: props.project
+          project: projectInfo.project.id,
         },
       ]);
     if (error) throw error;
-    tasks.data.push({
+    gantt.addTask({
       id,
       text: title.value,
       description: description.value,
@@ -88,8 +94,73 @@ async function addTask(taskInfo) {
       progress: progress.value / 100,
       // parent,
     });
-    gantt.parse(tasks);
     gantt.hideLightbox();
+  } catch (error) {
+    emit('ganttError', error);
+  }
+}
+
+async function editTask(taskInfo) {
+  const {
+    id, title, description, start, finish, progress,
+  } = taskInfo;
+  const duration = (Date.parse(finish.value) - Date.parse(start.value)) / 1000 / 60 / 60 / 24;
+  try {
+    const { error } = await supabase
+      .from('gantt_tasks')
+      .update({
+        text: title.value,
+        description: description.value,
+        start_date: start.value,
+        duration,
+        progress: progress.value / 100,
+      })
+      .eq('id', id.value);
+    if (error) throw error;
+  } catch (error) {
+    emit('ganttError', error);
+  }
+  const task = gantt.getTask(id.value);
+  task.text = title.value;
+  task.description = description.value;
+  task.progress = progress.value / 100;
+  task.start_date = new Date(start.value);
+  task.end_date = new Date(finish.value);
+  gantt.updateTask(id.value);
+  gantt.hideLightbox();
+}
+
+async function handleDrag(task) {
+  try {
+    const { error } = await supabase
+      .from('gantt_tasks')
+      .update({
+        text: task.title,
+        start_date: task.start_date,
+        duration: task.duration,
+        progress: task.progress,
+      })
+      .eq('id', task.id);
+    if (error) throw error;
+  } catch (error) {
+    emit('ganttError', error);
+  }
+}
+
+async function addLink(link) {
+  try {
+    const id = uuid();
+    const { error } = await supabase
+      .from('gantt_links')
+      .insert({
+        id,
+        type: link.type,
+        source: link.source,
+        target: link.target,
+        // project: ,
+      });
+    if (error) throw error;
+    gantt.changeLinkId(link.id, id);
   } catch (error) {
     emit('ganttError', error);
   }
@@ -106,7 +177,7 @@ function closeSlideOver() {
   toggleSlideOver.value = false;
 }
 
-// Gantt config
+// ------------------ Gantt config ------------------ //
 onBeforeMount(() => {
   gantt.i18n.setLocale('es');
   gantt.config.date_format = '%Y-%m-%d';
@@ -169,14 +240,15 @@ onBeforeMount(() => {
     const {
       text, description, start_date: startDate, end_date: endDate, progress,
     } = gantt.getTask(id);
+    taskEdit.task.id = id;
     taskEdit.task.text = text;
     taskEdit.task.description = description;
-    let mes = startDate.getMonth();
+    let mes = startDate.getMonth() + 1;
     if (mes < 10) {
       mes = `0${mes}`;
     }
     taskEdit.task.start_date = `${startDate.getFullYear()}-${mes}-${startDate.getDate()}`;
-    mes = endDate.getMonth();
+    mes = endDate.getMonth() + 1;
     if (mes < 10) {
       mes = `0${mes}`;
     }
@@ -184,6 +256,17 @@ onBeforeMount(() => {
     taskEdit.task.progress = progress;
     edit.value = true;
     gantt.showLightbox();
+  });
+
+  gantt.attachEvent('onAfterTaskDrag', (id) => {
+    const task = gantt.getTask(id);
+    handleDrag(task);
+  });
+
+  gantt.attachEvent('onAfterLinkAdd', (id) => {
+    const link = gantt.getLink(id);
+    console.log(link);
+    addLink(link);
   });
 
   gantt.createTask = () => {
@@ -212,8 +295,11 @@ onBeforeMount(() => {
 });
 
 onUnmounted(() => {
-  tasks.data = {};
-  tasks.links = {};
+  tasks.data = [];
+  tasks.links = [];
+  localStorage.removeItem('projectId');
+  localStorage.removeItem('projectName');
+  localStorage.setItem('projectSelected', 'false');
   gantt.clearAll();
 });
 </script>
@@ -223,18 +309,18 @@ onUnmounted(() => {
 @media (prefers-color-scheme: dark) {
   .gantt_grid_scale, .gantt_task_scale, .gantt_task_vscroll, .gantt_grid_data, .grid_cell,
   .gantt_layout_cell, .gantt_task_scale * {
-      background-color: rgb(43, 53, 68);
-      border-color: rgb(31, 41, 55 ) !important;
+    background-color: rgb(43, 53, 68);
+    border-color: rgb(31, 41, 55 ) !important;
   }
   .gantt_grid_scale, .gantt_task_scale,
   .gantt_task .gantt_task_scale .gantt_scale_cell,
   .gantt_grid_scale .gantt_grid_head_cell {
-      color: white !important;
-      border-color: rgb(31, 41, 55) !important;
+    color: white !important;
+    border-color: rgb(31, 41, 55) !important;
   }
   .gantt_row, .gantt_task_row, .gantt_row.odd, .gantt_task_row.odd {
-      background-color: rgb(43, 53, 68);
-      border-color: rgb(31, 41, 55) !important;
+    background-color: rgb(43, 53, 68);
+    border-color: rgb(31, 41, 55) !important;
   }
   .gantt_task_row.odd.gantt_selected {
     background-color: rgba(0,199,181,.2);

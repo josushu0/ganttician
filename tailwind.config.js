@@ -8,6 +8,9 @@ module.exports = {
         'wiggle-light': "url('./src/assets/wiggle_light.svg')",
         'wiggle-dark': "url('./src/assets/wiggle_dark.svg')",
       },
+      colors: {
+        'gray-750': '#2b3544',
+      },
     },
     fontFamily: {
       body: ['Inter', 'sans-serif'],
