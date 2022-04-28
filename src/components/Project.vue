@@ -46,7 +46,7 @@ onBeforeMount(async () => {
     const { data, error } = await supabase
       .from('projects')
       .select('*')
-      .eq('user', session.user.id);
+      .eq('owner', session.user.id);
 
     if (error) throw error;
     if (data) projects.value = data;
@@ -86,7 +86,7 @@ const addProject = async (projectInfo) => {
       .insert({
         id,
         project_name: projectInfo.project_name.value,
-        user: session.user.id,
+        owner: session.user.id,
       });
     projects.value.push(projectInfo);
     closeModal();
