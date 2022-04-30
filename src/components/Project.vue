@@ -71,10 +71,8 @@ function closeModal() {
 
 const getProject = (projectItem) => {
   projectStore.project = projectItem;
-  if (localStorage.getItem('projectId') === null && localStorage.getItem('projectName') === null) {
-    localStorage.setItem('projectId', projectItem.id);
-    localStorage.setItem('projectName', projectItem.project_name);
-  }
+  localStorage.setItem('projectId', projectItem.id);
+  localStorage.setItem('projectName', projectItem.project_name);
   showGantt();
 };
 
@@ -86,9 +84,16 @@ const addProject = async (projectInfo) => {
       .insert({
         id,
         project_name: projectInfo.project_name.value,
+        descripcion: projectInfo.descripcion.value,
+        inicio: projectInfo.inicio.value,
+        final: projectInfo.final.value,
         owner: session.user.id,
       });
-    projects.value.push(projectInfo);
+    const newProject = {
+      id,
+      ...projectInfo,
+    };
+    projects.value.push(newProject);
     closeModal();
     if (error) throw error;
   } catch (error) {
