@@ -42,8 +42,8 @@ onBeforeMount(() => {
   }
 });
 
-const alertType = ref();
-const alertDescription = ref();
+const alertType = ref('');
+const alertDescription = ref('');
 const toggleAlert = ref(false);
 
 function dismissAlert() {
