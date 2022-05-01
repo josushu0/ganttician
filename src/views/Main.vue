@@ -1,6 +1,6 @@
 <template>
   <div v-if="session">
-    <TransitionRoot v-if='projectSelected'
+    <TransitionRoot
         :show="toggleAlert"
         enter="transition-opacity duration-75"
         enter-from="opacity-0"
