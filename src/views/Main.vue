@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TransitionRoot
+    <TransitionRoot v-if='projectSelected'
         :show="toggleAlert"
         enter="transition-opacity duration-75"
         enter-from="opacity-0"
@@ -73,8 +73,8 @@ const showGantt = () => {
 };
 
 const toggleAlert = ref(false);
-const alertType = ref();
-const alertDescription = ref();
+const alertType = ref('');
+const alertDescription = ref('');
 function dismissAlert() {
   toggleAlert.value = false;
 }
