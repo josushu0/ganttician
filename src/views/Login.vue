@@ -51,6 +51,7 @@ function dismissAlert() {
 }
 
 function loginError(error) {
+  console.log(error);
   alertType.value = 'Error';
   alertDescription.value = error;
   toggleAlert.value = true;
