@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-50 dark:bg-gray-700 h-screen w-screen">
+  <div class="bg-gray-50 dark:bg-gray-700 min-h-screen w-screen pb-4">
     <div class="w-screen">
       <h1 class="flex justify-center mb-10 text-4xl text-gray-900 underline pt-10
         dark:text-gray-50 sm:text-5xl">
@@ -39,28 +39,29 @@
       </nav>
         <TabPanels class="w-screen grid place-content-center">
           <TabPanel tabindex="-1">
-            <div class="flex justify-center items-center flex-wrap gap-3 max-w-3xl m-auto">
+            <div class="flex justify-center flex-wrap gap-3 max-w-3xl m-auto 2xl:max-w-6xl px-4">
               <button v-for='projectItem in active' :key='projectItem.id'
-                class="bg-gray-300 text-gray-900 rounded-lg h-32 w-32 shadow-lg focus:outline
+                class="bg-gray-300 text-gray-900 rounded-lg h-40 w-40 shadow-lg focus:outline
                   dark:bg-gray-800 dark:text-gray-50 hover:bg-gray-400 hover:dark:bg-gray-900
-                  dark:outline-purple-500 outline-purple-600 outline-2"
+                  dark:outline-purple-500 outline-purple-600 outline-2 sm:h-32 sm:w-32"
                   @click="getProject(projectItem)">
                   {{projectItem.project_name}}
               </button>
             </div>
-            <button class="bg-gray-300 text-gray-900 rounded-lg h-32 w-32 shadow-lg
+            <button class="bg-gray-300 text-gray-900 rounded-lg h-40 w-40 shadow-lg
                 dark:bg-gray-800 dark:text-gray-50 flex justify-center items-center
                 hover:bg-gray-400 hover:dark:bg-gray-900 mx-auto mt-3 focus:outline
-                dark:outline-purple-500 outline-purple-600 outline-2" @click="showModal" >
+                dark:outline-purple-500 outline-purple-600 outline-2 sm:h-32 sm:w-32"
+                @click="showModal" >
                 <PlusSmIcon class="h-12 w-12" />
             </button>
           </TabPanel>
           <TabPanel tabindex="-1">
-            <div class="flex justify-center items-center flex-wrap gap-3 max-w-3xl m-auto">
+            <div class="flex justify-center flex-wrap gap-3 max-w-3xl m-auto 2xl:max-w-6xl">
               <button v-for='projectItem in inactive' :key='projectItem.id'
-                class="bg-gray-300 text-gray-900 rounded-lg h-32 w-32 shadow-lg focus:outline
+                class="bg-gray-300 text-gray-900 rounded-lg h-40 w-40 shadow-lg focus:outline
                   dark:bg-gray-800 dark:text-gray-50 hover:bg-gray-400 hover:dark:bg-gray-900
-                  dark:outline-purple-500 outline-purple-600 outline-2"
+                  dark:outline-purple-500 outline-purple-600 outline-2 sm:h-32 sm:w-32"
                   @click="getProject(projectItem)">
                   {{projectItem.project_name}}
               </button>
