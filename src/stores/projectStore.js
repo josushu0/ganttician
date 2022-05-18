@@ -5,6 +5,11 @@ const useProjectStore = defineStore('project', {
     project: {
       id: '',
       project_name: '',
+      descripcion: '',
+      inicio: '',
+      final: '',
+      owner: '',
+      active: Boolean,
     },
   }),
 });

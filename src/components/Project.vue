@@ -105,8 +105,8 @@ onBeforeMount(async () => {
 
     if (error) throw error;
     if (data) {
-      active.value = data.filter((item) => item.status === true);
-      inactive.value = data.filter((item) => item.status === false);
+      active.value = data.filter((item) => item.active === true);
+      inactive.value = data.filter((item) => item.active === false);
     }
   } catch (error) {
     emit('projectError', error);
@@ -149,7 +149,6 @@ const addProject = async (projectInfo) => {
       });
     const newProject = {
       id,
-      status: true,
       ...projectInfo,
     };
     active.value.push(newProject);

@@ -19,13 +19,14 @@
       <ViewGridIcon class="h-5 w-5 lg:h-6 lg:w-6" />
     </button>
 
-<!--    <button class="navbar_item rounded-lg ml-2 lg:mt-2 lg:ml-0 lg:w-11 lg:h-11-->
-<!--                  flex justify-center items-center w-10 h-10 shadow-lg">-->
-<!--      <PlusIcon class="h-5 w-5 lg:h-6 lg:w-6" />-->
-<!--    </button>-->
+   <button class="navbar_item rounded-lg ml-auto lg:mt-auto lg:ml-0 lg:w-11 lg:h-11
+                 flex justify-center items-center w-10 h-10 shadow-lg"
+                 @click="showProjectModal">
+     <PencilAltIcon class="h-5 w-5 lg:h-6 lg:w-6" />
+   </button>
 
-    <hr class="bg-gray-300 dark:bg-gray-900 border border-gray-300 ml-auto h-3/4 w-0
-                lg:mt-auto lg:ml-0 lg:w-9/12 lg:h-0 dark:border-gray-900" />
+    <hr class="bg-gray-300 dark:bg-gray-900 border border-gray-300 h-3/4 w-0
+                ml-2 lg:w-9/12 lg:h-0 lg:mt-2 lg:ml-0 dark:border-gray-900" />
 
     <button class="logout_button rounded-lg ml-2 mr-2 lg:mt-2 lg:ml-0 lg:mr-0 lg:mb-2
                   flex justify-center items-center w-10 h-10 shadow-lg
@@ -38,12 +39,12 @@
 
 <script setup>
 import {
-  ViewGridIcon, MenuIcon, LogoutIcon,
+  ViewGridIcon, MenuIcon, LogoutIcon, PencilAltIcon,
 } from '@heroicons/vue/solid';
 import supabase from '../supabase/supabase';
 
 // eslint-disable-next-line no-undef
-const emit = defineEmits(['hideDrawer', 'showProjects', 'signoutError']);
+const emit = defineEmits(['hideDrawer', 'showProjects', 'signoutError', 'showProjectModal']);
 
 let hiddenDrawer = false;
 
@@ -63,5 +64,9 @@ const hideDrawer = () => {
 
 const showProjects = () => {
   emit('showProjects');
+};
+
+const showProjectModal = () => {
+  emit('showProjectModal');
 };
 </script>

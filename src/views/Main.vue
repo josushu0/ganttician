@@ -17,12 +17,16 @@
     bg-gray-100 dark:bg-gray-750 lg:grid-cols-[3.5rem,calc(100vw-3.5rem)]"
     v-if="session">
       <Navbar @hideDrawer="hideDrawer" @showProjects="showProjects" @signoutError="signoutError"
+      @showProjectModal="showProjectModal"
       class="row-start-1 col-start-1 w-screen h-[52px]
       lg:col-start-1 lg:row-start-1 lg:w-14 lg:h-screen" />
       <GanttChart
       class="row-start-2 col-start-1 w-screen h-full overflow-hidden
       lg:col-start-2 lg:row-start-1 lg:w-full lg:h-screen"
       @ganttError="ganttError" />
+      <Modal :toggle="toggleModal" @closeModal="closeModal">
+        <ProjectForm @addProject="editProject"/>
+      </Modal>
     </div>
   </div>
   <div v-else>
@@ -40,6 +44,9 @@ import Navbar from '../components/Navbar.vue';
 import GanttChart from '../components/GanttChart.vue';
 import AlertDialog from '../components/AlertDialog.vue';
 import Project from '../components/Project.vue';
+import Modal from '../components/Modal.vue';
+import ProjectForm from '../components/ProjectForm.vue';
+import useProjectStore from '../stores/projectStore';
 import supabase from '../supabase/supabase';
 
 const router = useRouter();
@@ -62,10 +69,45 @@ function hideDrawer(hiddenDrawer) {
   }
 }
 
+const projectStore = useProjectStore();
 const showProjects = () => {
   localStorage.setItem('projectSelected', 'false');
   projectSelected.value = (localStorage.getItem('projectSelected') === 'true');
+  projectStore.$reset();
 };
+
+const toggleModal = ref(false);
+
+function showProjectModal() {
+  toggleModal.value = true;
+}
+
+const editProject = async (projectInfo) => {
+  const { error } = await supabase
+    .from('projects')
+    .update({
+      project_name: projectInfo.project_name.value,
+      descripcion: projectInfo.descripcion.value,
+      inicio: projectInfo.inicio.value,
+      final: projectInfo.final.value,
+      active: projectInfo.active.value,
+    })
+    .eq('id', projectStore.project.id);
+  if (error) {
+    throw error;
+  } else {
+    toggleModal.value = false;
+    projectStore.project.project_name = projectInfo.project_name.value;
+    projectStore.project.descripcion = projectInfo.descripcion.value;
+    projectStore.project.inicio = projectInfo.inicio.value;
+    projectStore.project.final = projectInfo.final.value;
+    projectStore.project.active = projectInfo.active.value;
+  }
+};
+
+function closeModal() {
+  toggleModal.value = false;
+}
 
 const showGantt = () => {
   localStorage.setItem('projectSelected', 'true');
