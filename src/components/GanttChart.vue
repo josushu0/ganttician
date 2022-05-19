@@ -3,7 +3,8 @@
     <div v-show="loaded" class="w-full h-full">
       <div id="gantt" class="w-full h-full"></div>
       <SlideOver :toggle="toggleSlideOver" @closeSlideOver="closeSlideOver" class="z-50">
-        <TaskForm :edit=edit @addTask="addTask" @editTask="editTask" />
+        <TaskForm :edit=edit :minDate=minDate :maxDate=maxDate
+          @addTask="addTask" @editTask="editTask" />
       </SlideOver>
     </div>
     <SpinnerLoader v-show="!loaded" />
@@ -33,6 +34,9 @@ const tasks = reactive({
   links: [],
 });
 const loaded = ref(false);
+const parentTask = ref();
+const minDate = ref();
+const maxDate = ref();
 
 const projectInfo = useProjectStore();
 projectInfo.project.id = localStorage.getItem('projectId');
@@ -80,7 +84,7 @@ async function addTask(taskInfo) {
           start_date: start.value,
           duration,
           progress: progress.value / 100,
-          // parent,
+          parent: parentTask.value,
           project: projectInfo.project.id,
         },
       ]);
@@ -92,9 +96,12 @@ async function addTask(taskInfo) {
       start_date: start.value,
       duration,
       progress: progress.value / 100,
-      // parent,
+      parent: parentTask.value,
     });
     gantt.hideLightbox();
+    minDate.value = '';
+    maxDate.value = '';
+    parentTask.value = '';
   } catch (error) {
     emit('ganttError', error);
   }
@@ -269,7 +276,26 @@ onBeforeMount(() => {
     addLink(link);
   });
 
-  gantt.createTask = () => {
+  gantt.createTask = (_task, parent) => {
+    if (parent !== 0) {
+      parentTask.value = parent;
+      minDate.value = gantt.getTask(parent).start_date;
+      let mes = minDate.value.getMonth() + 1;
+      if (mes < 10) {
+        mes = `0${mes}`;
+      }
+      minDate.value = `${minDate.value.getFullYear()}-${mes}-${minDate.value.getDate()}`;
+      maxDate.value = gantt.getTask(parent).end_date;
+      mes = maxDate.value.getMonth() + 1;
+      if (mes < 10) {
+        mes = `0${mes}`;
+      }
+      maxDate.value = `${maxDate.value.getFullYear()}-${mes}-${maxDate.value.getDate()}`;
+    } else {
+      minDate.value = '';
+      maxDate.value = '';
+      parentTask.value = '';
+    }
     edit.value = false;
     gantt.showLightbox();
   };
