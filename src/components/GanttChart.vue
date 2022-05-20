@@ -59,6 +59,7 @@ async function getTasks() {
       tasks.links = ganttLinks;
       gantt.init('gantt');
       gantt.parse(tasks);
+      gantt.sort('start_date', false);
       loaded.value = true;
     } catch (error) {
       emit('ganttError', error);
@@ -307,8 +308,15 @@ onBeforeMount(() => {
 
   gantt.attachEvent('onAfterLinkAdd', (id) => {
     const link = gantt.getLink(id);
-    console.log(link);
     addLink(link);
+  });
+
+  gantt.attachEvent('onAfterTaskUpdate', () => {
+    gantt.sort('start_date', false);
+  });
+
+  gantt.attachEvent('onAfterTaskAdd', () => {
+    gantt.sort('start_date', false);
   });
 
   gantt.createTask = (_task, parent) => {
