@@ -375,6 +375,20 @@ onUnmounted(() => {
 
 <style>
 @import "../../node_modules/dhtmlx-gantt/codebase/skins/dhtmlxgantt_material.css";
+
+.gantt_grid_data {
+  border-right: 1px solid #d7d7d7;
+}
+.gantt_tree_content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gantt_task_progress {
+  background-color: #34D399;
+}
+
 @media (prefers-color-scheme: dark) {
   .gantt_grid_scale, .gantt_task_scale, .gantt_task_vscroll, .gantt_grid_data, .grid_cell,
   .gantt_layout_cell, .gantt_task_scale * {
@@ -401,13 +415,8 @@ onUnmounted(() => {
   .gantt_grid_data {
     border-right: 1px solid rgb(31, 41, 55) !important;
   }
-}
-.gantt_grid_data {
-  border-right: 1px solid #d7d7d7;
-}
-.gantt_tree_content {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  .gantt_task_progress {
+  background-color: #10B981;
+  }
 }
 </style>
