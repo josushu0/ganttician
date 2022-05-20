@@ -265,8 +265,30 @@ onBeforeMount(() => {
     gantt.showLightbox();
   });
 
-  gantt.attachEvent('onAfterTaskDrag', (id) => {
-    const task = gantt.getTask(id);
+  gantt.attachEvent('onTaskDrag', (id, mode, task, original) => {
+    const parent = gantt.getTask(gantt.getParent(id));
+    const modes = gantt.config.drag_mode;
+    const duration = original.duration * (1000 * 60 * 60 * 24);
+    if (mode === modes.move || mode === modes.resize) {
+      if (task.end_date > parent.end_date) {
+        // eslint-disable-next-line no-param-reassign
+        task.end_date = parent.end_date;
+        // eslint-disable-next-line no-param-reassign
+        task.duration = original.duration;
+        if (mode === modes.move) {
+        // eslint-disable-next-line no-param-reassign
+          task.start_date = new Date(task.end_date - duration);
+        }
+      }
+      if (task.start_date < parent.start_date) {
+        // eslint-disable-next-line no-param-reassign
+        task.start_date = parent.start_date;
+        // eslint-disable-next-line no-param-reassign
+        task.duration = original.duration;
+        // eslint-disable-next-line no-param-reassign
+        if (mode === modes.move) { task.end_date = new Date(+task.start_date + duration); }
+      }
+    }
     handleDrag(task);
   });
 
