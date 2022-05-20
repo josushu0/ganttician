@@ -266,28 +266,41 @@ onBeforeMount(() => {
   });
 
   gantt.attachEvent('onTaskDrag', (id, mode, task, original) => {
-    const parent = gantt.getTask(gantt.getParent(id));
     const modes = gantt.config.drag_mode;
     const duration = original.duration * (1000 * 60 * 60 * 24);
-    if (mode === modes.move || mode === modes.resize) {
-      if (task.end_date > parent.end_date) {
-        // eslint-disable-next-line no-param-reassign
-        task.end_date = parent.end_date;
-        // eslint-disable-next-line no-param-reassign
-        task.duration = original.duration;
-        if (mode === modes.move) {
-        // eslint-disable-next-line no-param-reassign
-          task.start_date = new Date(task.end_date - duration);
+    if (gantt.getParent(id) !== 0) {
+      const parent = gantt.getTask(gantt.getParent(id));
+      if (mode === modes.move || mode === modes.resize) {
+        if (task.end_date > parent.end_date) {
+          // eslint-disable-next-line no-param-reassign
+          task.end_date = parent.end_date;
+          // eslint-disable-next-line no-param-reassign
+          task.duration = original.duration;
+          if (mode === modes.move) {
+          // eslint-disable-next-line no-param-reassign
+            task.start_date = new Date(task.end_date - duration);
+          }
+        }
+        if (task.start_date < parent.start_date) {
+          // eslint-disable-next-line no-param-reassign
+          task.start_date = parent.start_date;
+          // eslint-disable-next-line no-param-reassign
+          task.duration = original.duration;
+          // eslint-disable-next-line no-param-reassign
+          if (mode === modes.move) { task.end_date = new Date(+task.start_date + duration); }
         }
       }
-      if (task.start_date < parent.start_date) {
+    }
+    if (mode === modes.move) {
+      const diff = task.start_date - original.start_date;
+      gantt.eachTask((child) => {
         // eslint-disable-next-line no-param-reassign
-        task.start_date = parent.start_date;
+        child.start_date = new Date(+child.start_date + diff);
         // eslint-disable-next-line no-param-reassign
-        task.duration = original.duration;
-        // eslint-disable-next-line no-param-reassign
-        if (mode === modes.move) { task.end_date = new Date(+task.start_date + duration); }
-      }
+        child.end_date = new Date(+child.end_date + diff);
+        gantt.refreshTask(child.id, true);
+        handleDrag(child);
+      }, id);
     }
     handleDrag(task);
   });
