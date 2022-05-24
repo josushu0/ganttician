@@ -14,13 +14,15 @@
     </TransitionRoot>
     <div class="grid w-screen min-h-screen place-items-center bg-gray-100 bg-wiggle-light
     dark:bg-gray-700 dark:bg-wiggle-dark">
-      <UserForm :buttonText="buttonText" :login="login" @signupError="signupError">
+      <UserForm v-if="!mail" :buttonText="buttonText" :login="login" @email='email'
+        @signupError="signupError">
         <p class="mt-4 text-center text-gray-500 dark:text-gray-300">
           Ya tienes una cuenta?
           <router-link to="/login"
           class="dark text-blue-600 hover:underline dark:text-blue-300"> Inicia sesión</router-link>
         </p>
       </UserForm>
+      <ConfirmEmail v-else :correo='mail' />
     </div>
   </div>
 </template>
@@ -32,10 +34,12 @@ import { TransitionRoot } from '@headlessui/vue';
 import UserForm from '../components/UserForm.vue';
 import supabase from '../supabase/supabase';
 import AlertDialog from '../components/AlertDialog.vue';
+import ConfirmEmail from '../components/ConfirmEmail.vue';
 
 const router = useRouter();
 const buttonText = 'Registrarse';
 const login = false;
+const mail = ref('');
 
 onBeforeMount(() => {
   if (supabase.auth.session()) {
@@ -46,6 +50,10 @@ onBeforeMount(() => {
 const alertType = ref('');
 const alertDescription = ref('');
 const toggleAlert = ref(false);
+
+const email = (correo) => {
+  mail.value = correo;
+};
 
 function dismissAlert() {
   toggleAlert.value = false;

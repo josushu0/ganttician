@@ -3,17 +3,21 @@
 </template>
 
 <script setup>
-import { useRouter, useRoute } from 'vue-router';
+import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import supabase from './supabase/supabase';
 
 const router = useRouter();
-const route = useRoute();
 
-supabase.auth.onAuthStateChange((_event, session) => {
-  if (!session) {
-    router.replace('/login');
-  } else if (route.path === '/login' || route.path === '/register') {
+onMounted(() => {
+  router.replace('/');
+});
+
+supabase.auth.onAuthStateChange((event) => {
+  if (event === 'SIGNED_IN') {
     router.replace('/');
+  } else if (event === 'SIGNED_OUT') {
+    router.replace('/login');
   }
 });
 </script>

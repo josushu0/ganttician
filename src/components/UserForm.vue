@@ -76,18 +76,18 @@ const props = defineProps({
   login: Boolean,
 });
 // eslint-disable-next-line no-undef
-const emit = defineEmits(['loginError', 'signupError']);
+const emit = defineEmits(['loginError', 'signupError', 'email']);
 
 const userName = ref('');
 const userEmail = ref('');
 const userPassword = ref('');
 
-async function createProfile() {
+async function createProfile(user) {
   try {
     const { error } = await supabase
       .from('profile')
       .insert([
-        { id: supabase.auth.user().id, user_name: userName.value },
+        { id: user.id, user_name: userName.value },
       ]);
     if (error) { throw error; }
   } catch (error) {
@@ -109,12 +109,13 @@ async function handleLogin() {
 
 async function handleSignup() {
   try {
-    const { error } = await supabase.auth.signUp({
+    const { user, error } = await supabase.auth.signUp({
       email: userEmail.value,
       password: userPassword.value,
     });
     if (error) { throw error; }
-    createProfile();
+    createProfile(user);
+    emit('email', user.email);
   } catch (error) {
     emit('signupError', error.message);
   }
