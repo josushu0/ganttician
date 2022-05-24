@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col last:justify-end text-gray-700 dark:text-gray-200 h-full">
-    <form @submit.prevent='decideTaskOperation' class="h-full flex flex-col">
+    <form @submit.prevent class="h-full flex flex-col">
       <div class="mb-4">
         <label for="title" class="font-medium">Título</label>
         <input type="text" name="title" id="title" v-model="title" required
@@ -38,13 +38,13 @@
         </div>
       </div>
       <div class="mt-auto flex justify-end">
-        <button v-if="props.edit"
+        <button v-if="props.edit" @click='deleteTask'
                 class="rounded text-red-700 py-2 px-6 mr-4 hover:bg-red-300
         dark:text-red-400 dark:hover:bg-red-500 dark:hover:text-gray-50">
           Eliminar
         </button>
         <button class="rounded bg-purple-500 text-white py-2 px-6
-      hover:bg-purple-600">
+      hover:bg-purple-600" @click='decideTaskOperation'>
           Guardar
         </button>
       </div>
@@ -91,9 +91,9 @@ const editTask = () => {
   emit('editTask', taskInfo);
 };
 
-// const deleteTask = () => {
-//   emit('deleteTask', taskInfo);
-// };
+const deleteTask = () => {
+  emit('deleteTask', taskInfo);
+};
 
 const decideTaskOperation = () => {
   if (props.edit) {

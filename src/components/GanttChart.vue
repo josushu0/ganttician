@@ -4,7 +4,7 @@
       <div id="gantt" class="w-full h-full"></div>
       <SlideOver :toggle="toggleSlideOver" @closeSlideOver="closeSlideOver" class="z-50">
         <TaskForm :edit=edit :minDate=minDate :maxDate=maxDate
-          @addTask="addTask" @editTask="editTask" />
+          @addTask="addTask" @editTask="editTask" @deleteTask='deleteTask'/>
       </SlideOver>
     </div>
     <SpinnerLoader v-show="!loaded" />
@@ -51,7 +51,7 @@ async function getTasks() {
         .eq('project', projectInfo.project.id);
       const { data: ganttLinks, error: linksError } = await supabase
         .from('gantt_links')
-        .select('type,source,target')
+        .select('id,type,source,target')
         .eq('project', projectInfo.project.id);
       if (tasksError) throw tasksError;
       else if (linksError) throw linksError;
@@ -138,6 +138,20 @@ async function editTask(taskInfo) {
   gantt.hideLightbox();
 }
 
+async function deleteTask(taskInfo) {
+  try {
+    const { error } = await supabase
+      .from('gantt_tasks')
+      .delete()
+      .eq('id', taskInfo.id.value);
+    if (error) throw error;
+    gantt.deleteTask(taskInfo.id.value);
+    gantt.hideLightbox();
+  } catch (error) {
+    emit('ganttError', error);
+  }
+}
+
 async function handleDrag(task) {
   try {
     const { error } = await supabase
@@ -165,10 +179,22 @@ async function addLink(link) {
         type: link.type,
         source: link.source,
         target: link.target,
-        // project: ,
+        project: projectInfo.project.id,
       });
     if (error) throw error;
     gantt.changeLinkId(link.id, id);
+  } catch (error) {
+    emit('ganttError', error);
+  }
+}
+
+async function deleteLink(id) {
+  try {
+    const { error } = await supabase
+      .from('gantt_links')
+      .delete()
+      .eq('id', id);
+    if (error) throw error;
   } catch (error) {
     emit('ganttError', error);
   }
@@ -309,6 +335,11 @@ onBeforeMount(() => {
   gantt.attachEvent('onAfterLinkAdd', (id) => {
     const link = gantt.getLink(id);
     addLink(link);
+  });
+
+  gantt.attachEvent('onAfterLinkDelete', (id) => {
+    console.log(id);
+    deleteLink(id);
   });
 
   gantt.attachEvent('onAfterTaskUpdate', () => {
