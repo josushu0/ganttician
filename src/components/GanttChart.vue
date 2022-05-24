@@ -354,16 +354,24 @@ onBeforeMount(() => {
       parentTask.value = parent;
       minDate.value = gantt.getTask(parent).start_date;
       let mes = minDate.value.getMonth() + 1;
+      let dia = minDate.value.getDate();
       if (mes < 10) {
         mes = `0${mes}`;
       }
-      minDate.value = `${minDate.value.getFullYear()}-${mes}-${minDate.value.getDate()}`;
+      if (dia < 10) {
+        dia = `0${dia}`;
+      }
+      minDate.value = `${minDate.value.getFullYear()}-${mes}-${dia}`;
       maxDate.value = gantt.getTask(parent).end_date;
       mes = maxDate.value.getMonth() + 1;
+      dia = maxDate.value.getDate();
       if (mes < 10) {
         mes = `0${mes}`;
       }
-      maxDate.value = `${maxDate.value.getFullYear()}-${mes}-${maxDate.value.getDate()}`;
+      if (dia < 10) {
+        dia = `0${dia}`;
+      }
+      maxDate.value = `${maxDate.value.getFullYear()}-${mes}-${dia}`;
     } else {
       minDate.value = '';
       maxDate.value = '';
