@@ -34,7 +34,7 @@ const tasks = reactive({
   links: [],
 });
 const loaded = ref(false);
-const parentTask = ref();
+const parentTask = ref(null);
 const minDate = ref();
 const maxDate = ref();
 
@@ -102,7 +102,7 @@ async function addTask(taskInfo) {
     gantt.hideLightbox();
     minDate.value = '';
     maxDate.value = '';
-    parentTask.value = '';
+    parentTask.value = null;
   } catch (error) {
     emit('ganttError', error);
   }
@@ -338,7 +338,6 @@ onBeforeMount(() => {
   });
 
   gantt.attachEvent('onAfterLinkDelete', (id) => {
-    console.log(id);
     deleteLink(id);
   });
 
@@ -368,7 +367,7 @@ onBeforeMount(() => {
     } else {
       minDate.value = '';
       maxDate.value = '';
-      parentTask.value = '';
+      parentTask.value = null;
     }
     edit.value = false;
     gantt.showLightbox();
