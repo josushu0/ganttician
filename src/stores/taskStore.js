@@ -9,6 +9,7 @@ const useTaskStore = defineStore('task', {
       start_date: '',
       end_date: '',
       progress: 0,
+      encargado: '',
     },
   }),
 });

@@ -37,6 +37,17 @@
           <span class="w-16 text-right">{{ progress }}%</span>
         </div>
       </div>
+      <div class="mb-4">
+        <label for="title" class="font-medium">Encargado</label>
+        <select name="title" id="title" v-model="encargado" required
+               class="rounded border-gray-300 w-full
+          focus:ring-purple-600 focus:border-transparent text-sm sm:text-base
+          dark:bg-gray-700 dark:border-[#515c6d] dark:focus:ring-purple-500 mt-1" >
+          <option v-for='colaborador in colabStore.colaboradores' :key='colaborador.colaborador'>
+            {{ colaborador }}
+          </option>
+        </select>
+      </div>
       <div class="mt-auto flex justify-end">
         <button v-if="props.edit" @click='deleteTask'
                 class="rounded text-red-700 py-2 px-6 mr-4 hover:bg-red-300
@@ -55,6 +66,7 @@
 <script setup>
 import { ref } from 'vue';
 import useTaskStore from '../stores/taskStore';
+import useColaboradoresStore from '../stores/colaboradoresStore';
 
 // eslint-disable-next-line no-undef
 const emit = defineEmits(['addTask', 'editTask', 'deleteTask']);
@@ -65,6 +77,8 @@ const props = defineProps({
   maxDate: String,
 });
 
+const colabStore = useColaboradoresStore();
+
 const taskEdit = useTaskStore();
 const id = ref(taskEdit.task.id);
 const title = ref(taskEdit.task.text);
@@ -72,6 +86,7 @@ const description = ref(taskEdit.task.description);
 const start = ref(taskEdit.task.start_date);
 const finish = ref(taskEdit.task.end_date);
 const progress = ref(taskEdit.task.progress * 100);
+const encargado = ref(taskEdit.task.encargado);
 
 const taskInfo = {
   id,
@@ -80,6 +95,7 @@ const taskInfo = {
   start,
   finish,
   progress,
+  encargado,
 };
 taskEdit.$reset();
 

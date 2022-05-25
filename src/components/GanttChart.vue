@@ -47,7 +47,7 @@ async function getTasks() {
     try {
       const { data: ganttTasks, error: tasksError } = await supabase
         .from('gantt_tasks')
-        .select('id,duration,text,description,start_date,progress,parent')
+        .select('id,duration,text,description,start_date,progress,parent,encargado')
         .eq('project', projectInfo.project.id);
       const { data: ganttLinks, error: linksError } = await supabase
         .from('gantt_links')
@@ -69,7 +69,7 @@ async function getTasks() {
 
 async function addTask(taskInfo) {
   const {
-    title, description, start, finish, progress,
+    title, description, start, finish, progress, encargado,
   } = taskInfo;
   const duration = (Date.parse(finish.value) - Date.parse(start.value)) / 1000 / 60 / 60 / 24;
   const id = uuid();
@@ -87,6 +87,7 @@ async function addTask(taskInfo) {
           progress: progress.value / 100,
           parent: parentTask.value,
           project: projectInfo.project.id,
+          encargado: encargado.value,
         },
       ]);
     if (error) throw error;
@@ -98,6 +99,7 @@ async function addTask(taskInfo) {
       duration,
       progress: progress.value / 100,
       parent: parentTask.value,
+      encargado: encargado.value,
     });
     gantt.hideLightbox();
     minDate.value = '';
@@ -110,7 +112,7 @@ async function addTask(taskInfo) {
 
 async function editTask(taskInfo) {
   const {
-    id, title, description, start, finish, progress,
+    id, title, description, start, finish, progress, encargado,
   } = taskInfo;
   const duration = (Date.parse(finish.value) - Date.parse(start.value)) / 1000 / 60 / 60 / 24;
   try {
@@ -122,6 +124,7 @@ async function editTask(taskInfo) {
         start_date: start.value,
         duration,
         progress: progress.value / 100,
+        encargado: encargado.value,
       })
       .eq('id', id.value);
     if (error) throw error;
@@ -272,11 +275,12 @@ onBeforeMount(() => {
 
   gantt.attachEvent('onTaskDblClick', (id) => {
     const {
-      text, description, start_date: startDate, end_date: endDate, progress,
+      text, description, start_date: startDate, end_date: endDate, progress, encargado,
     } = gantt.getTask(id);
     taskEdit.task.id = id;
     taskEdit.task.text = text;
     taskEdit.task.description = description;
+    taskEdit.task.encargado = encargado;
     let mes = startDate.getMonth() + 1;
     if (mes < 10) {
       mes = `0${mes}`;
