@@ -10,6 +10,7 @@ const useProjectStore = defineStore('project', {
       final: '',
       owner: '',
       active: Boolean,
+      colaboradores: [],
     },
   }),
 });

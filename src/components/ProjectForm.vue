@@ -6,7 +6,7 @@
     <DialogTitle v-else as="h1" class="text-2xl font-medium mb-5">
       Crear proyecto
     </DialogTitle>
-    <form @submit.prevent="addProject" class="w-full">
+    <form @submit.prevent class="w-full">
       <label for="name" class="font-medium">Nombre del proyecto</label>
       <input type="text" name="name" id="name" class="rounded border-gray-300 w-full
         focus:ring-purple-600 focus:border-transparent text-sm sm:text-base
@@ -39,10 +39,7 @@
           class="rounded border-gray-300 w-full focus:ring-purple-600 focus:border-transparent mt-1
           text-sm sm:text-base dark:bg-gray-700 dark:border-[#515c6d] dark:focus:ring-purple-500" />
       </div>
-      <!-- <button class="flex items-center ml-auto">Opciones adicionales
-        <ChevronDownIcon class="h-5 w-5 lg:h-6 lg:w-6" />
-      </button> -->
-      <button type="submit"
+      <button type="submit" @click='addProject'
         class="rounded bg-purple-500 text-white py-2 px-6 mt-1 mb-4 hover:bg-purple-600">
         Guardar
       </button>
@@ -75,13 +72,14 @@ const projectDescripcion = ref(projectStore.project.descripcion);
 const projectInicio = ref(projectStore.project.inicio);
 const projectFinal = ref(projectStore.project.final);
 const projectActive = ref(projectStore.project.active);
-const projectColaborador = ref([]);
+const projectColaborador = ref(projectStore.project.colaboradores);
 const projectInfo = {
   project_name: projectName,
   descripcion: projectDescripcion,
   inicio: projectInicio,
   final: projectFinal,
   active: projectActive,
+  colaboradores: projectColaborador,
 };
 
 const addProject = () => {

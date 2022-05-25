@@ -86,10 +86,13 @@ import { v4 as uuid } from 'uuid';
 import Modal from './Modal.vue';
 import ProjectForm from './ProjectForm.vue';
 import useProjectStore from '../stores/projectStore';
+import useColaboradoresStore from '../stores/colaboradoresStore';
 import supabase from '../supabase/supabase';
 
 const session = supabase.auth.session();
 const projectStore = useProjectStore();
+const colabStore = useColaboradoresStore();
+const userName = ref('');
 
 // eslint-disable-next-line no-undef
 const emit = defineEmits(['projectError', 'showGantt']);
@@ -98,16 +101,28 @@ const inactive = ref();
 
 onBeforeMount(async () => {
   try {
-    const { data, error } = await supabase
+    const { data: profileData, error: profileError } = await supabase
+      .from('profile')
+      .select('projects')
+      .eq('id', session.user.id);
+    if (profileError) throw profileError;
+
+    const { data: projectData, error: projectError } = await supabase
       .from('projects')
       .select('*')
-      .eq('owner', session.user.id);
-
-    if (error) throw error;
-    if (data) {
-      active.value = data.filter((item) => item.active === true);
-      inactive.value = data.filter((item) => item.active === false);
+      .in('id', profileData[0].projects);
+    if (projectError) throw projectError;
+    if (projectData) {
+      active.value = projectData.filter((item) => item.active === true);
+      inactive.value = projectData.filter((item) => item.active === false);
     }
+
+    const { data: nameData, error: nameError } = await supabase
+      .from('profile')
+      .select('user_name')
+      .eq('id', session.user.id);
+    userName.value = nameData[0].user_name;
+    if (nameError) throw nameError;
   } catch (error) {
     emit('projectError', error);
   }
@@ -127,15 +142,28 @@ function closeModal() {
   toggleModal.value = false;
 }
 
-const getProject = (projectItem) => {
-  projectStore.project = projectItem;
-  localStorage.setItem('projectId', projectItem.id);
-  localStorage.setItem('projectName', projectItem.project_name);
-  showGantt();
+const getProject = async (projectItem) => {
+  try {
+    projectStore.project = projectItem;
+    const { data, error } = await supabase
+      .from('projects')
+      .select('colaboradores')
+      .eq('id', projectItem.id);
+    if (error) throw error;
+    colabStore.colaboradores = data[0].colaboradores;
+    localStorage.setItem('projectId', projectItem.id);
+    localStorage.setItem('projectName', projectItem.project_name);
+    showGantt();
+  } catch (error) {
+    emit('projectError', error.message);
+  }
 };
 
 const addProject = async (projectInfo) => {
   const id = uuid();
+  const colaboradores = projectInfo.colaboradores.value.split(' ');
+  colaboradores.push(userName.value);
+  colabStore.colaboradores = colaboradores;
   try {
     const { error } = await supabase
       .from('projects')
@@ -146,16 +174,20 @@ const addProject = async (projectInfo) => {
         inicio: projectInfo.inicio.value,
         final: projectInfo.final.value,
         owner: session.user.id,
+        colaboradores,
       });
+    if (error) throw error;
     const newProject = {
       id,
       ...projectInfo,
     };
     active.value.push(newProject);
+    const { error: colabError } = await supabase
+      .rpc('append', { name: colaboradores, project: id });
+    if (colabError) throw colabError;
     closeModal();
-    if (error) throw error;
-  } catch (error) {
-    emit('projectError', error);
+  } catch (e) {
+    emit('projectError', e.message);
   }
 };
 
