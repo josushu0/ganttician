@@ -2,10 +2,10 @@
   <nav class="fixed top-0 left-0 h-16 w-screen flex flex-row items-center bg-gray-200 text-gray-700
               lg:flex-col lg:h-screen lg:w-16
               dark:bg-gray-800 dark:text-white">
-    <img src="../assets/logo.png" alt="Logo" height="34" width="34" class="ml-2 lg:mt-2 lg:ml-0">
+    <img src="../assets/logo.png" alt="Logo" height="42" width="42" class="ml-2 lg:mt-1 lg:ml-0">
 
     <hr class="bg-gray-300 dark:bg-gray-900 border border-gray-300 ml-2 h-3/4 w-0
-                lg:mt-2 lg:ml-0 lg:w-9/12 lg:h-0 dark:border-gray-900" />
+                lg:mt-1 lg:ml-0 lg:w-9/12 lg:h-0 dark:border-gray-900" />
 
     <button class="navbar_item rounded-lg ml-2 lg:mt-2 lg:ml-0 lg:w-11 lg:h-11
                   flex justify-center items-center w-10 h-10 shadow-lg"
