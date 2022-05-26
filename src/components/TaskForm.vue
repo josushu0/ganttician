@@ -4,7 +4,7 @@
       <div class="mb-4">
         <label for="title" class="font-medium">Título</label>
         <input type="text" name="title" id="title" v-model="title" required
-               class="rounded border-gray-300 w-full
+          autocomplete='off' class="rounded border-gray-300 w-full
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base
           dark:bg-gray-700 dark:border-[#515c6d] dark:focus:ring-purple-500 mt-1" />
       </div>

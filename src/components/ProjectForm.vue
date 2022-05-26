@@ -11,7 +11,7 @@
       <input type="text" name="name" id="name" class="rounded border-gray-300 w-full
         focus:ring-purple-600 focus:border-transparent text-sm sm:text-base
         dark:bg-gray-700 dark:border-[#515c6d] dark:focus:ring-purple-500 mt-1 mb-4"
-        v-model="projectName" required>
+        v-model="projectName" required autocomplete='off'>
       <label for="descripcion" class="font-medium">Descripción</label>
       <textarea name="descripcion" id="descripcion" class="rounded border-gray-300 w-full
         focus:ring-purple-600 focus:border-transparent text-sm sm:text-base
@@ -37,7 +37,8 @@
         <label for="colaborador" class="font-medium">Colaboradores</label>
         <input type="text" name="colaborador" id="colaborador" v-model="projectColaborador"
           class="rounded border-gray-300 w-full focus:ring-purple-600 focus:border-transparent mt-1
-          text-sm sm:text-base dark:bg-gray-700 dark:border-[#515c6d] dark:focus:ring-purple-500" />
+          text-sm sm:text-base dark:bg-gray-700 dark:border-[#515c6d] dark:focus:ring-purple-500"
+          autocomplete='off'/>
       </div>
       <button type="submit" @click='addProject'
         class="rounded bg-purple-500 text-white py-2 px-6 mt-1 mb-4 hover:bg-purple-600">

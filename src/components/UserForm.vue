@@ -16,7 +16,8 @@
           <input type="text" name="username" id="username" v-model="userName" required
           class="rounded border-gray-300 w-full text-gray-700 dark:text-gray-200
           focus:ring-purple-600 focus:border-transparent text-sm sm:text-base pl-10
-          dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500">
+          dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500"
+          autocomplete='off'>
           <span class="absolute h-full w-10 left-0 top-0 z-10
           flex justify-center items-center pointer-events-none">
             <UserIcon class="h-5 w-5 mb-[2px] sm:h-6 sm:w-6" />
