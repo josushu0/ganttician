@@ -30,7 +30,7 @@
     </div>
   </div>
   <div v-else>
-    <Project @showGantt="showGantt" @projectError="projectError" />
+    <Project @showGantt="showGantt" @projectError="projectError" @signoutError="signoutError" />
   </div>
   </div>
 </template>

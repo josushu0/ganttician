@@ -73,12 +73,17 @@
     <Modal :toggle="toggleModal" @closeModal="closeModal">
       <ProjectForm @addProject="addProject"/>
     </Modal>
+    <button class="logout_button rounded-lg flex justify-center items-center w-10 h-10 shadow-lg
+                  lg:w-11 lg:h-11 fixed bottom-2 left-2"
+                  @click="handleSignout">
+      <LogoutIcon class="h-5 w-5 lg:h-6 lg:w-6" />
+    </button>
   </div>
 </template>
 
 <script setup>
 import { onBeforeMount, ref } from 'vue';
-import { PlusSmIcon } from '@heroicons/vue/outline';
+import { PlusSmIcon, LogoutIcon } from '@heroicons/vue/outline';
 import {
   TabGroup, TabList, Tab, TabPanels, TabPanel,
 } from '@headlessui/vue';
@@ -95,7 +100,7 @@ const colabStore = useColaboradoresStore();
 const userName = ref('');
 
 // eslint-disable-next-line no-undef
-const emit = defineEmits(['projectError', 'showGantt']);
+const emit = defineEmits(['projectError', 'showGantt', 'signoutError']);
 const active = ref();
 const inactive = ref();
 
@@ -190,5 +195,14 @@ const addProject = async (projectInfo) => {
     emit('projectError', e.message);
   }
 };
+
+async function handleSignout() {
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+  } catch (error) {
+    emit('signoutError', error.message);
+  }
+}
 
 </script>
