@@ -291,7 +291,7 @@ onBeforeMount(() => {
       mes = `0${mes}`;
     }
     taskEdit.task.end_date = `${endDate.getFullYear()}-${mes}-${endDate.getDate()}`;
-    taskEdit.task.progress = progress;
+    taskEdit.task.progress = progress.toFixed(2);
     edit.value = true;
     gantt.showLightbox();
   });
