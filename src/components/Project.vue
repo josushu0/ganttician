@@ -129,7 +129,7 @@ onBeforeMount(async () => {
     userName.value = nameData[0].user_name;
     if (nameError) throw nameError;
   } catch (error) {
-    emit('projectError', error);
+    emit('projectError', error.message);
   }
 });
 
