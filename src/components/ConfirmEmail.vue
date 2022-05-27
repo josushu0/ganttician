@@ -11,14 +11,20 @@
       <p class='mb-4'>
         Por favor dirígete a tu correo y haz clic en el enlace para completar tu registro.
       </p>
-      <button class="rounded bg-purple-500 text-white py-2 px-6 uppercase mt-2
+      <button @click='returnLogin' class="rounded bg-purple-500 text-white py-2 px-6 uppercase mt-2
       hover:bg-purple-600">Iniciar sesión</button>
     </div>
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
 // eslint-disable-next-line no-undef
 const props = defineProps({
   correo: String,
 });
+
+const router = useRouter();
+const returnLogin = () => {
+  router.replace('/login');
+};
 </script>
