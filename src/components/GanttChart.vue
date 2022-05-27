@@ -62,7 +62,7 @@ async function getTasks() {
       gantt.sort('start_date', false);
       loaded.value = true;
     } catch (error) {
-      emit('ganttError', error);
+      emit('ganttError', error.message);
     }
   }
 }
@@ -106,7 +106,7 @@ async function addTask(taskInfo) {
     maxDate.value = '';
     parentTask.value = null;
   } catch (error) {
-    emit('ganttError', error);
+    emit('ganttError', error.message);
   }
 }
 
@@ -129,7 +129,7 @@ async function editTask(taskInfo) {
       .eq('id', id.value);
     if (error) throw error;
   } catch (error) {
-    emit('ganttError', error);
+    emit('ganttError', error.message);
   }
   const task = gantt.getTask(id.value);
   task.text = title.value;
@@ -151,7 +151,7 @@ async function deleteTask(taskInfo) {
     gantt.deleteTask(taskInfo.id.value);
     gantt.hideLightbox();
   } catch (error) {
-    emit('ganttError', error);
+    emit('ganttError', error.message);
   }
 }
 
@@ -168,7 +168,7 @@ async function handleDrag(task) {
       .eq('id', task.id);
     if (error) throw error;
   } catch (error) {
-    emit('ganttError', error);
+    emit('ganttError', error.message);
   }
 }
 
@@ -187,7 +187,7 @@ async function addLink(link) {
     if (error) throw error;
     gantt.changeLinkId(link.id, id);
   } catch (error) {
-    emit('ganttError', error);
+    emit('ganttError', error.message);
   }
 }
 
@@ -199,7 +199,7 @@ async function deleteLink(id) {
       .eq('id', id);
     if (error) throw error;
   } catch (error) {
-    emit('ganttError', error);
+    emit('ganttError', error.message);
   }
 }
 
@@ -274,6 +274,34 @@ onBeforeMount(() => {
   gantt.config.grid_width = 400;
 
   gantt.attachEvent('onTaskDblClick', (id) => {
+    const parent = gantt.getParent(id);
+    if (parent !== 0) {
+      parentTask.value = parent;
+      minDate.value = gantt.getTask(parent).start_date;
+      let mes = minDate.value.getMonth() + 1;
+      let dia = minDate.value.getDate();
+      if (mes < 10) {
+        mes = `0${mes}`;
+      }
+      if (dia < 10) {
+        dia = `0${dia}`;
+      }
+      minDate.value = `${minDate.value.getFullYear()}-${mes}-${dia}`;
+      maxDate.value = gantt.getTask(parent).end_date;
+      mes = maxDate.value.getMonth() + 1;
+      dia = maxDate.value.getDate();
+      if (mes < 10) {
+        mes = `0${mes}`;
+      }
+      if (dia < 10) {
+        dia = `0${dia}`;
+      }
+      maxDate.value = `${maxDate.value.getFullYear()}-${mes}-${dia}`;
+    } else {
+      minDate.value = '';
+      maxDate.value = '';
+      parentTask.value = null;
+    }
     const {
       text, description, start_date: startDate, end_date: endDate, progress, encargado,
     } = gantt.getTask(id);
