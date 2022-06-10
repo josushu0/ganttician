@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://ganttician.vercel.app">
-    <img src="src/assets/logo_title.png" alt="Logo" width=100 />
+    <img src="src/assets/logo_title.png" alt="Logo" width=400 />
   </a>
 
   <p align="center">
@@ -22,7 +22,6 @@ Ganttician permite llevar el control de proyectos a través de una aplicación w
 - Crear tareas
 - Modificar tareas
 - Añadir colaboradores
-
 
 ## Tecnologías
 - Vue
