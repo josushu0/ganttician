@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@nuxt/kit':
+    specifier: ^3.10.3
+    version: 3.10.3
   '@nuxtjs/color-mode':
     specifier: ^3.3.2
     version: 3.3.2
