@@ -2,6 +2,9 @@
 definePageMeta({
 	middleware: 'auth',
 })
+
+const user = useUser()
+console.log(user)
 </script>
 
 <template>
