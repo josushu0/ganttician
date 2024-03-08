@@ -1,21 +1,31 @@
-import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { sqliteTable, text, integer, primaryKey } from 'drizzle-orm/sqlite-core'
 
-export const sessions = pgTable("sessions", {
-	id: text("id").primaryKey(),
-	userId: text("user_id")
+export const sessions = sqliteTable('sessions', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
 		.notNull()
-		.references(() => (users.id)),
-	expiresAt: timestamp("expires_at", {
-			withTimezone: true,
-			mode: "date"
-		}).notNull()
+		.references(() => users.id),
+	expiresAt: integer('expires_at').notNull(),
 })
 
-export const users = pgTable("users", {
-	id: text("id").primaryKey(),
-	name: text("name").notNull(),
-	email: text("email")
-		.notNull()
-		.unique(),
-	password: text("password").notNull()
+export const users = sqliteTable('users', {
+	id: text('id').primaryKey(),
+	username: text('username').notNull(),
+	avatar: text('avatar'),
 })
+
+export const oauthAccount = sqliteTable(
+	'oauth_account',
+	{
+		providerId: text('provider_id').notNull(),
+		providerUserId: text('provider_user_id').notNull(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => users.id),
+	},
+	(table) => {
+		return {
+			pk: primaryKey({ columns: [table.providerId, table.providerUserId] }),
+		}
+	},
+)
