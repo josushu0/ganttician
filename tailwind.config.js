@@ -14,7 +14,7 @@ export default {
 		`${srcDir}/app.{js,ts,vue}`,
 		`${srcDir}/Error.{js,ts,vue}`,
 		`${srcDir}/error.{js,ts,vue}`,
-		`${srcDir}/app.config.{js,ts}`
+		`${srcDir}/app.config.{js,ts}`,
 	],
 	darkMode: 'class',
 	theme: {
@@ -29,8 +29,8 @@ export default {
 				'secondary-light': '#8cadde',
 				'secondary-dark': '#214273',
 				'accent-light': '#4dcba3',
-				'accent-dark': '#34b28a'
-			}
-		}
-	}
+				'accent-dark': '#34b28a',
+			},
+		},
+	},
 }
