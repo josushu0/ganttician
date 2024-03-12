@@ -10,5 +10,3 @@ console.log(user)
 <template>
 	<div>Page: dashboard</div>
 </template>
-
-<style scoped></style>

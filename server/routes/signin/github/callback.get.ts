@@ -49,7 +49,7 @@ export default defineEventHandler(async (event) => {
 
 		await db.insert(users).values({
 			id: userId,
-			username: githubUser.id,
+			username: githubUser.name,
 			avatar: githubUser.avatar_url,
 		})
 		await db.insert(oauthAccount).values({
@@ -79,6 +79,6 @@ export default defineEventHandler(async (event) => {
 
 interface GitHubUser {
 	id: string
-	login: string
+	name: string
 	avatar_url: string
 }
