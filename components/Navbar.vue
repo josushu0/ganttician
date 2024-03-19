@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+const isLargeScreen = useMediaQuery('(min-width: 1280px)')
+const user = useUser()
 const route = useRoute()
 const userDropdown = [
 	[
@@ -20,13 +22,16 @@ async function logout() {
 
 <template>
 	<nav
-		class="flex flex-col items-center justify-between p-2 border-r-2 border-r-slate-300 dark:border-r-slate-800">
-		<div class="flex flex-col gap-2 items-center">
-			<Logo class="size-8" />
-			<UDivider size="xs" />
+		class="flex xl:flex-col items-center justify-between p-2 border-t-2 xl:border-r-2 border-t-slate-300 xl:border-r-slate-300 dark:xl:border-t-slate-800 xl:dark:border-r-slate-800">
+		<div class="flex xl:flex-col gap-2 items-center">
+			<Logo class="size-8 hidden xl:block" />
+			<UDivider class="hidden xl:flex" size="xs" />
 			<UTooltip
 				text="Dashboard"
-				:popper="{ placement: 'right', offsetDistance: 18 }">
+				:popper="{
+					placement: isLargeScreen ? 'right' : 'top',
+					offsetDistance: 18,
+				}">
 				<ULink
 					to="/dashboard"
 					class="hover:bg-accent-500/20 hover:dark:bg-accent-600/20 rounded flex items-center justify-center size-8"
@@ -37,7 +42,10 @@ async function logout() {
 			<UTooltip
 				v-if="route.path.startsWith('/project')"
 				text="Gantt chart"
-				:popper="{ placement: 'right', offsetDistance: 18 }">
+				:popper="{
+					placement: isLargeScreen ? 'right' : 'top',
+					offsetDistance: 18,
+				}">
 				<ULink
 					:to="'/project/' + route.params.id"
 					class="hover:bg-accent-500/20 hover:dark:bg-accent-600/20 rounded flex items-center justify-center size-8"
@@ -46,14 +54,17 @@ async function logout() {
 				</ULink>
 			</UTooltip>
 		</div>
-		<div class="flex flex-col gap-2 items-center">
+		<div class="flex xl:flex-col gap-2 items-center">
 			<UTooltip
 				:text="
 					route.path.startsWith('/dashboard')
 						? 'Organization settings'
 						: 'Project settings'
 				"
-				:popper="{ placement: 'right', offsetDistance: 18 }">
+				:popper="{
+					placement: isLargeScreen ? 'right' : 'top',
+					offsetDistance: 18,
+				}">
 				<ULink
 					:to="
 						route.path.startsWith('dashboard')
@@ -67,16 +78,19 @@ async function logout() {
 			</UTooltip>
 			<UDropdown
 				:items="userDropdown"
-				:popper="{ arrow: true, placement: 'right-end', offsetDistance: 18 }"
+				:popper="{
+					arrow: true,
+					placement: isLargeScreen ? 'right-end' : 'top-end',
+					offsetDistance: 18,
+				}"
 				class="hover:bg-accent-500/20 hover:dark:bg-accent-600/20">
 				<UTooltip
 					text="User"
-					:popper="{ placement: 'right', offsetDistance: 18 }">
-					<UButton
-						icon="i-heroicons-user"
-						color="primary"
-						variant="solid"
-						:ui="{ rounded: 'rounded-full' }" />
+					:popper="{
+						placement: isLargeScreen ? 'right' : 'top',
+						offsetDistance: 18,
+					}">
+					<UAvatar :src="user?.avatar" size="xs" :alt="user?.username" />
 				</UTooltip>
 			</UDropdown>
 		</div>
