@@ -2,11 +2,8 @@
 definePageMeta({
 	middleware: 'auth',
 })
-
-const user = useUser()
-console.log(user)
 </script>
 
 <template>
-	<div>Page: dashboard</div>
+	<div class="text-white w-full h-full">Page: dashboard</div>
 </template>
