@@ -1,28 +1,23 @@
 <script lang="ts" setup>
+import { useUserStore } from '~/stores/user'
+
 const isLargeScreen = useMediaQuery('(min-width: 1280px)')
-const user = useUser()
+const userStore = useUserStore()
 const route = useRoute()
 const userDropdown = [
 	[
 		{
 			label: 'Logout',
 			icon: 'i-heroicons-arrow-left-start-on-rectangle',
-			click: logout,
+			click: userStore.logout,
 		},
 	],
 ]
-
-async function logout() {
-	await $fetch('/api/logout', {
-		method: 'POST',
-	})
-	reloadNuxtApp()
-}
 </script>
 
 <template>
 	<nav
-		class="flex xl:flex-col items-center justify-between p-2 border-t-2 xl:border-r-2 border-t-slate-300 xl:border-r-slate-300 dark:xl:border-t-slate-800 xl:dark:border-r-slate-800">
+		class="flex xl:flex-col items-center justify-between p-2 border-t-2 xl:border-r-2 border-t-slate-300 xl:border-r-slate-300 dark:border-t-slate-800 xl:dark:border-r-slate-800">
 		<div class="flex xl:flex-col gap-2 items-center">
 			<Logo class="size-8 hidden xl:block" />
 			<UDivider class="hidden xl:flex" size="xs" />
@@ -32,12 +27,13 @@ async function logout() {
 					placement: isLargeScreen ? 'right' : 'top',
 					offsetDistance: 18,
 				}">
-				<ULink
+				<UButton
+					square
+					variant="ghost"
 					to="/dashboard"
-					class="hover:bg-accent-500/20 hover:dark:bg-accent-600/20 rounded flex items-center justify-center size-8"
 					active-class="text-accent-500 dark:text-accent-600 bg-accent-500/30 dark:bg-accent-600/30">
 					<UIcon name="i-heroicons-squares-2x2" class="size-6" />
-				</ULink>
+				</UButton>
 			</UTooltip>
 			<UTooltip
 				v-if="route.path.startsWith('/project')"
@@ -46,12 +42,13 @@ async function logout() {
 					placement: isLargeScreen ? 'right' : 'top',
 					offsetDistance: 18,
 				}">
-				<ULink
+				<UButton
+					square
+					variant="ghost"
 					:to="'/project/' + route.params.id"
-					class="hover:bg-accent-500/20 hover:dark:bg-accent-600/20 rounded flex items-center justify-center size-8"
 					active-class="text-accent-500 dark:text-accent-600 bg-accent-500/30 dark:bg-accent-600/30">
 					<UIcon name="i-heroicons-chart-bar" class="size-6 rotate-90" />
-				</ULink>
+				</UButton>
 			</UTooltip>
 		</div>
 		<div class="flex xl:flex-col gap-2 items-center">
@@ -65,16 +62,17 @@ async function logout() {
 					placement: isLargeScreen ? 'right' : 'top',
 					offsetDistance: 18,
 				}">
-				<ULink
+				<UButton
+					square
+					variant="ghost"
 					:to="
 						route.path.startsWith('dashboard')
 							? `/organization/organizationId/settings`
 							: `/project/projectId/settings`
 					"
-					class="hover:bg-accent-500/20 hover:dark:bg-accent-600/20 rounded flex items-center justify-center size-8"
 					active-class="text-accent-500 dark:text-accent-600 bg-accent-500/30 dark:bg-accent-600/30">
 					<UIcon name="i-heroicons-cog-6-tooth" class="size-6" />
-				</ULink>
+				</UButton>
 			</UTooltip>
 			<UDropdown
 				:items="userDropdown"
@@ -90,7 +88,12 @@ async function logout() {
 						placement: isLargeScreen ? 'right' : 'top',
 						offsetDistance: 18,
 					}">
-					<UAvatar :src="user?.avatar" size="xs" :alt="user?.username" />
+					<UButton variant="ghost" square>
+						<UAvatar
+							:src="userStore.user?.avatar"
+							size="xs"
+							:alt="userStore.user?.username" />
+					</UButton>
 				</UTooltip>
 			</UDropdown>
 		</div>
