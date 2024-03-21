@@ -14,6 +14,7 @@
 	"dependencies": {
 		"@libsql/client": "^0.5.3",
 		"@lucia-auth/adapter-drizzle": "^1.0.2",
+		"@pinia/nuxt": "^0.5.1",
 		"arctic": "^1.2.1",
 		"drizzle-orm": "^0.29.4",
 		"lucia": "^3.0.1",
@@ -23,12 +24,12 @@
 		"vue-router": "^4.3.0"
 	},
 	"devDependencies": {
+		"@iconify-json/simple-icons": "^1.1.95",
 		"@nuxt/kit": "^3.10.3",
 		"@nuxt/ui": "^2.14.2",
 		"@vue/typescript-plugin": "^2.0.4",
 		"@vueuse/core": "^10.9.0",
 		"@vueuse/nuxt": "^10.9.0",
-		"drizzle-kit": "^0.20.14",
-		"@iconify-json/simple-icons": "^1.1.95"
+		"drizzle-kit": "^0.20.14"
 	}
 }
