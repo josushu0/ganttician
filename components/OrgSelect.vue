@@ -1,10 +1,6 @@
 <script setup lang="ts">
-const organizations = [
-	{ id: 1, name: 'Org 1' },
-	{ id: 2, name: 'Org 2' },
-	{ id: 3, name: 'Org 3' },
-]
-const selected = ref(organizations[0])
+const orgStore = useOrganizationsStore()
+await orgStore.fetchOrganizations()
 </script>
 
 <template>
@@ -14,6 +10,6 @@ const selected = ref(organizations[0])
 		option-attribute="name"
 		by="id"
 		:search-attributes="['name']"
-		v-model="selected"
-		:options="organizations" />
+		v-model="orgStore.selectedOrganization"
+		:options="orgStore.organizations" />
 </template>
