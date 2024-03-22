@@ -5,7 +5,7 @@
 			<slot />
 		</section>
 		<section
-			class="hidden xl:flex flex-col items-center justify-center gap-10 bg-accent-400 dark:bg-accent-800">
+			class="hidden xl:flex flex-col items-center justify-center gap-10 bg-background">
 			<LogoComplete />
 			<picture class="w-9/12">
 				<source
