@@ -1,52 +1,87 @@
+const animate = require('tailwindcss-animate')
+
 /** @type {import('tailwindcss').Config} */
+module.exports = {
+	darkMode: ['class'],
+	safelist: ['dark'],
+	prefix: '',
 
-const srcDir = './'
-
-export default {
-	content: [
-		`${srcDir}/components/**/*.{vue,js,ts}`,
-		`${srcDir}/layouts/**/*.vue`,
-		`${srcDir}/pages/**/*.vue`,
-		`${srcDir}/composables/**/*.{js,ts}`,
-		`${srcDir}/plugins/**/*.{js,ts}`,
-		`${srcDir}/utils/**/*.{js,ts}`,
-		`${srcDir}/App.{js,ts,vue}`,
-		`${srcDir}/app.{js,ts,vue}`,
-		`${srcDir}/Error.{js,ts,vue}`,
-		`${srcDir}/error.{js,ts,vue}`,
-		`${srcDir}/app.config.{js,ts}`,
-	],
-	darkMode: 'class',
 	theme: {
+		container: {
+			center: true,
+			padding: '2rem',
+			screens: {
+				'2xl': '1400px',
+			},
+		},
 		extend: {
 			colors: {
-				accent: {
-					50: '#f1f6fc',
-					100: '#e5edfa',
-					200: '#d1ddf4',
-					300: '#b4c6ed',
-					400: '#96a8e3',
-					500: '#6e7fd4',
-					600: '#626bc9',
-					700: '#5259b0',
-					800: '#444a8f',
-					900: '#3d4472',
-					950: '#232643',
+				border: 'hsl(var(--border))',
+				input: 'hsl(var(--input))',
+				ring: 'hsl(var(--ring))',
+				background: 'hsl(var(--background))',
+				foreground: 'hsl(var(--foreground))',
+				primary: {
+					DEFAULT: 'hsl(var(--primary))',
+					foreground: 'hsl(var(--primary-foreground))',
 				},
 				secondary: {
-					50: '#edfcf6',
-					100: '#d4f7e7',
-					200: '#adedd3',
-					300: '#77deba',
-					400: '#4dcba3',
-					500: '#1dac84',
-					600: '#108b6b',
-					700: '#0d6f58',
-					800: '#0d5847',
-					900: '#0b493b',
-					950: '#052922',
+					DEFAULT: 'hsl(var(--secondary))',
+					foreground: 'hsl(var(--secondary-foreground))',
 				},
+				destructive: {
+					DEFAULT: 'hsl(var(--destructive))',
+					foreground: 'hsl(var(--destructive-foreground))',
+				},
+				muted: {
+					DEFAULT: 'hsl(var(--muted))',
+					foreground: 'hsl(var(--muted-foreground))',
+				},
+				accent: {
+					DEFAULT: 'hsl(var(--accent))',
+					foreground: 'hsl(var(--accent-foreground))',
+				},
+				popover: {
+					DEFAULT: 'hsl(var(--popover))',
+					foreground: 'hsl(var(--popover-foreground))',
+				},
+				card: {
+					DEFAULT: 'hsl(var(--card))',
+					foreground: 'hsl(var(--card-foreground))',
+				},
+			},
+			borderRadius: {
+				xl: 'calc(var(--radius) + 4px)',
+				lg: 'var(--radius)',
+				md: 'calc(var(--radius) - 2px)',
+				sm: 'calc(var(--radius) - 4px)',
+			},
+			keyframes: {
+				'accordion-down': {
+					from: { height: 0 },
+					to: { height: 'var(--radix-accordion-content-height)' },
+				},
+				'accordion-up': {
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: 0 },
+				},
+				'collapsible-down': {
+					from: { height: 0 },
+					to: { height: 'var(--radix-collapsible-content-height)' },
+				},
+				'collapsible-up': {
+					from: { height: 'var(--radix-collapsible-content-height)' },
+					to: { height: 0 },
+				},
+			},
+			animation: {
+				'accordion-down': 'accordion-down 0.2s ease-out',
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'collapsible-down': 'collapsible-down 0.2s ease-in-out',
+				'collapsible-up': 'collapsible-up 0.2s ease-in-out',
 			},
 		},
 	},
+	plugins: [animate],
 }
+
