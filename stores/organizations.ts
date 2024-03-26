@@ -11,5 +11,20 @@ export const useOrganizationsStore = defineStore('organizations', {
 			this.organizations = data
 			this.selectedOrganization = data[0]
 		},
+		async createOrganization(info: newOrgInfo) {
+			await $fetch('/api/organization', {
+				method: 'POST',
+				body: {
+					name: info.name,
+					description: info.description,
+				},
+			})
+			await navigateTo('/dashboard')
+		},
 	},
 })
+
+interface newOrgInfo {
+	name: string
+	description?: string | undefined
+}
