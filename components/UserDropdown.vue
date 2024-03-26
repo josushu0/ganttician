@@ -7,29 +7,16 @@ const isLargeScreen = useMediaQuery('(min-width: 1280px)')
 
 <template>
 	<DropdownMenu>
-		<DropdownMenuTrigger>
-			<TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger as-child>
-						<Button size="icon" variant="ghost">
-							<Avatar>
-								<AvatarImage
-									:src="userStore.user?.avatar!"
-									:alt="userStore.user?.username" />
-								<AvatarFallback
-									:text="userStore.user?.username"
-									class="truncate" />
-							</Avatar>
-							<span class="sr-only">User menu</span>
-						</Button>
-					</TooltipTrigger>
-					<TooltipContent
-						:side="isLargeScreen ? 'right' : 'top'"
-						:sideOffset="14">
-						User menu
-					</TooltipContent>
-				</Tooltip>
-			</TooltipProvider>
+		<DropdownMenuTrigger as-child>
+			<Button size="icon" variant="ghost">
+				<Avatar>
+					<AvatarImage
+						:src="userStore.user?.avatar!"
+						:alt="userStore.user?.username" />
+					<AvatarFallback :text="userStore.user?.username" class="truncate" />
+				</Avatar>
+				<span class="sr-only">User menu</span>
+			</Button>
 		</DropdownMenuTrigger>
 		<DropdownMenuContent
 			:side="isLargeScreen ? 'right' : 'top'"
