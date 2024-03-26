@@ -25,15 +25,17 @@ const projects = computed(() => {
 		</div>
 		<div class="grid md:grid-cols-2 2xl:grid-cols-3 gap-4 overflow-y-auto">
 			<Card class="basis-1/3" v-for="project in projects" :key="project.id">
-				<CardHeader>
-					<CardTitle>{{ project.name }}</CardTitle>
-				</CardHeader>
-				<CardContent>
-					{{ project.description }}
-				</CardContent>
-				<CardFooter>
-					{{ project.id }}
-				</CardFooter>
+				<NuxtLink :to="'/project/' + project.id">
+					<CardHeader>
+						<CardTitle>{{ project.name }}</CardTitle>
+					</CardHeader>
+					<CardContent>
+						{{ project.description }}
+					</CardContent>
+					<CardFooter>
+						{{ project.id }}
+					</CardFooter>
+				</NuxtLink>
 			</Card>
 		</div>
 	</div>
