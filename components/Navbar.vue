@@ -11,25 +11,32 @@ const route = useRoute()
 		<div class="flex xl:flex-col gap-2 items-center">
 			<Logo class="size-10 hidden xl:block" />
 			<Separator v-if="isLargeScreen" />
-			<NavLink :condition="true" popover="Dashboard" to="/dashboard">
+			<NavLink
+				:condition="true"
+				popover="Dashboard"
+				to="/dashboard"
+				label="Go to dashboard">
 				<LayoutGrid />
 			</NavLink>
 			<NavLink
 				:condition="route.path.startsWith('/project/[id]')"
 				popover="Gantt Chart"
-				to="/project/new">
+				to="/project/new"
+				label="Go to Gantt Chart">
 				<GanttChart />
 			</NavLink>
 			<NavLink
 				:condition="route.path.startsWith('/project/[id]')"
 				popover="Project settings"
-				to="/project/[id]/settings">
+				to="/project/[id]/settings"
+				label="Go to Project Settings">
 				<Settings />
 			</NavLink>
 			<NavLink
 				:condition="route.path.startsWith('/dashboard')"
 				popover="Organization settings"
-				to="/organization/[id]/settings">
+				to="/organization/[id]/settings"
+				label="Go to Organization Settings">
 				<Settings />
 			</NavLink>
 		</div>

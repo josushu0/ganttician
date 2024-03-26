@@ -4,6 +4,7 @@ const props = defineProps<{
 	condition: boolean
 	to: string
 	popover: string
+	label: string
 }>()
 </script>
 
@@ -11,9 +12,10 @@ const props = defineProps<{
 	<TooltipProvider v-if="props.condition">
 		<Tooltip>
 			<TooltipTrigger as-child>
-				<Button size="icon" variant="ghost">
+				<Button size="icon" variant="ghost" as-child>
 					<NuxtLink :to="props.to">
 						<slot />
+						<span class="sr-only">{{ props.label }}</span>
 					</NuxtLink>
 				</Button>
 			</TooltipTrigger>
