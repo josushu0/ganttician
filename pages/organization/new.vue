@@ -1,56 +1,75 @@
 <script setup lang="ts">
-const createOrg = async () => {
-	loading.value = true
-	await $fetch('/api/organization', {
-		method: 'POST',
-		body: {
-			name: state.name,
-			description: state.description,
-		},
-	})
-	await navigateTo('/dashboard')
-}
+import { toTypedSchema } from '@vee-validate/zod'
+import { LoaderCircle } from 'lucide-vue-next'
+import { useForm } from 'vee-validate'
+import { z } from 'zod'
 
+const orgStore = useOrganizationsStore()
 const loading = ref(false)
-const state = reactive({
-	name: '',
-	description: '',
+
+const formSchema = toTypedSchema(
+	z.object({
+		name: z.string({ required_error: 'The organization name is required.' }),
+		description: z.string().optional(),
+	}),
+)
+
+const form = useForm({
+	validationSchema: formSchema,
+})
+
+const createOrg = form.handleSubmit(async (values) => {
+	loading.value = true
+	await orgStore.createOrganization(values)
 })
 </script>
 
 <template>
 	<div class="grid place-content-center w-full h-full">
-		<UForm
-			class="flex flex-col gap-4 rounded border-2 border-slate-300 dark:border-slate-800 p-6"
-			:state="state"
+		<form
+			class="flex flex-col gap-4 rounded xl:border-2 xl:border-border p-6"
 			@submit="createOrg">
 			<div class="space-y-4">
 				<h1 class="font-bold text-xl">Create a new Organization</h1>
-				<UDivider size="sm" />
+				<Separator size="sm" />
 				<p>
 					This organization will contain all your projects. You can create
 					multiple of these.
 				</p>
 			</div>
-			<UFormGroup
-				label="Name"
-				name="name"
-				required
-				size="lg"
-				description="What's the name of your company or team?">
-				<UInput v-model="state.name" />
-			</UFormGroup>
-			<UFormGroup
-				label="Description"
-				name="description"
-				size="lg"
-				description="Describe the purpose of your organization. (Optional)">
-				<UTextarea v-model="state.description" />
-			</UFormGroup>
+			<FormField v-slot="{ componentField }" name="name">
+				<FormItem>
+					<FormLabel>Name</FormLabel>
+					<FormControl>
+						<Input type="text" v-bind="componentField" />
+					</FormControl>
+					<FormDescription>
+						What's the name of your company or team?
+					</FormDescription>
+					<FormMessage />
+				</FormItem>
+			</FormField>
+			<FormField v-slot="{ componentField }" name="description">
+				<FormItem>
+					<FormLabel>Description</FormLabel>
+					<FormControl>
+						<Textarea v-bind="componentField" />
+					</FormControl>
+					<FormDescription>
+						Describe the purpose of your organization. (Optional)
+					</FormDescription>
+					<FormMessage />
+				</FormItem>
+			</FormField>
 			<div class="flex justify-between">
-				<UButton label="Cancel" variant="solid" color="gray" to="/dashboard" />
-				<UButton type="submit" :loading="loading" label="Create Organization" />
+				<Button variant="outline" as-child>
+					<NuxtLink to="/dashboard">Cancel</NuxtLink>
+				</Button>
+				<Button type="submit" :disabled="loading" label="Create Organization">
+					<LoaderCircle v-if="loading" class="size-4 mr-2 animate-spin" />
+					Create Organization
+				</Button>
 			</div>
-		</UForm>
+		</form>
 	</div>
 </template>
