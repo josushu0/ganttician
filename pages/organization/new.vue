@@ -31,7 +31,7 @@ const createOrg = form.handleSubmit(async (values) => {
 			@submit="createOrg">
 			<div class="space-y-4">
 				<h1 class="font-bold text-xl">Create a new Organization</h1>
-				<Separator size="sm" />
+				<Separator />
 				<p>
 					This organization will contain all your projects. You can create
 					multiple of these.
