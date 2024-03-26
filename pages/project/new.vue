@@ -85,7 +85,7 @@ const createProject = form.handleSubmit(async (values) => {
 					<FormLabel>Time Range</FormLabel>
 					<DateRangePicker :value="value" :componentField="componentField" />
 					<FormDescription>
-						Select the time range of the project.
+						Select a start and end date for the project.
 					</FormDescription>
 					<FormMessage />
 				</FormItem>

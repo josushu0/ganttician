@@ -12,15 +12,11 @@ const orgStore = useOrganizationsStore()
 		<div class="flex xl:flex-col gap-2 items-center">
 			<Logo class="size-10 hidden xl:block" />
 			<Separator v-if="isLargeScreen" />
-			<NavLink
-				:condition="true"
-				popover="Dashboard"
-				to="/dashboard"
-				label="Go to dashboard">
+			<NavLink popover="Dashboard" to="/dashboard" label="Go to dashboard">
 				<LayoutGrid />
 			</NavLink>
 			<NavLink
-				:condition="
+				v-if="
 					route.path.startsWith('/project/') && route.path !== '/project/new'
 				"
 				popover="Gantt Chart"
@@ -29,7 +25,7 @@ const orgStore = useOrganizationsStore()
 				<GanttChart />
 			</NavLink>
 			<NavLink
-				:condition="
+				v-if="
 					route.path.startsWith('/project/') && route.path !== '/project/new'
 				"
 				popover="Project settings"
@@ -38,9 +34,11 @@ const orgStore = useOrganizationsStore()
 				<Settings />
 			</NavLink>
 			<NavLink
-				:condition="route.path.startsWith('/dashboard')"
+				v-if="
+					orgStore.selectedOrganization && route.path.startsWith('/dashboard')
+				"
 				popover="Organization settings"
-				:to="'/organization/' + orgStore.selectedOrganization?.id + '/settings'"
+				:to="'/organization/' + orgStore.selectedOrganization.id + '/settings'"
 				label="Go to Organization Settings">
 				<Settings />
 			</NavLink>

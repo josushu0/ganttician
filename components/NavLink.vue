@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const isLargeScreen = useMediaQuery('(min-width: 1280px)')
 const props = defineProps<{
-	condition: boolean
 	to: string
 	popover: string
 	label: string
@@ -9,7 +8,7 @@ const props = defineProps<{
 </script>
 
 <template>
-	<TooltipProvider v-if="props.condition">
+	<TooltipProvider>
 		<Tooltip>
 			<TooltipTrigger as-child>
 				<Button size="icon" variant="ghost" as-child>
