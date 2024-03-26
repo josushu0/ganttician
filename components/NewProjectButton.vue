@@ -3,10 +3,9 @@ import { Plus } from 'lucide-vue-next'
 </script>
 
 <template>
-	<Button as-child>
-		<NuxtLink to="/project/new" class="flex items-center gap-2">
-			New Project
-			<Plus class="size-4" />
+	<Button as-child size="icon">
+		<NuxtLink to="/project/new">
+			<Plus class="size-6" />
 		</NuxtLink>
 	</Button>
 </template>
