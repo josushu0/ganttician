@@ -9,7 +9,7 @@ definePageMeta({
 
 <template>
 	<div class="flex flex-col gap-4 w-full max-w-md">
-		<Logo class="xl:hidden" />
+		<Logo class="xl:hidden size-12" />
 		<h1 class="text-2xl font-bold">Welcome to Ganttician</h1>
 		<span>Select an option to Sign in.</span>
 		<Button
