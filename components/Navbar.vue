@@ -3,6 +3,7 @@ import { GanttChart, LayoutGrid, Settings } from 'lucide-vue-next'
 
 const isLargeScreen = useMediaQuery('(min-width: 1280px)')
 const route = useRoute()
+const orgStore = useOrganizationsStore()
 </script>
 
 <template>
@@ -19,23 +20,27 @@ const route = useRoute()
 				<LayoutGrid />
 			</NavLink>
 			<NavLink
-				:condition="route.path.startsWith('/project/[id]')"
+				:condition="
+					route.path.startsWith('/project/') && route.path !== '/project/new'
+				"
 				popover="Gantt Chart"
-				to="/project/new"
+				:to="'/project/' + route.params.id"
 				label="Go to Gantt Chart">
 				<GanttChart />
 			</NavLink>
 			<NavLink
-				:condition="route.path.startsWith('/project/[id]')"
+				:condition="
+					route.path.startsWith('/project/') && route.path !== '/project/new'
+				"
 				popover="Project settings"
-				to="/project/[id]/settings"
+				:to="'/project/' + route.params.id + '/settings'"
 				label="Go to Project Settings">
 				<Settings />
 			</NavLink>
 			<NavLink
 				:condition="route.path.startsWith('/dashboard')"
 				popover="Organization settings"
-				to="/organization/[id]/settings"
+				:to="'/organization/' + orgStore.selectedOrganization?.id + '/settings'"
 				label="Go to Organization Settings">
 				<Settings />
 			</NavLink>
