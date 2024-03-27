@@ -4,7 +4,7 @@ export const useUserStore = defineStore('user', {
 	state: () => ({ user: null as User | null }),
 	actions: {
 		async logout() {
-			await $fetch('/api/logout', {
+			await useFetch('/api/logout', {
 				method: 'POST',
 			})
 			reloadNuxtApp()

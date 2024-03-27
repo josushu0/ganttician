@@ -3,21 +3,21 @@ import type { Project } from '~/db/schema/projects'
 
 export const useProjectsStore = defineStore('projects', {
 	state: () => ({
-		projects: [] as Project[],
+		projects: [] as Project[] | null,
 		selectedProject: null as Project | null,
 	}),
 	actions: {
 		async fetchProjects() {
 			const orgStore = useOrganizationsStore()
-			const projects = await $fetch<Project[]>(
-				`/api/project?org=${orgStore.selectedOrganization?.id}`,
-			)
-			this.projects = projects
+			const { data } = await useFetch<Project[]>('/api/project', {
+				query: { org: orgStore.selectedOrganization?.id },
+			})
+			this.projects = data.value
 		},
 		async createProject(info: newProjectInfo) {
 			console.log(info)
 
-			await $fetch('/api/project', {
+			await useFetch('/api/project', {
 				method: 'POST',
 				body: {
 					name: info.name,
