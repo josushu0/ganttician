@@ -22,4 +22,31 @@ export const useProjectsStore = defineStore('projects', {
 		],
 		selectedProject: null as Project | null,
 	}),
+	actions: {
+		async createProject(info: newProjectInfo) {
+			console.log(info)
+
+			await $fetch('/api/project', {
+				method: 'POST',
+				body: {
+					name: info.name,
+					description: info.description,
+					organizationId: info.organizationId,
+					start: info.date.start,
+					end: info.date.end,
+				},
+			})
+			await navigateTo('/dashboard')
+		},
+	},
 })
+
+interface newProjectInfo {
+	name: string
+	description?: string | undefined
+	organizationId: string
+	date: {
+		start: Date
+		end: Date
+	}
+}

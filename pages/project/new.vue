@@ -10,7 +10,7 @@ const loading = ref(false)
 
 const formSchema = toTypedSchema(
 	z.object({
-		organization: z.string().optional(),
+		organizationId: z.string(),
 		name: z.string({ required_error: 'The project name is required.' }),
 		description: z.string().optional(),
 		date: z.object({
@@ -24,12 +24,15 @@ const formSchema = toTypedSchema(
 
 const form = useForm({
 	validationSchema: formSchema,
+	initialValues: {
+		organizationId: '',
+	},
 })
 
 const createProject = form.handleSubmit(async (values) => {
 	loading.value = true
-	values.organization = orgStore.selectedOrganization.id
-	console.log(values)
+	values.organizationId = orgStore.selectedOrganization!.id
+	projectStore.createProject(values)
 })
 </script>
 
