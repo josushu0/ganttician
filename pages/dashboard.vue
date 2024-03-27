@@ -4,12 +4,21 @@ definePageMeta({
 })
 
 const proStore = useProjectsStore()
+proStore.fetchProjects()
 const projects = computed(() => {
 	if (proStore.selectedProject) {
 		return Array(proStore.selectedProject)
 	}
 	return proStore.projects
 })
+
+const orgStore = useOrganizationsStore()
+watch(
+	() => orgStore.selectedOrganization,
+	() => {
+		proStore.fetchProjects()
+	},
+)
 </script>
 
 <template>
