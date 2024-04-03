@@ -6,9 +6,7 @@ import type { Organization } from '~/db/schema/organization'
 
 const open = ref(false)
 const orgStore = useOrganizationsStore()
-if (orgStore.organizations.length === 0) {
-	await orgStore.fetchOrganizations()
-}
+orgStore.fetchOrganizations()
 
 const selectOrg = (value: Organization) => {
 	orgStore.selectedOrganization = value
@@ -44,7 +42,7 @@ const selectOrg = (value: Organization) => {
 								:class="
 									cn(
 										'ml-auto h-4 w-4',
-										orgStore.selectedOrganization.id === organization.id
+										orgStore.selectedOrganization?.id === organization.id
 											? 'opacity-100'
 											: 'opacity-0',
 									)
