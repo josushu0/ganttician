@@ -4,6 +4,10 @@ import { LoaderCircle } from 'lucide-vue-next'
 import { useForm } from 'vee-validate'
 import { z } from 'zod'
 
+definePageMeta({
+	middleware: 'auth',
+})
+
 const orgStore = useOrganizationsStore()
 const loading = ref(false)
 

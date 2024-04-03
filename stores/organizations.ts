@@ -9,7 +9,12 @@ export const useOrganizationsStore = defineStore('organizations', {
 		async fetchOrganizations() {
 			const { data } = await useFetch<Organization[]>('/api/organization')
 			this.organizations = data.value
-			this.selectedOrganization = this.organizations && this.organizations[0]
+			this.selectedOrganization = this.organizations
+				? this.organizations[0]
+				: null
+			if (!this.selectedOrganization) {
+				await navigateTo('/organization/new')
+			}
 		},
 		async createOrganization(info: newOrgInfo) {
 			await useFetch('/api/organization', {
