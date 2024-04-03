@@ -1,10 +1,11 @@
 <script lang="ts" setup>
+import { Plus } from 'lucide-vue-next'
+
 definePageMeta({
 	middleware: 'auth',
 })
 
 const proStore = useProjectsStore()
-proStore.fetchProjects()
 const projects = computed(() => {
 	if (proStore.selectedProject) {
 		return Array(proStore.selectedProject)
@@ -13,12 +14,15 @@ const projects = computed(() => {
 })
 
 const orgStore = useOrganizationsStore()
-watch(
-	() => orgStore.selectedOrganization,
-	() => {
-		proStore.fetchProjects()
-	},
-)
+watchEffect(async () => {
+	if (orgStore.selectedOrganization) {
+		await proStore.fetchProjects()
+	}
+})
+
+if (orgStore.selectedOrganization) {
+	await proStore.fetchProjects()
+}
 </script>
 
 <template>
@@ -45,6 +49,22 @@ watch(
 						{{ project.id }}
 					</CardFooter>
 				</NuxtLink>
+			</Card>
+			<Card v-if="projects?.length === 0" class="col-span-full">
+				<CardHeader>
+					<CardTitle class="text-center">No projects</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<p class="text-center">Get started by creating a new project.</p>
+				</CardContent>
+				<CardFooter class="flex justify-center">
+					<Button as-child>
+						<NuxtLink to="/project/new" class="flex gap-1 items-center">
+							<Plus class="size-4" />
+							New project
+						</NuxtLink>
+					</Button>
+				</CardFooter>
 			</Card>
 		</div>
 	</div>
