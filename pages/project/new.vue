@@ -4,6 +4,10 @@ import { LoaderCircle } from 'lucide-vue-next'
 import { useForm } from 'vee-validate'
 import { z } from 'zod'
 
+definePageMeta({
+	middleware: 'auth',
+})
+
 const projectStore = useProjectsStore()
 const orgStore = useOrganizationsStore()
 const loading = ref(false)
@@ -49,18 +53,13 @@ const createProject = form.handleSubmit(async (values) => {
 					the organization will have access to this project.
 				</p>
 			</div>
-			<FormField name="organization">
-				<FormItem class="flex flex-col">
-					<FormLabel>Organization</FormLabel>
-					<FormControl>
-						<OrgSelect />
-					</FormControl>
-					<FormDescription>
-						To which organization should the project belong?
-					</FormDescription>
-					<FormMessage />
-				</FormItem>
-			</FormField>
+			<div class="flex flex-col gap-2">
+				<Label>Organization</Label>
+				<OrgSelect />
+				<p class="text-sm text-muted-foreground">
+					To which organization should the project belong?
+				</p>
+			</div>
 			<FormField v-slot="{ componentField }" name="name">
 				<FormItem>
 					<FormLabel>Name</FormLabel>
