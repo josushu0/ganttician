@@ -2,6 +2,13 @@
 definePageMeta({
 	middleware: 'auth',
 })
+
+const { id } = useRoute().params
+const orgStore = useOrganizationsStore()
+if (!orgStore.selectedOrganization) {
+	const org = await orgStore.getOrganization(id)
+	orgStore.selectedOrganization = org.value
+}
 </script>
 
 <template>
@@ -15,6 +22,11 @@ definePageMeta({
 				<div class="rounded xl:border-2 xl:border-border p-0 xl:p-6">
 					<OrgGeneralSettings />
 					<DeleteOrg />
+				</div>
+			</TabsContent>
+			<TabsContent value="members">
+				<div class="rounded xl:border-2 xl:border-border p-0 xl:p-6">
+					<h1 class="text-center font-bold text-2xl">In development...</h1>
 				</div>
 			</TabsContent>
 		</Tabs>

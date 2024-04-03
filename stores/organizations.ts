@@ -7,7 +7,7 @@ export const useOrganizationsStore = defineStore('organizations', {
 	}),
 	actions: {
 		async fetchOrganizations() {
-			const { data } = await useFetch<Organization[]>('/api/organization')
+			const { data } = await useFetch<Organization[]>('/api/organizations')
 			this.organizations = data.value
 			this.selectedOrganization = this.organizations
 				? this.organizations[0]
@@ -25,6 +25,12 @@ export const useOrganizationsStore = defineStore('organizations', {
 				},
 			})
 			await navigateTo('/dashboard')
+		},
+		async getOrganization(orgId: string | string[]) {
+			const { data } = await useFetch<Organization>('/api/organization', {
+				query: { orgId: orgId },
+			})
+			return data
 		},
 	},
 })

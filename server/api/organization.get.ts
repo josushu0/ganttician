@@ -1,25 +1,18 @@
 import { eq } from 'drizzle-orm'
-import type { User } from 'lucia'
-import { organizations, usersToOrganizations } from '~/db/schema/organization'
+import { organizations } from '~/db/schema/organization'
 
-export default defineEventHandler(async (event) => {
-	if (event.context.user) {
-		const user: User = event.context.user
-		const join = await db
-			.selectDistinct()
-			.from(usersToOrganizations)
-			.innerJoin(
-				organizations,
-				eq(usersToOrganizations.organizationId, organizations.id),
-			)
-			.where(eq(usersToOrganizations.userId, user.id))
-			.all()
-
-		const orgs = join.map((org) => {
-			return org.organizations
+export default defineEventHandler<{ query: { orgId: string } }>(
+	async (event) => {
+		if (event.context.user) {
+			const { orgId } = getQuery(event)
+			const org = await db.query.organizations.findFirst({
+				where: eq(organizations.id, orgId),
+			})
+			return org
+		}
+		throw createError({
+			statusCode: 401,
+			statusMessage: 'Not authorized',
 		})
-
-		return orgs
-	}
-	return []
-})
+	},
+)

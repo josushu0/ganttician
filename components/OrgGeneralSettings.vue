@@ -5,6 +5,9 @@ import { useForm } from 'vee-validate'
 import { z } from 'zod'
 
 const generalLoading = ref(false)
+const orgStore = useOrganizationsStore()
+const userStore = useUserStore()
+const disable = orgStore.selectedOrganization?.admin !== userStore.user?.id
 
 const formSchema = toTypedSchema(
 	z.object({
@@ -15,6 +18,10 @@ const formSchema = toTypedSchema(
 
 const generalForm = useForm({
 	validationSchema: formSchema,
+	initialValues: {
+		name: orgStore.selectedOrganization?.name,
+		description: orgStore.selectedOrganization?.description ?? '',
+	},
 })
 
 const saveGeneral = generalForm.handleSubmit(async (values) => {
@@ -29,7 +36,7 @@ const saveGeneral = generalForm.handleSubmit(async (values) => {
 			<FormItem>
 				<FormLabel>Name</FormLabel>
 				<FormControl>
-					<Input type="text" v-bind="componentField" />
+					<Input type="text" v-bind="componentField" :disabled="disable" />
 				</FormControl>
 				<FormDescription>
 					What's the name of your company or team?
@@ -41,7 +48,7 @@ const saveGeneral = generalForm.handleSubmit(async (values) => {
 			<FormItem>
 				<FormLabel>Description</FormLabel>
 				<FormControl>
-					<Textarea v-bind="componentField" />
+					<Textarea v-bind="componentField" :disabled="disable" />
 				</FormControl>
 				<FormDescription>
 					Describe the purpose of your organization. (Optional)
