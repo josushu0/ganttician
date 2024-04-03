@@ -9,7 +9,7 @@ export const useProjectsStore = defineStore('projects', {
 	actions: {
 		async fetchProjects() {
 			const orgStore = useOrganizationsStore()
-			const projects = await $fetch<Project[]>('/api/project', {
+			const projects = await $fetch<Project[]>('/api/projects', {
 				query: { org: orgStore.selectedOrganization?.id },
 			})
 			this.projects = projects
