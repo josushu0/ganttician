@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 		const { name, description } = await readBody(event)
 		await db
 			.insert(organizations)
-			.values({ name, description, id: organizationId })
+			.values({ name, description, id: organizationId, admin: user.id })
 		await db
 			.insert(usersToOrganizations)
 			.values({ userId: user.id, organizationId })
