@@ -50,22 +50,22 @@ if (orgStore.selectedOrganization) {
 					</CardFooter>
 				</NuxtLink>
 			</Card>
-			<Card v-if="projects?.length === 0" class="col-span-full">
-				<CardHeader>
-					<CardTitle class="text-center">No projects</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<p class="text-center">Get started by creating a new project.</p>
-				</CardContent>
-				<CardFooter class="flex justify-center">
-					<Button as-child>
-						<NuxtLink to="/project/new" class="flex gap-1 items-center">
-							<Plus class="size-4" />
-							New project
-						</NuxtLink>
-					</Button>
-				</CardFooter>
-			</Card>
 		</div>
+		<Card v-if="projects?.length === 0" class="w-full">
+			<CardHeader>
+				<CardTitle class="text-center">No projects</CardTitle>
+			</CardHeader>
+			<CardContent>
+				<p class="text-center">Get started by creating a new project.</p>
+			</CardContent>
+			<CardFooter class="flex justify-center">
+				<Button as-child>
+					<NuxtLink to="/project/new" class="flex gap-1 items-center">
+						<Plus class="size-4" />
+						New project
+					</NuxtLink>
+				</Button>
+			</CardFooter>
+		</Card>
 	</div>
 </template>
