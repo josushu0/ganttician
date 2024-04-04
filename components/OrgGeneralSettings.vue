@@ -26,6 +26,11 @@ const generalForm = useForm({
 
 const saveGeneral = generalForm.handleSubmit(async (values) => {
 	generalLoading.value = true
+	await orgStore.updateOrganization({
+		id: orgStore.selectedOrganization?.id,
+		...values,
+	})
+	generalLoading.value = false
 })
 </script>
 

@@ -32,10 +32,21 @@ export const useOrganizationsStore = defineStore('organizations', {
 			})
 			return data
 		},
+		async updateOrganization(info: newOrgInfo) {
+			await useFetch('/api/organization', {
+				method: 'POST',
+				body: {
+					id: info.id,
+					name: info.name,
+					description: info.description,
+				},
+			})
+		},
 	},
 })
 
 interface newOrgInfo {
+	id: string | undefined
 	name: string
 	description?: string | undefined
 }
