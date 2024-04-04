@@ -18,14 +18,10 @@ export default defineEventHandler(async (event) => {
 				target: organizations.id,
 				set: { name, description },
 			})
-		await db
-			.insert(usersToOrganizations)
-			.values({ userId: user.id, organizationId })
-			.onConflictDoNothing({
-				target: [
-					usersToOrganizations.userId,
-					usersToOrganizations.organizationId,
-				],
-			})
+		if (!id) {
+			await db
+				.insert(usersToOrganizations)
+				.values({ userId: user.id, organizationId })
+		}
 	}
 })
