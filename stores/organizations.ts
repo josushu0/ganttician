@@ -1,3 +1,4 @@
+import { toast } from 'vue-sonner'
 import type { Organization } from '~/db/schema/organization'
 
 export const useOrganizationsStore = defineStore('organizations', {
@@ -25,6 +26,7 @@ export const useOrganizationsStore = defineStore('organizations', {
 				},
 			})
 			await navigateTo('/dashboard')
+			toast.success(`Organization ${info.name} has been created`)
 		},
 		async getOrganization(orgId: string | string[]) {
 			const { data } = await useFetch<Organization>('/api/organization', {
@@ -41,6 +43,7 @@ export const useOrganizationsStore = defineStore('organizations', {
 					description: info.description,
 				},
 			})
+			toast.success(`Organization ${info.name} updated successfully`)
 		},
 	},
 })

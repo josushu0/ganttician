@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { toast } from 'vue-sonner'
 import type { Project } from '~/db/schema/projects'
 
 export const useProjectsStore = defineStore('projects', {
@@ -26,6 +27,7 @@ export const useProjectsStore = defineStore('projects', {
 				},
 			})
 			await navigateTo('/dashboard')
+			toast.success(`Project ${info.name} has been created`)
 		},
 	},
 })
