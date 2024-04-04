@@ -2,13 +2,13 @@
 import { toTypedSchema } from '@vee-validate/zod'
 import { LoaderCircle } from 'lucide-vue-next'
 import { useForm } from 'vee-validate'
+import { toast } from 'vue-sonner'
 import { z } from 'zod'
 
 definePageMeta({
 	middleware: 'auth',
 })
 
-const orgStore = useOrganizationsStore()
 const loading = ref(false)
 
 const formSchema = toTypedSchema(
@@ -24,7 +24,15 @@ const form = useForm({
 
 const createOrg = form.handleSubmit(async (values) => {
 	loading.value = true
-	await orgStore.createOrganization(values)
+	await $fetch('/api/organization', {
+		method: 'POST',
+		body: {
+			name: values.name,
+			description: values.description,
+		},
+	})
+	toast.success(`Organization ${values.name} has been created`)
+	await navigateTo('/dashboard')
 })
 </script>
 

@@ -1,13 +1,23 @@
 <script setup lang="ts">
+import type { Organization } from '~/db/schema/organization'
+
 definePageMeta({
 	middleware: 'auth',
 })
 
 const { id } = useRoute().params
 const orgStore = useOrganizationsStore()
+
+const getOrganization = async (orgId: string | string[]) => {
+	const data = await $fetch<Organization>('/api/organization', {
+		query: { orgId: orgId },
+	})
+	return data
+}
+
 if (!orgStore.selectedOrganization) {
-	const org = await orgStore.getOrganization(id)
-	orgStore.selectedOrganization = org.value
+	const org = await getOrganization(id)
+	orgStore.selectedOrganization = org
 }
 </script>
 

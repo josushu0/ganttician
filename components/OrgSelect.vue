@@ -6,7 +6,11 @@ import type { Organization } from '~/db/schema/organization'
 
 const open = ref(false)
 const orgStore = useOrganizationsStore()
-orgStore.fetchOrganizations()
+const data = await $fetch<Organization[]>('/api/organizations')
+orgStore.organizations = data
+orgStore.selectedOrganization = orgStore.organizations
+	? orgStore.organizations[0]
+	: null
 
 const selectOrg = (value: Organization) => {
 	orgStore.selectedOrganization = value

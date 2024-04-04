@@ -3,6 +3,12 @@ import { LogOut } from 'lucide-vue-next'
 
 const userStore = useUserStore()
 const isLargeScreen = useMediaQuery('(min-width: 1280px)')
+async function logout() {
+	await $fetch('/api/logout', {
+		method: 'POST',
+	})
+	reloadNuxtApp()
+}
 </script>
 
 <template>
@@ -22,7 +28,7 @@ const isLargeScreen = useMediaQuery('(min-width: 1280px)')
 			:side="isLargeScreen ? 'right' : 'top'"
 			:sideOffset="14"
 			class="w-fit h-fit p-2">
-			<DropdownMenuItem @click="userStore.logout" variant="ghost">
+			<DropdownMenuItem @click="logout" variant="ghost">
 				<LogOut class="size-4 me-2" />
 				Logout
 			</DropdownMenuItem>

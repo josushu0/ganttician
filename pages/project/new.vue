@@ -2,13 +2,13 @@
 import { toTypedSchema } from '@vee-validate/zod'
 import { LoaderCircle } from 'lucide-vue-next'
 import { useForm } from 'vee-validate'
+import { toast } from 'vue-sonner'
 import { z } from 'zod'
 
 definePageMeta({
 	middleware: 'auth',
 })
 
-const projectStore = useProjectsStore()
 const orgStore = useOrganizationsStore()
 const loading = ref(false)
 
@@ -36,7 +36,18 @@ const form = useForm({
 const createProject = form.handleSubmit(async (values) => {
 	loading.value = true
 	values.organizationId = orgStore.selectedOrganization!.id
-	projectStore.createProject(values)
+	await $fetch('/api/project', {
+		method: 'POST',
+		body: {
+			name: values.name,
+			description: values.description,
+			organizationId: values.organizationId,
+			start: values.date.start,
+			end: values.date.end,
+		},
+	})
+	toast.success(`Project ${values.name} has been created`)
+	await navigateTo('/dashboard')
 })
 </script>
 

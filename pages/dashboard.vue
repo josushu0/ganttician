@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { Plus } from 'lucide-vue-next'
+import type { Project } from '~/db/schema/projects'
 
 definePageMeta({
 	middleware: 'auth',
@@ -13,15 +14,23 @@ const projects = computed(() => {
 	return proStore.projects
 })
 
+const fetchProjects = async () => {
+	const orgStore = useOrganizationsStore()
+	const data = await $fetch<Project[]>('/api/projects', {
+		query: { org: orgStore.selectedOrganization?.id },
+	})
+	proStore.projects = data
+}
+
 const orgStore = useOrganizationsStore()
 watchEffect(async () => {
 	if (orgStore.selectedOrganization) {
-		await proStore.fetchProjects()
+		await fetchProjects()
 	}
 })
 
 if (orgStore.selectedOrganization) {
-	await proStore.fetchProjects()
+	await fetchProjects()
 }
 </script>
 

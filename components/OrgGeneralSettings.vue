@@ -2,6 +2,7 @@
 import { toTypedSchema } from '@vee-validate/zod'
 import { LoaderCircle } from 'lucide-vue-next'
 import { useForm } from 'vee-validate'
+import { toast } from 'vue-sonner'
 import { z } from 'zod'
 
 const generalLoading = ref(false)
@@ -26,10 +27,15 @@ const generalForm = useForm({
 
 const saveGeneral = generalForm.handleSubmit(async (values) => {
 	generalLoading.value = true
-	await orgStore.updateOrganization({
-		id: orgStore.selectedOrganization?.id,
-		...values,
+	await $fetch('/api/organization', {
+		method: 'POST',
+		body: {
+			id: orgStore.selectedOrganization?.id,
+			name: values.name,
+			description: values.description,
+		},
 	})
+	toast.success(`Organization ${values.name} updated successfully`)
 	generalLoading.value = false
 })
 </script>
