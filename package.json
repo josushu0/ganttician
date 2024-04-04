@@ -32,13 +32,13 @@
 		"vee-validate": "^4.12.6",
 		"vue": "^3.4.19",
 		"vue-router": "^4.3.0",
+		"vue-sonner": "^1.1.2",
 		"zod": "^3.22.4"
 	},
 	"devDependencies": {
 		"@nuxt/kit": "^3.10.3",
 		"@nuxtjs/color-mode": "^3.3.3",
 		"@nuxtjs/tailwindcss": "^6.11.4",
-		"@vue/typescript-plugin": "^2.0.4",
 		"@vueuse/core": "^10.9.0",
 		"@vueuse/nuxt": "^10.9.0",
 		"drizzle-kit": "^0.20.14",
