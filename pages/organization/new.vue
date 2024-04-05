@@ -37,7 +37,7 @@ const createOrg = form.handleSubmit(async (values) => {
 </script>
 
 <template>
-	<div class="grid place-content-center w-full h-full">
+	<div class="md:grid md:place-content-center w-full h-full overflow-y-auto">
 		<form
 			class="flex flex-col gap-4 rounded xl:border-2 xl:border-border p-6"
 			@submit="createOrg">

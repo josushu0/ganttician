@@ -22,8 +22,10 @@ if (!orgStore.selectedOrganization) {
 </script>
 
 <template>
-	<div class="grid place-content-center w-full h-full">
-		<Tabs default-value="general" class="p-4 xl:p-0 max-w-screen-sm w-screen">
+	<div class="md:grid md:place-content-center w-full h-full overflow-y-auto">
+		<Tabs
+			default-value="general"
+			class="p-4 xl:p-0 md:max-w-screen-sm w-screen">
 			<TabsList class="w-full">
 				<TabsTrigger value="general" class="flex-1">General</TabsTrigger>
 				<TabsTrigger value="members" class="flex-1">Members</TabsTrigger>
