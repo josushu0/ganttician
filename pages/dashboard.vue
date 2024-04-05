@@ -8,6 +8,7 @@ definePageMeta({
 })
 
 const proStore = useProjectsStore()
+const orgStore = useOrganizationsStore()
 
 const { data: orgs } = await useFetch<Organization[]>('/api/organizations')
 const projects = ref<Project[]>([])
@@ -27,6 +28,15 @@ const projectsFilter = computed(() => {
 	}
 	return []
 })
+
+watch(
+	() => orgStore.selectedOrganization,
+	async () => {
+		projects.value = await $fetch<Project[]>('/api/projects', {
+			query: { org: orgStore.selectedOrganization.id },
+		})
+	},
+)
 </script>
 
 <template>
