@@ -7,19 +7,23 @@ definePageMeta({
 	middleware: 'auth',
 })
 
-const orgStore = useOrganizationsStore()
 const proStore = useProjectsStore()
 
 const { data: orgs } = await useFetch<Organization[]>('/api/organizations')
-const projects = await $fetch<Project[]>('/api/projects', {
-	query: { org: orgStore.selectedOrganization.id },
-})
+const projects = ref<Project[]>([])
+if (orgs.value?.length === 0) {
+	await navigateTo('/organization/new')
+} else {
+	projects.value = await $fetch<Project[]>('/api/projects', {
+		query: { org: orgs.value![0].id },
+	})
+}
 
 const projectsFilter = computed(() => {
 	if (proStore.selectedProject) {
 		return [proStore.selectedProject]
-	} else if (projects) {
-		return projects
+	} else if (projects.value) {
+		return projects.value
 	}
 	return []
 })

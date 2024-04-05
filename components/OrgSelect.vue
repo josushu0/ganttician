@@ -26,7 +26,7 @@ const selectOrg = (value: Organization) => {
 				role="combobox"
 				:aria-expanded="open"
 				class="justify-between">
-				{{ orgStore.selectedOrganization.name || 'Select an Organization...' }}
+				{{ orgStore.selectedOrganization?.name || 'Select an Organization...' }}
 				<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 			</Button>
 		</PopoverTrigger>
