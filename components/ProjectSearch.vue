@@ -7,7 +7,6 @@ const { projects } = defineProps<{
 }>()
 const open = ref(false)
 const proStore = useProjectsStore()
-proStore.projects = projects
 
 const SelectProject = (project: Project) => {
 	proStore.selectedProject = project
@@ -34,7 +33,7 @@ const SelectProject = (project: Project) => {
 				<CommandList>
 					<CommandGroup>
 						<CommandItem
-							v-for="project in proStore.projects"
+							v-for="project in projects"
 							:key="project.id"
 							:value="project.name"
 							@select="SelectProject(project)">
