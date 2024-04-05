@@ -4,6 +4,7 @@ import { LoaderCircle } from 'lucide-vue-next'
 import { useForm } from 'vee-validate'
 import { toast } from 'vue-sonner'
 import { z } from 'zod'
+import type { Organization } from '~/db/schema/organization'
 
 definePageMeta({
 	middleware: 'auth',
@@ -11,6 +12,14 @@ definePageMeta({
 
 const orgStore = useOrganizationsStore()
 const loading = ref(false)
+
+const orgs = ref<Organization[]>([])
+if (orgStore.organizations.length === 0) {
+	const { data } = await useFetch<Organization[]>('/api/organizations')
+	orgs.value = data.value ? data.value : []
+} else {
+	orgs.value = orgStore.organizations
+}
 
 const formSchema = toTypedSchema(
 	z.object({
@@ -66,7 +75,7 @@ const createProject = form.handleSubmit(async (values) => {
 			</div>
 			<div class="flex flex-col gap-2">
 				<Label>Organization</Label>
-				<OrgSelect />
+				<OrgSelect :orgs="orgs" />
 				<p class="text-sm text-muted-foreground">
 					To which organization should the project belong?
 				</p>

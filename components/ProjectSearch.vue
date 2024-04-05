@@ -2,8 +2,12 @@
 import { ChevronsUpDown, X } from 'lucide-vue-next'
 import type { Project } from '~/db/schema/projects'
 
+const { projects } = defineProps<{
+	projects: Project[]
+}>()
 const open = ref(false)
 const proStore = useProjectsStore()
+proStore.projects = projects
 
 const SelectProject = (project: Project) => {
 	proStore.selectedProject = project

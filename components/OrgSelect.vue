@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { Check, ChevronsUpDown } from 'lucide-vue-next'
-
 import { cn } from '@/lib/utils'
 import type { Organization } from '~/db/schema/organization'
 
-const open = ref(false)
-const orgStore = useOrganizationsStore()
-const data = await $fetch<Organization[]>('/api/organizations')
-orgStore.organizations = data
-orgStore.selectedOrganization = orgStore.organizations
-	? orgStore.organizations[0]
-	: null
+const { orgs } = defineProps<{
+	orgs: Organization[]
+}>()
 
+const orgStore = useOrganizationsStore()
+orgStore.organizations = orgs
+orgStore.selectedOrganization = orgStore.organizations[0]
+
+const open = ref(false)
 const selectOrg = (value: Organization) => {
 	orgStore.selectedOrganization = value
 	open.value = false
@@ -26,7 +26,7 @@ const selectOrg = (value: Organization) => {
 				role="combobox"
 				:aria-expanded="open"
 				class="justify-between">
-				{{ orgStore.selectedOrganization?.name || 'Select an Organization...' }}
+				{{ orgStore.selectedOrganization.name || 'Select an Organization...' }}
 				<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 			</Button>
 		</PopoverTrigger>
@@ -37,7 +37,7 @@ const selectOrg = (value: Organization) => {
 				<CommandList>
 					<CommandGroup>
 						<CommandItem
-							v-for="organization in orgStore.organizations"
+							v-for="organization in orgs"
 							:key="organization.id"
 							:value="organization.name"
 							@select="selectOrg(organization)">
@@ -46,7 +46,7 @@ const selectOrg = (value: Organization) => {
 								:class="
 									cn(
 										'ml-auto h-4 w-4',
-										orgStore.selectedOrganization?.id === organization.id
+										orgStore.selectedOrganization.id === organization.id
 											? 'opacity-100'
 											: 'opacity-0',
 									)
