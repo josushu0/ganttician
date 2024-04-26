@@ -3,24 +3,28 @@ const isLargeScreen = useMediaQuery('(min-width: 1280px)')
 const props = defineProps<{
 	to: string
 	popover: string
-	label: string
 }>()
 </script>
 
 <template>
 	<TooltipProvider>
-		<Tooltip>
-			<TooltipTrigger as-child>
-				<Button size="icon" variant="ghost" as-child>
-					<NuxtLink :to="props.to">
-						<slot />
-						<span class="sr-only">{{ props.label }}</span>
-					</NuxtLink>
-				</Button>
+		<TooltipRoot>
+			<TooltipTrigger
+				as-child
+				class="w-full aspect-square rounded flex justify-center items-center hover:bg-border transition-colors outline-primary focus-visible:outline">
+				<NuxtLink :to="props.to">
+					<slot />
+				</NuxtLink>
 			</TooltipTrigger>
-			<TooltipContent :side="isLargeScreen ? 'right' : 'top'" :sideOffset="14">
-				{{ props.popover }}
-			</TooltipContent>
-		</Tooltip>
+			<TooltipPortal>
+				<TooltipContent
+					:side="isLargeScreen ? 'right' : 'top'"
+					:side-offset="14"
+					align="center"
+					class="border-2 border-border select-none rounded py-1 px-2 text-foreground">
+					{{ props.popover }}
+				</TooltipContent>
+			</TooltipPortal>
+		</TooltipRoot>
 	</TooltipProvider>
 </template>
