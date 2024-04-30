@@ -29,7 +29,7 @@ function resetFilter() {
 <template>
 	<ComboboxRoot v-model="selectedProject">
 		<ComboboxAnchor
-			class="flex items-center justify-between max-w-52 w-full p-2 rounded bg-background text-foreground border-2 border-border outline-primary focus-visible:outline">
+			class="flex items-center justify-between p-2 rounded bg-background text-foreground border-2 border-border outline-primary focus-visible:outline">
 			<ComboboxInput
 				class="bg-transparent outline-none min-w-0"
 				placeholder="Search project...">
@@ -44,7 +44,7 @@ function resetFilter() {
 			position="popper"
 			side="bottom"
 			:side-offset="3"
-			class="absolute z-10 border-border border-2 bg-background p-1 rounded content">
+			class="absolute z-10 border-border border-2 bg-background p-1 rounded project_combo">
 			<ComboboxViewport>
 				<ComboboxEmpty></ComboboxEmpty>
 				<ComboboxGroup>
@@ -68,7 +68,7 @@ function resetFilter() {
 </template>
 
 <style>
-.content {
+.project_combo {
 	width: var(--radix-combobox-trigger-width);
 }
 </style>
