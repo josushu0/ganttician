@@ -4,10 +4,15 @@ import { Icon } from '@iconify/vue'
 const route = useRoute()
 const orgStore = useOrganizationsStore()
 
-const isInProject =
-	route.path.startsWith('/project/') && route.path !== '/project/new'
-const isInDashboard =
-	route.path.startsWith('/dashboard') && orgStore.selectedOrganization
+const isInProject = computedAsync(
+	async () =>
+		route.path.startsWith('/project/') && route.path !== '/project/new',
+	false,
+)
+const isInDashboard = computedAsync(
+	async () => route.path === '/dashboard' && orgStore.selectedOrganization,
+	false,
+)
 </script>
 
 <template>
