@@ -10,6 +10,7 @@ export const projects = sqliteTable('projects', {
 		.references(() => organizations.id),
 	start: integer('start', { mode: 'timestamp' }).notNull(),
 	end: integer('end', { mode: 'timestamp' }).notNull(),
+	status: integer('status', { mode: 'boolean' }).default(true).notNull(),
 })
 
 export type Project = typeof projects.$inferSelect
