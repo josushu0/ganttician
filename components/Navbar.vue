@@ -36,7 +36,7 @@ const isInDashboard =
 			<NavLink
 				v-if="isInDashboard"
 				popover="Organization settings"
-				:to="'/organization/' + orgStore.selectedOrganization.id + '/settings'">
+				:to="'/organization/' + orgStore.selectedOrganization + '/settings'">
 				<Icon icon="lucide:settings" class="size-5" />
 			</NavLink>
 		</div>

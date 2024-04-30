@@ -11,7 +11,7 @@ const props = defineProps<{
 		<TooltipRoot>
 			<TooltipTrigger
 				as-child
-				class="w-full aspect-square rounded flex justify-center items-center hover:bg-border transition-colors outline-primary focus-visible:outline">
+				class="h-full xl:h-auto xl:w-full aspect-square rounded flex justify-center items-center hover:bg-border transition-colors outline-primary focus-visible:outline">
 				<NuxtLink :to="props.to">
 					<slot />
 				</NuxtLink>
@@ -21,7 +21,7 @@ const props = defineProps<{
 					:side="isLargeScreen ? 'right' : 'top'"
 					:side-offset="14"
 					align="center"
-					class="border-2 border-border select-none rounded py-1 px-2 text-foreground">
+					class="border-2 border-border select-none rounded py-1 px-2 text-foreground bg-background">
 					{{ props.popover }}
 				</TooltipContent>
 			</TooltipPortal>
