@@ -26,7 +26,7 @@ watch(orgStore, () => {
 	<SelectRoot v-model="orgStore.selectedOrganization">
 		<SelectTrigger
 			aria-label="Select an organization"
-			class="flex items-center justify-between gap-2 p-2 max-w-52 w-full rounded bg-background border-2 border-border outline-primary focus-visible:outline">
+			class="flex items-center justify-between gap-2 p-2 w-full rounded bg-background border-2 border-border outline-primary focus-visible:outline">
 			<SelectValue placeholder="Select an organization" class="truncate" />
 			<Icon icon="lucide:chevron-down" class="size-5 shrink-0" />
 		</SelectTrigger>
@@ -35,7 +35,7 @@ watch(orgStore, () => {
 				position="popper"
 				side="bottom"
 				:side-offset="3"
-				class="bg-background border-2 border-border p-1 rounded content">
+				class="bg-background border-2 border-border p-1 rounded org_select">
 				<SelectScrollUpButton
 					class="flex items-center justify-center cursor-default">
 					<Icon icon="lucide:chevron-up" />
@@ -67,7 +67,7 @@ watch(orgStore, () => {
 </template>
 
 <style>
-.content {
+.org_select {
 	width: var(--radix-select-trigger-width);
 }
 </style>

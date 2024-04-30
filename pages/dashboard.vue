@@ -6,8 +6,8 @@ definePageMeta({
 })
 
 const orgStore = useOrganizationsStore()
-let projects = ref([]) as Ref<Project[]>
-let selectedProject = ref([]) as Ref<Project[]>
+const projects = ref([]) as Ref<Project[]>
+const selectedProject = ref([]) as Ref<Project[]>
 
 async function fetchProjects() {
 	const data = await $fetch<Project[]>('/api/projects', {
@@ -20,7 +20,9 @@ async function fetchProjects() {
 <template>
 	<div class="flex flex-col gap-4 w-full h-full py-2 px-4">
 		<div class="flex gap-2">
-			<OrgSelect @selected-org="fetchProjects" />
+			<div class="max-w-52 w-full">
+				<OrgSelect @selected-org="fetchProjects" />
+			</div>
 			<NewOrgButton />
 		</div>
 		<div class="flex gap-2 items-center flex-wrap">
