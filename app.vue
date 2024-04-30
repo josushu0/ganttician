@@ -3,11 +3,11 @@ const useIdFunction = () => useId()
 </script>
 
 <template>
-	<div class="text-foreground bg-background">
-		<NuxtLayout>
-			<ConfigProvider :use-id="useIdFunction">
+	<ConfigProvider :use-id="useIdFunction">
+		<div class="text-foreground bg-background">
+			<NuxtLayout>
 				<NuxtPage />
-			</ConfigProvider>
-		</NuxtLayout>
-	</div>
+			</NuxtLayout>
+		</div>
+	</ConfigProvider>
 </template>
