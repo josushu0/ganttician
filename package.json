@@ -12,6 +12,7 @@
 		"push": "drizzle-kit push:sqlite"
 	},
 	"dependencies": {
+		"@internationalized/date": "^3.5.2",
 		"@libsql/client": "^0.5.3",
 		"@lucia-auth/adapter-drizzle": "^1.0.2",
 		"@pinia/nuxt": "^0.5.1",
