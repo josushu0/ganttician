@@ -1,70 +1,39 @@
 <script setup lang="ts">
-import { toTypedSchema } from '@vee-validate/zod'
-import { LoaderCircle } from 'lucide-vue-next'
-import { useForm } from 'vee-validate'
-import { toast } from 'vue-sonner'
-import { z } from 'zod'
-import type { Organization } from '~/db/schema/organization'
+import { Icon } from '@iconify/vue/dist/iconify.js'
 
-definePageMeta({
-	middleware: 'auth',
-})
-
-const orgStore = useOrganizationsStore()
 const loading = ref(false)
-
-const orgs = ref<Organization[]>([])
-if (orgStore.organizations.length === 0) {
-	const { data } = await useFetch<Organization[]>('/api/organizations')
-	orgs.value = data.value ? data.value : []
-} else {
-	orgs.value = orgStore.organizations
-}
-
-const formSchema = toTypedSchema(
-	z.object({
-		organizationId: z.string(),
-		name: z.string({ required_error: 'The project name is required.' }),
-		description: z.string().optional(),
-		date: z.object({
-			start: z.date({
-				required_error: 'The start and end dates are required.',
-			}),
-			end: z.date({ required_error: 'The start and end dates are required.' }),
-		}),
-	}),
-)
-
-const form = useForm({
-	validationSchema: formSchema,
-	initialValues: {
-		organizationId: '',
-	},
+const orgStore = useOrganizationsStore()
+const values = reactive({
+	name: '',
+	description: '',
+	start: new Date(),
+	end: new Date(),
 })
 
-const createProject = form.handleSubmit(async (values) => {
+async function createProject() {
 	loading.value = true
-	values.organizationId = orgStore.selectedOrganization!.id
 	await $fetch('/api/project', {
 		method: 'POST',
 		body: {
-			name: values.name,
-			description: values.description,
-			organizationId: values.organizationId,
-			start: values.date.start,
-			end: values.date.end,
+			...values,
+			organizationId: orgStore.selectedOrganization,
 		},
 	})
-	toast.success(`Project ${values.name} has been created`)
+	loading.value = false
 	await navigateTo('/dashboard')
-})
+}
+
+function setRange(start: Date, end: Date) {
+	values.start = start
+	values.end = end
+}
 </script>
 
 <template>
 	<div class="md:grid md:place-content-center w-full h-full overflow-y-auto">
 		<form
 			class="flex flex-col gap-4 rounded xl:border-2 xl:border-border p-6"
-			@submit="createProject">
+			@submit.prevent="createProject">
 			<div class="space-y-4">
 				<h1 class="font-bold text-xl">Create a new Project</h1>
 				<Separator />
@@ -73,54 +42,68 @@ const createProject = form.handleSubmit(async (values) => {
 					the organization will have access to this project.
 				</p>
 			</div>
-			<div class="flex flex-col gap-2">
-				<Label>Organization</Label>
-				<OrgSelect :orgs="orgs" />
-				<p class="text-sm text-muted-foreground">
+			<div>
+				<Label class="space-y-1">
+					<span>Organization</span>
+					<OrgSelect aria-describedby="orgHint" />
+				</Label>
+				<p id="orgHint" class="text-sm text-muted-foreground">
 					To which organization should the project belong?
 				</p>
 			</div>
-			<FormField v-slot="{ componentField }" name="name">
-				<FormItem>
-					<FormLabel>Name</FormLabel>
-					<FormControl>
-						<Input type="text" v-bind="componentField" />
-					</FormControl>
-					<FormDescription> What's the name of the project? </FormDescription>
-					<FormMessage />
-				</FormItem>
-			</FormField>
-			<FormField v-slot="{ componentField }" name="description">
-				<FormItem>
-					<FormLabel>Description</FormLabel>
-					<FormControl>
-						<Textarea v-bind="componentField" />
-					</FormControl>
-					<FormDescription>
-						Describe the purpose of your organization. (Optional)
-					</FormDescription>
-					<FormMessage />
-				</FormItem>
-			</FormField>
-			<FormField v-slot="{ componentField, value }" name="date">
-				<FormItem class="flex flex-col">
-					<FormLabel>Time Range</FormLabel>
-					<DateRangePicker :value="value" :componentField="componentField" />
-					<FormDescription>
-						Select a start and end date for the project.
-					</FormDescription>
-					<FormMessage />
-				</FormItem>
-			</FormField>
-			<div class="flex gap-4"></div>
+			<div>
+				<Label class="space-y-1">
+					<span>Name</span>
+					<input
+						type="text"
+						aria-describedby="nameHint"
+						required
+						v-model="values.name"
+						class="w-full p-2 border-2 border-border bg-background rounded text-foreground outline-primary focus-visible:outline" />
+				</Label>
+				<p id="nameHint" class="text-sm text-muted-foreground">
+					What's the name of your company or team?
+				</p>
+			</div>
+			<div>
+				<Label class="space-y-1">
+					<span>Description</span>
+					<textarea
+						v-model="values.description"
+						aria-describedby="descHint"
+						class="w-full p-2 border-2 border-border bg-background rounded text-foreground outline-primary focus-visible:outline"></textarea>
+				</Label>
+				<p id="descHint" class="text-sm text-muted-foreground">
+					Describe the purpose of your organization. (Optional)
+				</p>
+			</div>
+			<div>
+				<Label class="space-y-1">
+					<span>Time Range</span>
+					<TimePicker
+						aria-describedby="timeHint"
+						@set-range="(start, end) => setRange(start, end)" />
+				</Label>
+				<p id="timeHint" class="text-sm text-muted-foreground">
+					Select a time range for the project.
+				</p>
+			</div>
 			<div class="flex justify-between">
-				<Button variant="outline" as-child>
-					<NuxtLink to="/dashboard">Cancel</NuxtLink>
-				</Button>
-				<Button type="submit" :disabled="loading" label="Create Project">
-					<LoaderCircle v-if="loading" class="size-4 mr-2 animate-spin" />
+				<NuxtLink
+					to="/dashboard"
+					class="p-2 rounded bg-background border-2 border-border hover:bg-muted outline-primary focus-visible:outline">
+					Cancel
+				</NuxtLink>
+				<button
+					type="submit"
+					:disabled="loading"
+					class="flex items-center p-2 rounded bg-primary text-primary-foreground outline-primary outline-offset-2 focus-visible:outline">
+					<Icon
+						icon="lucide:loader-circle"
+						v-if="loading"
+						class="size-4 mr-2 animate-spin" />
 					Create Project
-				</Button>
+				</button>
 			</div>
 		</form>
 	</div>
