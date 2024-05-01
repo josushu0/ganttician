@@ -53,7 +53,8 @@ watchEffect(() => {
 					</DateRangePickerInput>
 				</template>
 			</div>
-			<DateRangePickerTrigger class="flex items-center justify-center">
+			<DateRangePickerTrigger
+				class="flex items-center justify-center rounded outline-primary focus-visible:outline">
 				<Icon icon="lucide:calendar-range" class="size-6" />
 			</DateRangePickerTrigger>
 		</DateRangePickerField>
