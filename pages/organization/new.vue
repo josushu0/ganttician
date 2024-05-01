@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
 
+definePageMeta({
+	middleware: 'auth',
+})
+
 const loading = ref(false)
 const values = reactive({
 	name: '',
