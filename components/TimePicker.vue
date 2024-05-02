@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import { type DateRange } from 'radix-vue'
+import { toDate } from 'radix-vue/date'
 
 const emit = defineEmits(['setRange'])
 
 const date = ref<DateRange>()
 
 watchEffect(() => {
-	emit(
-		'setRange',
-		date.value?.start?.toDate('America/Mexico_City'),
-		date.value?.end?.toDate('America/Mexico_City'),
-	)
+	if (date.value && date.value.end && date.value.start) {
+		emit('setRange', toDate(date.value.start), toDate(date.value.end))
+	}
 })
 </script>
 
