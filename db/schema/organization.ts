@@ -23,7 +23,7 @@ export const usersToOrganizations = sqliteTable(
 			.references(() => users.id),
 		organizationId: text('organization_id')
 			.notNull()
-			.references(() => organizations.id),
+			.references(() => organizations.id, { onDelete: 'cascade' }),
 	},
 	(t) => ({
 		pk: primaryKey({ columns: [t.userId, t.organizationId] }),
