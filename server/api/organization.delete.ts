@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm'
 import { organizations } from '~/db/schema/organization'
 
-export default defineEventHandler<{ query: { orgId: string } }>(
+export default defineEventHandler<{ query: { orgId: string; admin: string } }>(
 	async (event) => {
 		if (!event.context.user) {
 			throw createError({
@@ -9,10 +9,9 @@ export default defineEventHandler<{ query: { orgId: string } }>(
 				statusMessage: 'Not authorized',
 			})
 		}
-		const { orgId } = getQuery(event)
-		const org = await db.query.organizations.findFirst({
-			where: eq(organizations.id, orgId),
-		})
-		return org
+		const { orgId, admin } = getQuery(event)
+		if (event.context.user.id === admin) {
+			await db.delete(organizations).where(eq(organizations.id, orgId))
+		}
 	},
 )
