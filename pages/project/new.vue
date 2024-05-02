@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
+import { toast } from 'vue-sonner'
 
 definePageMeta({
 	middleware: 'auth',
@@ -24,6 +25,7 @@ async function createProject() {
 		},
 	})
 	loading.value = false
+	toast.success(`Created project ${values.name} successfully.`)
 	await navigateTo('/dashboard')
 }
 

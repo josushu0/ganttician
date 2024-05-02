@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
+import { toast } from 'vue-sonner'
 import type { Organization } from '~/db/schema/organization'
 
 const props = defineProps<{
@@ -20,6 +21,7 @@ async function saveGeneral() {
 			...values,
 		},
 	})
+	toast.success(`Saved settings.`)
 	loading.value = false
 }
 </script>

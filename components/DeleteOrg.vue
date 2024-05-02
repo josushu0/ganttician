@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue/dist/iconify.js'
+import { toast } from 'vue-sonner'
 
 const props = defineProps<{
 	admin: string
@@ -16,6 +17,7 @@ async function deleteOrg() {
 		query: { orgId: route.params.id, admin: props.admin },
 	})
 	loading.value = false
+	toast.success(`Deleted organization successfully`)
 	await navigateTo('/dashboard')
 }
 </script>
