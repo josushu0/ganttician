@@ -1,46 +1,33 @@
 <script setup lang="ts">
-import { toTypedSchema } from '@vee-validate/zod'
-import { LoaderCircle } from 'lucide-vue-next'
-import { useForm } from 'vee-validate'
-import { toast } from 'vue-sonner'
-import { z } from 'zod'
+import { Icon } from '@iconify/vue/dist/iconify.js'
 
 definePageMeta({
 	middleware: 'auth',
 })
 
 const loading = ref(false)
-
-const formSchema = toTypedSchema(
-	z.object({
-		name: z.string({ required_error: 'The organization name is required.' }),
-		description: z.string().optional(),
-	}),
-)
-
-const form = useForm({
-	validationSchema: formSchema,
+const values = reactive({
+	name: '',
+	description: '',
 })
-
-const createOrg = form.handleSubmit(async (values) => {
+async function createOrg() {
 	loading.value = true
 	await $fetch('/api/organization', {
 		method: 'POST',
 		body: {
-			name: values.name,
-			description: values.description,
+			...values,
 		},
 	})
-	toast.success(`Organization ${values.name} has been created`)
+	loading.value = false
 	await navigateTo('/dashboard')
-})
+}
 </script>
 
 <template>
 	<div class="md:grid md:place-content-center w-full h-full overflow-y-auto">
 		<form
 			class="flex flex-col gap-4 rounded xl:border-2 xl:border-border p-6"
-			@submit="createOrg">
+			@submit.prevent="createOrg">
 			<div class="space-y-4">
 				<h1 class="font-bold text-xl">Create a new Organization</h1>
 				<Separator />
@@ -49,38 +36,48 @@ const createOrg = form.handleSubmit(async (values) => {
 					multiple of these.
 				</p>
 			</div>
-			<FormField v-slot="{ componentField }" name="name">
-				<FormItem>
-					<FormLabel>Name</FormLabel>
-					<FormControl>
-						<Input type="text" v-bind="componentField" />
-					</FormControl>
-					<FormDescription>
-						What's the name of your company or team?
-					</FormDescription>
-					<FormMessage />
-				</FormItem>
-			</FormField>
-			<FormField v-slot="{ componentField }" name="description">
-				<FormItem>
-					<FormLabel>Description</FormLabel>
-					<FormControl>
-						<Textarea v-bind="componentField" />
-					</FormControl>
-					<FormDescription>
-						Describe the purpose of your organization. (Optional)
-					</FormDescription>
-					<FormMessage />
-				</FormItem>
-			</FormField>
+			<div>
+				<Label class="space-y-1">
+					<span>Name</span>
+					<input
+						type="text"
+						aria-describedby="nameHint"
+						required
+						v-model="values.name"
+						class="w-full p-2 border-2 border-border bg-background rounded text-foreground outline-primary focus-visible:outline" />
+				</Label>
+				<p id="nameHint" class="text-sm text-muted-foreground">
+					What's the name of your company or team?
+				</p>
+			</div>
+			<div>
+				<Label class="space-y-1">
+					<span>Description</span>
+					<textarea
+						aria-describedby="descHint"
+						v-model="values.description"
+						class="w-full p-2 border-2 border-border bg-background rounded text-foreground outline-primary focus-visible:outline"></textarea>
+				</Label>
+				<p id="descHint" class="text-sm text-muted-foreground">
+					Describe the purpose of your organization. (Optional)
+				</p>
+			</div>
 			<div class="flex justify-between">
-				<Button variant="outline" as-child>
-					<NuxtLink to="/dashboard">Cancel</NuxtLink>
-				</Button>
-				<Button type="submit" :disabled="loading" label="Create Organization">
-					<LoaderCircle v-if="loading" class="size-4 mr-2 animate-spin" />
+				<NuxtLink
+					to="/dashboard"
+					class="p-2 rounded bg-background border-2 border-border hover:bg-muted outline-primary focus-visible:outline">
+					Cancel
+				</NuxtLink>
+				<button
+					type="submit"
+					:disabled="loading"
+					class="flex items-center p-2 rounded bg-primary text-primary-foreground outline-primary outline-offset-2 focus-visible:outline">
+					<Icon
+						icon="lucide:loader-circle"
+						v-if="loading"
+						class="size-4 mr-2 animate-spin" />
 					Create Organization
-				</Button>
+				</button>
 			</div>
 		</form>
 	</div>

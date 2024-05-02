@@ -6,7 +6,7 @@ export default defineNuxtConfig({
 		'@pinia/nuxt',
 		'@nuxtjs/color-mode',
 		'@nuxtjs/tailwindcss',
-		'shadcn-nuxt',
+		'radix-vue/nuxt',
 	],
 	colorMode: {
 		classSuffix: '',

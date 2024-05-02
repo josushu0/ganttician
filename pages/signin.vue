@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { Github } from 'lucide-vue-next'
-
+import { Icon } from '@iconify/vue'
 definePageMeta({
 	layout: 'auth',
 	middleware: 'auth',
@@ -12,13 +11,11 @@ definePageMeta({
 		<Logo class="xl:hidden size-12" />
 		<h1 class="text-2xl font-bold">Welcome to Ganttician</h1>
 		<span>Select an option to Sign in.</span>
-		<Button
-			as-child
-			class="bg-slate-700 hover:bg-slate-700 text-white font-bold">
-			<a href="/signin/github">
-				<Github class="me-2" />
-				Sign in with Github
-			</a>
-		</Button>
+		<a
+			class="flex gap-3 justify-center items-center bg-slate-700 hover:bg-slate-700 text-white font-bold p-3 rounded outline-primary focus-visible:outline"
+			href="/signin/github">
+			<Icon icon="radix-icons:github-logo" class="size-6" />
+			Sign in with Github
+		</a>
 	</div>
 </template>

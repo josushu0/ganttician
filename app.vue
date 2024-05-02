@@ -1,7 +1,13 @@
+<script setup lang="ts">
+const useIdFunction = () => useId()
+</script>
+
 <template>
-	<div>
-		<NuxtLayout>
-			<NuxtPage />
-		</NuxtLayout>
-	</div>
+	<ConfigProvider :use-id="useIdFunction">
+		<div class="text-foreground bg-background">
+			<NuxtLayout>
+				<NuxtPage />
+			</NuxtLayout>
+		</div>
+	</ConfigProvider>
 </template>

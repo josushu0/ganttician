@@ -1,75 +1,67 @@
 <script setup lang="ts">
-import { toTypedSchema } from '@vee-validate/zod'
-import { LoaderCircle } from 'lucide-vue-next'
-import { useForm } from 'vee-validate'
-import { toast } from 'vue-sonner'
-import { z } from 'zod'
+import { Icon } from '@iconify/vue/dist/iconify.js'
+import type { Organization } from '~/db/schema/organization'
 
-const generalLoading = ref(false)
-const orgStore = useOrganizationsStore()
-const userStore = useUserStore()
-const disable = orgStore.selectedOrganization?.admin !== userStore.user?.id
+const props = defineProps<{
+	data: Organization
+}>()
 
-const formSchema = toTypedSchema(
-	z.object({
-		name: z.string({ required_error: 'The organization name is required.' }),
-		description: z.string().optional(),
-	}),
-)
+const loading = ref(false)
 
-const generalForm = useForm({
-	validationSchema: formSchema,
-	initialValues: {
-		name: orgStore.selectedOrganization?.name,
-		description: orgStore.selectedOrganization?.description ?? '',
-	},
+const values = reactive({
+	...props.data,
 })
 
-const saveGeneral = generalForm.handleSubmit(async (values) => {
-	generalLoading.value = true
+async function saveGeneral() {
+	loading.value = true
 	await $fetch('/api/organization', {
 		method: 'POST',
 		body: {
-			id: orgStore.selectedOrganization?.id,
-			name: values.name,
-			description: values.description,
+			...values,
 		},
 	})
-	toast.success(`Organization ${values.name} updated successfully`)
-	generalLoading.value = false
-})
+	loading.value = false
+}
 </script>
 
 <template>
-	<form class="flex flex-col gap-4" @submit="saveGeneral">
+	<form class="flex flex-col gap-4" @submit.prevent="saveGeneral">
 		<h1 class="font-bold">General Settings</h1>
-		<FormField v-slot="{ componentField }" name="name">
-			<FormItem>
-				<FormLabel>Name</FormLabel>
-				<FormControl>
-					<Input type="text" v-bind="componentField" :disabled="disable" />
-				</FormControl>
-				<FormDescription>
-					What's the name of your company or team?
-				</FormDescription>
-				<FormMessage />
-			</FormItem>
-		</FormField>
-		<FormField v-slot="{ componentField }" name="description">
-			<FormItem>
-				<FormLabel>Description</FormLabel>
-				<FormControl>
-					<Textarea v-bind="componentField" :disabled="disable" />
-				</FormControl>
-				<FormDescription>
-					Describe the purpose of your organization. (Optional)
-				</FormDescription>
-				<FormMessage />
-			</FormItem>
-		</FormField>
-		<Button class="self-end" type="submit" :disabled="generalLoading">
-			<LoaderCircle v-if="generalLoading" class="size-4 mr-2 animate-spin" />
+		<div>
+			<Label class="space-y-1">
+				<span>Name</span>
+				<input
+					type="text"
+					aria-describedby="nameHint"
+					required
+					v-model="values.name"
+					class="w-full p-2 border-2 border-border bg-background rounded text-foreground outline-primary focus-visible:outline" />
+			</Label>
+			<p id="nameHint" class="text-sm text-muted-foreground">
+				What's the name of your company or team?
+			</p>
+		</div>
+		<div>
+			<Label class="space-y-1">
+				<span>Description</span>
+				<textarea
+					aria-describedby="descHint"
+					v-model="values.description"
+					class="w-full p-2 border-2 border-border bg-background rounded text-foreground outline-primary focus-visible:outline"></textarea>
+			</Label>
+			<p id="descHint" class="text-sm text-muted-foreground">
+				Describe the purpose of your organization.
+			</p>
+		</div>
+		<button
+			type="submit"
+			:disabled="loading"
+			class="self-end flex items-center py-2 px-6 rounded bg-primary text-primary-foreground outline-primary outline-offset-2 focus-visible:outline">
+			<Icon
+				icon="lucide:loader-circle"
+				v-if="loading"
+				class="size-4 mr-2 animate-spin" />
 			Save
-		</Button>
+		</button>
 	</form>
 </template>

@@ -1,102 +1,72 @@
 <script lang="ts" setup>
-import { Plus } from 'lucide-vue-next'
-import type { Organization } from '~/db/schema/organization'
 import type { Project } from '~/db/schema/projects'
 
 definePageMeta({
 	middleware: 'auth',
 })
 
-const proStore = useProjectsStore()
 const orgStore = useOrganizationsStore()
+const projects = ref([]) as Ref<Project[]>
+const selectedProject = ref([]) as Ref<Project[]>
 
-const { data: orgs } = await useFetch<Organization[]>('/api/organizations')
-const projects = ref<Project[]>([])
-if (orgs.value?.length === 0) {
-	await navigateTo('/organization/new')
-} else {
-	projects.value = await $fetch<Project[]>('/api/projects', {
-		query: { org: orgs.value![0].id },
+async function fetchProjects() {
+	const data = await $fetch<Project[]>('/api/projects', {
+		query: { orgId: orgStore.selectedOrganization },
 	})
+	projects.value = data ? data : []
 }
-
-const projectsFilter = computed(() => {
-	if (proStore.selectedProject) {
-		return [proStore.selectedProject]
-	} else if (projects.value) {
-		return projects.value
-	}
-	return []
-})
-
-watch(
-	() => orgStore.selectedOrganization,
-	async () => {
-		projects.value = await $fetch<Project[]>('/api/projects', {
-			query: { org: orgStore.selectedOrganization.id },
-		})
-	},
-)
 </script>
 
 <template>
-	<div class="flex flex-col gap-4 w-full h-full py-2 px-4 overflow-y-auto">
+	<div class="flex flex-col gap-4 w-full h-full py-2 px-4">
 		<div class="flex gap-2">
-			<OrgSelect :orgs="orgs ? orgs : []" />
+			<div class="max-w-52 w-full">
+				<OrgSelect @selected-org="fetchProjects" />
+			</div>
 			<NewOrgButton />
 		</div>
-		<div class="flex gap-2 items-center">
+		<div class="flex gap-2 items-center flex-wrap">
 			<h1 class="text-2xl font-bold">Projects</h1>
 			<NewProjectButton />
-			<ProjectSearch :projects="projects ? projects : []" />
+			<ProjectSearch
+				:projects="projects"
+				@filter="(filter) => (selectedProject = filter)" />
 		</div>
-		<div class="grid md:grid-cols-2 2xl:grid-cols-3 gap-4 overflow-y-auto">
+		<div
+			class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4 overflow-y-auto p-1">
+			<Card
+				class="col-span-1"
+				v-if="projects && selectedProject.length === 0"
+				v-for="project in projects"
+				:to="'/project/' + project.id"
+				:title="project.name"
+				:description="project.description ? project.description : ''"
+				:status="project.status"
+				:key="project.id">
+			</Card>
 			<Card
 				class="basis-1/3"
-				v-if="!proStore.selectedProject"
-				v-for="project in projectsFilter"
+				v-if="selectedProject"
+				v-for="project in selectedProject"
+				:to="'/project/' + project.id"
+				:title="project.name"
+				:description="project.description ? project.description : ''"
+				:status="project.status"
 				:key="project.id">
-				<NuxtLink :to="'/project/' + project.id">
-					<CardHeader>
-						<CardTitle>{{ project.name }}</CardTitle>
-					</CardHeader>
-					<CardContent>
-						{{ project.description }}
-					</CardContent>
-					<CardFooter>
-						{{ project.id }}
-					</CardFooter>
-				</NuxtLink>
 			</Card>
-			<Card class="basis-1/3" v-if="proStore.selectedProject">
-				<NuxtLink :to="'/project/' + proStore.selectedProject.id">
-					<CardHeader>
-						<CardTitle>{{ proStore.selectedProject.name }}</CardTitle>
-					</CardHeader>
-					<CardContent>
-						{{ proStore.selectedProject.description }}
-					</CardContent>
-					<CardFooter>
-						{{ proStore.selectedProject.id }}
-					</CardFooter>
+			<div
+				v-if="projects.length === 0"
+				class="col-span-3 flex flex-col items-center gap-2 p-4 rounded border-border border-2 text-foreground">
+				<h1 class="text-xl font-bold">No projects</h1>
+				<p class="text-wrap truncate grow">
+					Get started by creating a new project.
+				</p>
+				<NuxtLink
+					to="/project/new"
+					class="bg-primary p-2 rounded text-primary-foreground">
+					New Project
 				</NuxtLink>
-			</Card>
+			</div>
 		</div>
-		<Card v-if="projects?.length === 0" class="w-full">
-			<CardHeader>
-				<CardTitle class="text-center">No projects</CardTitle>
-			</CardHeader>
-			<CardContent>
-				<p class="text-center">Get started by creating a new project.</p>
-			</CardContent>
-			<CardFooter class="flex justify-center">
-				<Button as-child>
-					<NuxtLink to="/project/new" class="flex gap-1 items-center">
-						<Plus class="size-4" />
-						New project
-					</NuxtLink>
-				</Button>
-			</CardFooter>
-		</Card>
 	</div>
 </template>
