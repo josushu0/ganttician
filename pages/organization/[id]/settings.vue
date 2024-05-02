@@ -1,46 +1,44 @@
 <script setup lang="ts">
 import type { Organization } from '~/db/schema/organization'
 
-definePageMeta({
-	middleware: 'auth',
+const route = useRoute()
+
+const { data, pending } = await useFetch<Organization>('/api/organization', {
+	method: 'get',
+	query: { orgId: route.params.id },
 })
-
-const { id } = useRoute().params
-const orgStore = useOrganizationsStore()
-
-const getOrganization = async (orgId: string | string[]) => {
-	const data = await $fetch<Organization>('/api/organization', {
-		query: { orgId: orgId },
-	})
-	return data
-}
-
-if (!orgStore.selectedOrganization) {
-	const org = await getOrganization(id)
-	orgStore.selectedOrganization = org
-}
 </script>
 
 <template>
-	<div class="md:grid md:place-content-center w-full h-full overflow-y-auto">
-		<Tabs
-			default-value="general"
-			class="p-4 xl:p-0 md:max-w-screen-sm w-screen">
-			<TabsList class="w-full">
-				<TabsTrigger value="general" class="flex-1">General</TabsTrigger>
-				<TabsTrigger value="members" class="flex-1">Members</TabsTrigger>
+	<div class="md:grid md:place-content-center w-full h-full">
+		<TabsRoot
+			default-value="settings"
+			class="flex flex-col md:border-2 md:border-border rounded py-2 w-full md:w-[36rem]">
+			<TabsList
+				aria-label="Manage your organization"
+				class="flex justify-evenly relative shrink-0 border-b-2 border-border">
+				<TabsIndicator
+					class="absolute left-0 bottom-0 h-0.5 w-[--radix-tabs-indicator-size] translate-x-[--radix-tabs-indicator-position] transition-all">
+					<div class="bg-primary w-full h-full"></div>
+				</TabsIndicator>
+				<TabsTrigger
+					value="settings"
+					class="text-center px-6 py-2 rounded select-none outline-primary focus-visible:outline">
+					Organization
+				</TabsTrigger>
+				<TabsTrigger
+					value="members"
+					class="text-center px-6 py-2 rounded select-none outline-primary focus-visible:outline">
+					Members
+				</TabsTrigger>
 			</TabsList>
-			<TabsContent value="general">
-				<div class="rounded xl:border-2 xl:border-border p-0 xl:p-6">
-					<OrgGeneralSettings />
-					<DeleteOrg />
-				</div>
+			<TabsContent value="settings" class="p-6 w-full">
+				<OrgGeneralSettings v-if="!pending && data" :data="data" />
+				<DeleteOrg v-if="!pending && data" :admin="data.admin" />
 			</TabsContent>
-			<TabsContent value="members">
-				<div class="rounded xl:border-2 xl:border-border p-0 xl:p-6">
-					<h1 class="text-center font-bold text-2xl">In development...</h1>
-				</div>
+			<TabsContent value="members" class="p-6 w-full">
+				<h1 class="text-center font-bold text-2xl">In development...</h1>
 			</TabsContent>
-		</Tabs>
+		</TabsRoot>
 	</div>
 </template>
