@@ -17,7 +17,7 @@ watch(selectedProject, () => {
 		)
 		emit('filter', filteredProjects)
 	} else {
-		emit('filter', props.projects)
+		emit('filter', '')
 	}
 })
 
