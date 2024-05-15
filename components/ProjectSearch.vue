@@ -9,6 +9,14 @@ const props = defineProps<{
 const emit = defineEmits(['filter'])
 
 const selectedProject = ref('')
+const input = ref<HTMLElement | null>(null)
+const { focused } = useFocus(input)
+
+onStartTyping(() => {
+	if (!focused.value) {
+		input.value?.focus()
+	}
+})
 
 watch(selectedProject, () => {
 	if (selectedProject.value.length > 0) {
@@ -32,7 +40,9 @@ function resetFilter() {
 			class="flex items-center justify-between p-2 rounded bg-background text-foreground border-2 border-border outline-primary focus-visible:outline">
 			<ComboboxInput
 				class="bg-transparent outline-none min-w-0"
+				asChild
 				placeholder="Search project...">
+				<input ref="input" type="text" />
 			</ComboboxInput>
 			<ComboboxTrigger
 				class="size-6 inline-flex items-center justify-center shrink-0">
