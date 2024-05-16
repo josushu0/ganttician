@@ -8,7 +8,7 @@ const props = defineProps<{
 
 <template>
 	<TooltipProvider>
-		<TooltipRoot>
+		<TooltipRoot :delay-duration="0">
 			<TooltipTrigger
 				as-child
 				class="h-full xl:h-auto xl:w-full aspect-square rounded flex justify-center items-center hover:bg-border transition-colors outline-primary focus-visible:outline">
