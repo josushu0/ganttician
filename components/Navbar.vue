@@ -28,9 +28,9 @@ const isInDashboard = computedAsync(
 			</NavLink>
 			<NavLink
 				v-if="isInProject"
-				popover="Gantt Chart"
+				popover="Kanban"
 				:to="'/project/' + route.params.id">
-				<Icon icon="lucide:gantt-chart" class="size-5" />
+				<Icon icon="lucide:kanban" class="size-5" />
 			</NavLink>
 			<NavLink
 				v-if="isInProject"
