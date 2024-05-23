@@ -6,6 +6,7 @@ definePageMeta({
 })
 
 const orgStore = useOrganizationsStore()
+const projectStore = useProjectStore()
 const projects = ref([]) as Ref<Project[]>
 const selectedProject = ref([]) as Ref<Project[]>
 
@@ -42,7 +43,8 @@ async function fetchProjects() {
 				:title="project.name"
 				:description="project.description ? project.description : ''"
 				:status="project.status"
-				:key="project.id">
+				:key="project.id"
+				@click="projectStore.project = project">
 			</Card>
 			<Card
 				class="basis-1/3"
