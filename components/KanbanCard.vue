@@ -20,14 +20,14 @@ const dragEnd = () => {
 		draggable="true"
 		@dragstart="dragStart"
 		@dragend="dragEnd"
-		class="rounded border-2 border-border p-2 select-none"
-		:class="dragging && 'is_dragging'">
+		class="rounded border-2 border-border p-2 select-none task"
+		:class="dragging && 'dragging_task'">
 		{{ $props.task.name }}
 	</div>
 </template>
 
 <style scoped>
-.is_dragging {
+.dragging_task {
 	background-color: hsl(var(--primary));
 	color: hsl(var(--primary-foreground));
 	border-color: hsl(var(--primary));
