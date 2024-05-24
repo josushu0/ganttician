@@ -7,13 +7,20 @@ export default defineEventHandler(async (event) => {
 			statusMessage: 'Not authorized',
 		})
 	}
-	const { id, name, project }: Columns = await readBody(event)
+	const { id, name = '', project, position }: Columns = await readBody(event)
+
 	const uuid = crypto.randomUUID()
-	await db
+	const data = await db
 		.insert(columns)
 		.values({ id: id ? id : uuid, name, project })
 		.onConflictDoUpdate({
 			target: columns.id,
 			set: { name },
 		})
+		.returning()
+
+	return {
+		...data,
+		tasks: [],
+	}
 })
