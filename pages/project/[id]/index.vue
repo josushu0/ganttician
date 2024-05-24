@@ -29,6 +29,8 @@ const { data } = await useFetch<Data[]>('/api/tasks', {
 	method: 'get',
 	query: { id: id },
 })
+
+projectStore.projectData = data.value ?? []
 </script>
 
 <template>
@@ -38,7 +40,10 @@ const { data } = await useFetch<Data[]>('/api/tasks', {
 			<h1>{{ projectStore.project?.name }}</h1>
 		</div>
 		<div ref="board" class="w-full flex gap-4 p-2 overflow-x-auto">
-			<KanbanColumn v-for="column in data" :key="column.id" :column="column">
+			<KanbanColumn
+				v-for="column in projectStore.projectData"
+				:key="column.id"
+				:column="column">
 				<KanbanCard
 					v-for="task in column.tasks.filter(
 						(task) => task.column_id === column.id,
@@ -47,6 +52,7 @@ const { data } = await useFetch<Data[]>('/api/tasks', {
 					:task="task">
 				</KanbanCard>
 			</KanbanColumn>
+			<NewColumnCard />
 		</div>
 	</div>
 </template>
