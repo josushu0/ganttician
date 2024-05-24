@@ -20,7 +20,7 @@ const dragEnd = () => {
 		draggable="true"
 		@dragstart="dragStart"
 		@dragend="dragEnd"
-		class="rounded border-2 border-border p-2 select-none task"
+		class="bg-muted rounded border-2 border-border p-2 select-none task cursor-pointer"
 		:class="dragging && 'dragging_task'">
 		{{ $props.task.name }}
 	</div>
