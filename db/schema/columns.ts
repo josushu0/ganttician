@@ -6,6 +6,7 @@ import { tasks } from './tasks'
 export const columns = sqliteTable('columns', {
 	id: text('id').primaryKey(),
 	name: text('name').notNull(),
+	position: integer('position'),
 	project: text('project_id')
 		.notNull()
 		.references(() => projects.id, { onDelete: 'cascade' }),
