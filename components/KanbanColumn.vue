@@ -60,33 +60,36 @@ const editColumn = async (value: string | undefined) => {
 		ref="column"
 		@dragover="dragOver"
 		class="rounded bg-background border-2 border-border p-4 w-64 h-min space-y-2 min-w-64">
-		<EditableRoot
-			v-slot="{ isEditing }"
-			@submit="editColumn"
-			:default-value="$props.column.name"
-			submit-mode="enter"
-			placeholder="Click to edit..."
-			class="flex items-center justify-stretch gap-2">
-			<EditableArea class="grow h-8">
-				<EditablePreview class="break-all font-bold" />
-				<EditableInput
-					class="w-full bg-muted rounded p-1 text-foreground border-0 focus-within:outline-none" />
-			</EditableArea>
-			<div v-if="isEditing" class="flex gap-1">
-				<EditableSubmitTrigger asChild>
-					<button
-						class="p-1 hover:bg-border outline-primary focus-visible:outline transition-colors rounded">
-						<Icon icon="lucide:check" class="size-5" />
-					</button>
-				</EditableSubmitTrigger>
-				<EditableCancelTrigger asChild>
-					<button
-						class="p-1 hover:bg-border outline-primary focus-visible:outline transition-colors rounded">
-						<Icon icon="lucide:x" class="size-5" />
-					</button>
-				</EditableCancelTrigger>
-			</div>
-		</EditableRoot>
+		<div class="flex items-center">
+			<EditableRoot
+				v-slot="{ isEditing }"
+				@submit="editColumn"
+				:default-value="$props.column.name"
+				submit-mode="enter"
+				placeholder="Click to edit..."
+				class="flex items-center justify-stretch gap-2 grow">
+				<EditableArea class="grow">
+					<EditablePreview class="break-all font-bold" />
+					<EditableInput
+						class="w-full bg-muted rounded p-1 text-foreground border-0 focus-within:outline-none" />
+				</EditableArea>
+				<div v-if="isEditing" class="flex gap-1">
+					<EditableSubmitTrigger asChild>
+						<button
+							class="p-1 hover:bg-border outline-primary focus-visible:outline transition-colors rounded">
+							<Icon icon="lucide:check" class="size-5" />
+						</button>
+					</EditableSubmitTrigger>
+					<EditableCancelTrigger asChild>
+						<button
+							class="p-1 hover:bg-border outline-primary focus-visible:outline transition-colors rounded">
+							<Icon icon="lucide:x" class="size-5" />
+						</button>
+					</EditableCancelTrigger>
+				</div>
+			</EditableRoot>
+			<ColumnOptions :column="$props.column.id" />
+		</div>
 		<slot />
 	</div>
 </template>

@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
 		.returning()
 
 	return {
-		...data,
+		...data[0],
 		tasks: [],
 	}
 })
